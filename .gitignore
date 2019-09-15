@@ -1,6 +1,10 @@
 # Compiled class file
 *.class
 
+# Dotfiles
+/.gradle
+/.idea
+
 # Log file
 *.log
 
