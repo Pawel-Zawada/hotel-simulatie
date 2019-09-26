@@ -1,8 +1,6 @@
 package pathFinding;
 
-import java.awt.*;
 import java.util.ArrayList;
-import java.util.List;
 
 public class PathFinding {
     /**
@@ -166,7 +164,5 @@ public class PathFinding {
     private double calFcost(Node node){
         return calGCost(node) + calHCost(node);
     }
-
-
 
 }
