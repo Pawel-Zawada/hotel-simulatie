@@ -11,13 +11,13 @@ class UserInterface extends JFrame {
     private final JFrame frame = new JFrame("Hotel Simulator");
 
     private final JPanel mainPanel = new JPanel(new BorderLayout()); // Container panel to display subcomponents like navigation and content.
-    private final JPanel navigationPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 16, 8));
-    private static JLabel label = new JLabel("<html><font color='white'>Testing label text</font></html>");
-    private final JPanel contentPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 16, 8));
+    private static JLabel label = new JLabel("<html><font color='white'>Testing label text</font></html>"); // HTML FTW
+    private final JPanel navigationPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 16, 8)); // Will act as the container for navigational buttons.
+    private final JPanel contentPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 16, 8)); // Contextual content of the currently selected navigation. (For example `settings`)
     private final JButton exitButton = new ExitButton("Exit");
 
     /**
-     * Configures the frame and panel to contain base elements and properties, like background color.
+     * Build frame & containing panels with respective components.
      */
     private void setup() {
         configurePanels();
@@ -28,9 +28,12 @@ class UserInterface extends JFrame {
         frame.setUndecorated(true); // ...*without* window bar.
     }
 
+    /**
+     * Configure panel setup within the frame, including the panel's components like buttons.
+     */
     private void configurePanels() {
-        navigationPanel.setPreferredSize(new Dimension(0, 45));
-        navigationPanel.add(exitButton);
+        navigationPanel.setPreferredSize(new Dimension(0, 45)); // Low height so it acts as a sort of `toolbar` at the top.
+        navigationPanel.add(exitButton); // TODO: Move this to the right side of the panel.
         navigationPanel.setBackground(Color.red);
 
         contentPanel.add(label);
@@ -50,10 +53,10 @@ class UserInterface extends JFrame {
 
     static class ExitButton extends JButton {
         ExitButton(String text) {
-            super(text);
+            super(text); // Set title using JButton's constructor.
 
-            setBackground(Color.white);
-            addActionListener(e -> System.exit(0));
+            setBackground(Color.white); // Make it white to remove the ugly metallic gradient.
+            addActionListener(e -> System.exit(0)); // Kill the program on button click.
         }
     }
 }
