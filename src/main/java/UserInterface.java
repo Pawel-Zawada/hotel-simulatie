@@ -13,6 +13,8 @@ class UserInterface extends JFrame {
     private final JPanel mainPanel = new JPanel(new BorderLayout()); // Container panel to display subcomponents like navigation and content.
     private static JLabel label = new JLabel("<html><font color='white'>Testing label text</font></html>");
     private final JPanel contentPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 16, 8));
+    private final JPanel navigationPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 16, 8));
+    private final JButton exitButton = new JButton("Exit");
 
     UserInterface() {
         setup();
@@ -23,18 +25,27 @@ class UserInterface extends JFrame {
      * Configures the frame and panel to contain base elements and properties, like background color.
      */
     private void setup() {
-        contentPanel.add(label);
-        contentPanel.setBackground(Color.blue);
-
-        // Set `mainPanel` as the container to all components of the interface.
-        mainPanel.add(contentPanel, BorderLayout.CENTER);
-
-        frame.setContentPane(mainPanel);
+        configurePanels();
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH); // Set frame to fullscreen mode...
         frame.setUndecorated(true); // ...*without* window bar.
+    }
+
+    private void configurePanels() {
+        navigationPanel.setPreferredSize(new Dimension(0, 45));
+        navigationPanel.add(exitButton);
+        navigationPanel.setBackground(Color.red);
+
+        contentPanel.add(label);
+        contentPanel.setBackground(Color.blue);
+
+        // Set `mainPanel` as the container to all components of the interface.
+        mainPanel.add(navigationPanel, BorderLayout.NORTH);
+        mainPanel.add(contentPanel, BorderLayout.CENTER);
+
+        frame.setContentPane(mainPanel);
     }
 }
 
