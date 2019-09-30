@@ -11,15 +11,10 @@ class UserInterface extends JFrame {
     private final JFrame frame = new JFrame("Hotel Simulator");
 
     private final JPanel mainPanel = new JPanel(new BorderLayout()); // Container panel to display subcomponents like navigation and content.
+    private final JPanel navigationPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 16, 8));
     private static JLabel label = new JLabel("<html><font color='white'>Testing label text</font></html>");
     private final JPanel contentPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 16, 8));
-    private final JPanel navigationPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 16, 8));
-    private final JButton exitButton = new JButton("Exit");
-
-    UserInterface() {
-        setup();
-        frame.setVisible(true);
-    }
+    private final JButton exitButton = new ExitButton("Exit");
 
     /**
      * Configures the frame and panel to contain base elements and properties, like background color.
@@ -46,6 +41,20 @@ class UserInterface extends JFrame {
         mainPanel.add(contentPanel, BorderLayout.CENTER);
 
         frame.setContentPane(mainPanel);
+    }
+
+    UserInterface() {
+        setup();
+        frame.setVisible(true);
+    }
+
+    static class ExitButton extends JButton {
+        ExitButton(String text) {
+            super(text);
+
+            setBackground(Color.white);
+            addActionListener(e -> System.exit(0));
+        }
     }
 }
 
