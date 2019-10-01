@@ -49,49 +49,66 @@ class UserInterface extends JFrame {
     }
 
     private static class NavigationPanel extends JPanel {
-        Dimension dimension = new Dimension(80, 40);
-        ExitPanel exitPanel = new ExitPanel(dimension);
+        Dimension dimension = new Dimension(80, 60);
+        FloorsPanel floorsPanel = new FloorsPanel();
+        ExitPanel exitPanel = new ExitPanel();
 
         NavigationPanel() {
             super(new BorderLayout());
 
             setPreferredSize(dimension);
-            setBackground(Color.red); // TODO: Remove this panel marker.
+            setBackground(Color.lightGray); // TODO: Remove this panel marker.
 
+            add(floorsPanel, BorderLayout.LINE_START);
             add(exitPanel, BorderLayout.LINE_END);
         }
 
-        private static class ExitButton extends JButton {
+        private static class FloorsPanel extends JPanel {
+            FloorsPanel() {
+                super(new BorderLayout());
 
-            /**
-             * @param text      Text to be displayed in the button
-             * @param dimension Button's width & height size
-             * @see JButton
-             */
-            ExitButton(String text, Dimension dimension) {
-                super(text); // Set button's text with JButton's constructor.
+                setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 5));
 
-                setPreferredSize(new Dimension(
-                        dimension.width,
-                        dimension.height - 10
-                )); // Same size as containing panel, minus 10 pixels in height margin.
+                add(new JLabel("Floors:"), BorderLayout.PAGE_START);
 
-                setBackground(Color.white); // Make it white to remove the ugly metallic gradient.
-                addActionListener(e -> System.exit(0)); // Kill the program on button click.
+                // TODO: Split this into inner class
+                JPanel panel = new JPanel(new FlowLayout());
+                panel.add(new JButton("Floor 1"));
+                panel.add(new JButton("Floor 2"));
+                panel.add(new JButton("Floor 3"));
+                panel.add(new JButton("Floor 4"));
+
+                add(panel, BorderLayout.LINE_START);
             }
         }
 
         private class ExitPanel extends JPanel {
             ExitButton exitButton = new ExitButton("Exit", dimension);
 
-            /**
-             * @param dimension Panel's width & height size
-             */
-            ExitPanel(Dimension dimension) {
-                super(new FlowLayout(FlowLayout.RIGHT));
+            ExitPanel() {
+                setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
 
-                setBackground(Color.orange); // TODO: Remove this panel marker.
                 add(exitButton);
+            }
+
+            private class ExitButton extends JButton {
+
+                /**
+                 * @param text      Text to be displayed in the button
+                 * @param dimension Button's width & height size
+                 * @see JButton
+                 */
+                ExitButton(String text, Dimension dimension) {
+                    super(String.format("<html><span style='color: white'>%s</span></html>", text)); // Set button's text with JButton's constructor.
+
+                    setPreferredSize(new Dimension(
+                            dimension.width,
+                            dimension.height - 10
+                    )); // Same size as containing panel, minus 10 pixels in height margin.
+
+                    setBackground(Color.red); // Make it white to remove the ugly metallic gradient.
+                    addActionListener(e -> System.exit(0)); // Kill the program on button click.
+                }
             }
         }
     }
@@ -100,9 +117,9 @@ class UserInterface extends JFrame {
         ContentPanel() {
             super(new FlowLayout(FlowLayout.CENTER, 16, 8));
 
-            JLabel label = new JLabel("<html><font color='white'>Testing label text</font></html>");
+            JLabel label = new JLabel("<html><font>Testing label text</font></html>");
             add(label);
-            setBackground(Color.blue); // TODO: Remove this panel marker.
+            setBackground(Color.white); // TODO: Remove this panel marker.
         }
     }
 }
