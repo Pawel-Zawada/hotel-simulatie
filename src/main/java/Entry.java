@@ -7,7 +7,7 @@ public class Entry {
 
         Floor floorOne = new Floor(10 ,10,1);
         Floor floorTwo = new Floor(10 ,10,2);
-        PathFinding pathFinding = new PathFinding(floorOne,floorTwo,floorOne.getHotelElements()[1],floorTwo.getHotelElements()[10]);
+     //   PathFinding pathFinding = new PathFinding(floorOne,floorTwo,floorOne.getHotelElements()[1],floorTwo.getHotelElements()[10]);
 
 
 

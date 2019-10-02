@@ -2,7 +2,6 @@ package pathfinding;
 
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 
 public class PathFinding {
@@ -34,28 +33,20 @@ public class PathFinding {
      *  3
      */
 
-    private Node startNode;
-    private Node endNode;
-    private Node currentNode;
 
     private ArrayList<Node> openList = new ArrayList<>();
     private ArrayList<Node> closedList = new ArrayList<>();
 
-    public PathFinding(Node startNode, Node endNode){
-        this.startNode = startNode;
-        this.endNode = endNode;
-        this.currentNode = startNode;
+    public Node doPathFinding(Node startNode, Node endNode){
+        Node currentNode = startNode;
         openList.add(startNode);
-    }
 
-    public ArrayList<Node> doPathFinding(){
         while(currentNode!=endNode){
             currentNode = getLowestFCostNode(openList);
             openList.remove(currentNode);
             closedList.add(currentNode);
             if (currentNode == endNode){
-                System.out.println("jeeeej");
-                return openList;
+                return currentNode;
             }
             else {
 
@@ -68,7 +59,7 @@ public class PathFinding {
                     double gCost = calGCost(currentNode,connection);
                     if(gCost < node.getgCost() || !openList.contains(node)){
                         node.setgCost(gCost);
-                        node.sethCost(calHCost(node));
+                        node.sethCost(calHCost(node, endNode));
                         node.setParentNode(currentNode);
                         if(!openList.contains(node)){
                             openList.add(node);
@@ -93,13 +84,11 @@ public class PathFinding {
         return parentNode.getgCost() + connection.getWeight();
     }
 
-    private double calHCost(Node node){
+    private double calHCost(Node node, Node endNode){
         /**distance from end node*/
-
-        //double xf = Math.abs(node.getX()-endNode.getX());
-       // double yf = Math.abs(node.getY()-endNode.getY());
-       // return calDistance(xf,yf);
-        return 0;
+        double xf = Math.abs(node.getX()-endNode.getX());
+        double yf = Math.abs(node.getY()-endNode.getY());
+        return calDistance(xf,yf);
     }
 
     private double calDistance(double xf, double yf){
