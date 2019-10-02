@@ -13,6 +13,7 @@ class UserInterface extends JFrame {
     /**************
      * Containers *
      **************/
+    private JMenuBar menuBar = new MenuBar();
     private final MainPanel mainPanel = new MainPanel(); // Container panel to display subcomponents like navigation and content.
     private final NavigationPanel navigationPanel = new NavigationPanel(); // Will act as the container for navigational buttons.
     private final ContentPanel contentPanel = new ContentPanel(); // Contextual content of the currently selected navigation. (For example `settings`)
@@ -21,6 +22,8 @@ class UserInterface extends JFrame {
      * Build frame & containing panels with respective components.
      */
     private void setup() {
+        frame.setJMenuBar(menuBar);
+
         // Set `mainPanel` as the container to all components of the interface.
         mainPanel.add(navigationPanel, BorderLayout.PAGE_START);
         mainPanel.add(contentPanel, BorderLayout.CENTER);
@@ -38,9 +41,30 @@ class UserInterface extends JFrame {
         frame.setVisible(true);
     }
 
-    /**********************************************
-     * Custom containers w/ respective components *
-     **********************************************/
+    /**
+     * Navigation for general options and settings
+     */
+    private static class MenuBar extends JMenuBar {
+        JMenu mainMenu = new SystemMenu();
+
+        MenuBar() {
+            add(mainMenu);
+            add(Box.createHorizontalGlue()); // Items added after this are glued to the right side of the window.
+        }
+
+        private static class SystemMenu extends JMenu {
+            JMenuItem exitItem = new JMenuItem("Exit");
+
+            SystemMenu() {
+                super("System");
+
+                addSeparator();
+
+                exitItem.addActionListener(e -> System.exit(0)); // Kill the program on button click.
+                add(exitItem);
+            }
+        }
+    }
 
     private static class MainPanel extends JPanel {
         MainPanel() {
@@ -48,19 +72,20 @@ class UserInterface extends JFrame {
         }
     }
 
+    /**
+     * Shows options for traversing the hotel through it's floors.
+     */
     private static class NavigationPanel extends JPanel {
         Dimension dimension = new Dimension(80, 60);
         FloorsPanel floorsPanel = new FloorsPanel();
-        ExitPanel exitPanel = new ExitPanel();
 
         NavigationPanel() {
             super(new BorderLayout());
 
             setPreferredSize(dimension);
-            setBackground(Color.lightGray); // TODO: Remove this panel marker.
+            setBackground(Color.lightGray);
 
             add(floorsPanel, BorderLayout.LINE_START);
-            add(exitPanel, BorderLayout.LINE_END);
         }
 
         private static class FloorsPanel extends JPanel {
@@ -73,41 +98,44 @@ class UserInterface extends JFrame {
 
                 // TODO: Split this into inner class
                 JPanel panel = new JPanel(new FlowLayout());
-                panel.add(new JButton("Floor 1"));
-                panel.add(new JButton("Floor 2"));
-                panel.add(new JButton("Floor 3"));
-                panel.add(new JButton("Floor 4"));
+
+                // TODO: Implement button state manager to unselect other buttons on selection
+                panel.add(new FloorButton(1));
+                panel.add(new FloorButton(2));
+                panel.add(new FloorButton(3));
+                panel.add(new FloorButton(4));
 
                 add(panel, BorderLayout.LINE_START);
             }
-        }
 
-        private class ExitPanel extends JPanel {
-            ExitButton exitButton = new ExitButton("Exit", dimension);
+            private static class FloorButton extends JButton {
+                boolean selected = false;
+                Integer number;
 
-            ExitPanel() {
-                setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
+                FloorButton(Integer number) {
+                    super(String.format("Floor %s", number));
+                    this.number = number;
 
-                add(exitButton);
-            }
+                    setBackground(Color.white);
 
-            private class ExitButton extends JButton {
+                    addActionListener(e -> changeSelectedState(!selected));
+                }
 
                 /**
-                 * @param text      Text to be displayed in the button
-                 * @param dimension Button's width & height size
-                 * @see JButton
+                 * Render button in either `selected` or `unselected` state by changing it's appearance.
+                 *
+                 * @param selected Boolean value whether or not the button is to shown as selected or unselected.
                  */
-                ExitButton(String text, Dimension dimension) {
-                    super(String.format("<html><span style='color: white'>%s</span></html>", text)); // Set button's text with JButton's constructor.
+                void changeSelectedState(boolean selected) {
+                    this.selected = selected;
 
-                    setPreferredSize(new Dimension(
-                            dimension.width,
-                            dimension.height - 10
-                    )); // Same size as containing panel, minus 10 pixels in height margin.
-
-                    setBackground(Color.red); // Make it white to remove the ugly metallic gradient.
-                    addActionListener(e -> System.exit(0)); // Kill the program on button click.
+                    if (selected) {
+                        setBackground(Color.blue);
+                        setText(String.format("<html><span style='color: white'>Floor %s</span></html>", this.number));
+                    } else {
+                        setBackground(Color.white);
+                        setText(String.format("<html>Floor %s</html>", this.number));
+                    }
                 }
             }
         }
