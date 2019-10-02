@@ -13,6 +13,22 @@ public class Entry {
 
         System.out.println("No matter how many times I say hello, the world never answers.");
 
+        TaskRepository taskRepository = new TaskRepository();
+        taskRepository.enQueue(new Task(1));
+        taskRepository.enQueue(new Task(2));
+        taskRepository.enQueue(new Task(3));
+        System.out.println(taskRepository.getSize());
+        taskRepository.elements();
+        taskRepository.addEmergencyTask(new Task(55));
+        System.out.println(taskRepository.peek().getTaskNumber());
+        taskRepository.elements();
+        taskRepository.deQueue();
+        taskRepository.deQueue();
+        taskRepository.deQueue();
+        taskRepository.deQueue();
+        taskRepository.deQueue();
+        taskRepository.elements();
+
         UserInterface menu = new UserInterface();
     }
 }
