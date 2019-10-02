@@ -1,3 +1,7 @@
 public interface HotelElement {
-    void getLocation();
+    int getWidth();
+    int getHeight();
+    int getX();
+    int getY();
+    boolean isWalkable();
 }
