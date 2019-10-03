@@ -1,4 +1,4 @@
-public class Cinema implements HotelElement{
+public class Cinema implements HotelElement,IObserve{
     private int width;
     private int height;
     private int x;
@@ -11,6 +11,9 @@ public class Cinema implements HotelElement{
         this.y = y;
     }
 
+    public void observe(){
+        //start playing a movie
+    }
 
     public int getWidth() {
         return width;

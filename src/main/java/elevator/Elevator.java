@@ -70,7 +70,7 @@ public class Elevator {
     }
 
     /**
-     * Simulates a single step (HTE) of the elevator's movement pattern.
+     * Simulates a single step (HotelTimer) of the elevator's movement pattern.
      */
     public void step(){
         if(currentDestination == -1){
