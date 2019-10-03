@@ -15,19 +15,24 @@ public class Entry {
 
         TaskRepository taskRepository = new TaskRepository();
         taskRepository.enQueue(new Task(1));
-        taskRepository.enQueue(new Task(2));
-        taskRepository.enQueue(new Task(3));
-        System.out.println(taskRepository.getSize());
+        taskRepository.enQueue(new Task(10));
+        taskRepository.enQueue(new Task(100));
+
+        taskRepository.addEmergencyTask(new Task(300));
+        taskRepository.addEmergencyTask(new Task(500));
         taskRepository.elements();
-        taskRepository.addEmergencyTask(new Task(55));
-        System.out.println(taskRepository.peek().getTaskNumber());
-        taskRepository.elements();
-        taskRepository.deQueue();
-        taskRepository.deQueue();
-        taskRepository.deQueue();
-        taskRepository.deQueue();
-        taskRepository.deQueue();
-        taskRepository.elements();
+        try {
+            taskRepository.deQueue();
+            taskRepository.deQueue();
+            taskRepository.deQueue();
+            taskRepository.deQueue();
+            taskRepository.deQueue();
+            taskRepository.deQueue();
+            taskRepository.deQueue();
+            taskRepository.deQueue();
+        } catch (Exception e) {
+        }
+
 
         UserInterface menu = new UserInterface();
     }

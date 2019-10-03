@@ -2,7 +2,6 @@ import java.util.ArrayList;
 
 public class TaskRepository {
     private ArrayList<Task> taskQueue;
-    private int head = 0;
     private boolean isEmpty;
 
     public TaskRepository() {
@@ -22,27 +21,24 @@ public class TaskRepository {
         return true;
     }
 
-    public void deQueue() {
-        try {
-            if (taskQueue.size() > 0) {
-                this.taskQueue.remove(head);
-            } else {
-                isEmpty();
-            }
-        } catch (Exception e) {
-            System.out.println("No tasks to dequeue");
+    public Task deQueue() throws Exception {
+        if (taskQueue.size() > 0) {
+            Task removed = this.taskQueue.remove(0);
+            return removed;
+        }else{
+            throw new Exception("Cannot dequeue when task queue is empty.");
         }
     }
 
     public Task peek() {
-        return taskQueue.get(head);
+        return taskQueue.get(0);
     }
 
     public void addEmergencyTask(Task emergencyTask) {
         if (getSize() == 0) {
             enQueue(emergencyTask);
         } else {
-            taskQueue.add(head, emergencyTask);
+            taskQueue.add(0, emergencyTask);
         }
     }
 
