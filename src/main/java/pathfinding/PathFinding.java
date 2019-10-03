@@ -6,42 +6,28 @@ import java.util.List;
 
 public class PathFinding {
     /**
-     * List open nodes  // deze bevat de nodes die nog berekend moeten worden
-     * List closed nodes   // deze bevat de nodes die al berekend zijn, hier gaan we niet meer naar terug
-     *
-     *  Stap 1 voeg de start node toe aan de open list
-     *
-     *  Loop
-     *      Current node = node in open list met de laagste f cost
-     *      verwijder current van open list
-     *      voeg current node toe aan closed list
-     *
-     *      Als de current node de target node is, return, want we hebben het pad
-     *
-     *      Anders
-     *      Voor elke naaste node van de current node:
-     *          Als de node niet bewandelbaar is OF als de node in de clossed list zit
-     *              Ga naar de volgende node
-     *          Als het nieuwe pad naar de naaste node korter is OF als de node nog niet in de open list zit
-     *              Set f cost van de naaste node
-     *              Set parent van naaste node naar de huidige node
-     *              Als de naaste node niet in de open list staat voeg hem dan toe
-     *
-     *
-     *  1 Maak een grid node class, kan bewandel baar zijn of solid
-     *  2 Maak een grid en vul die met nodes
-     *  3
+     *  openList deze bevat de nodes die nog berekend moeten worden
+     *  closedList bevat de nodes die al berekend zijn, hier gaan we niet meer naar terug
      */
-
 
     private ArrayList<Node> openList = new ArrayList<>();
     private ArrayList<Node> closedList = new ArrayList<>();
 
+    /**
+     * @param startNode
+     * @param endNode
+     * @return de endNode met een parent node, de parent node heeft weer een parent node, enz., tot aan de startNode. Dit is het pad
+     */
     public Node doPathFinding(Node startNode, Node endNode){
         Node currentNode = startNode;
+
         openList.add(startNode);
 
         while(currentNode!=endNode){
+            /** gCost = afstand naar vorige node
+             * hCost = geschate affstand naar de eind node
+             * fCost = gCost + hCost
+             * currentNode = node in open list met de laagste fCost */
             currentNode = getLowestFCostNode(openList);
             openList.remove(currentNode);
             closedList.add(currentNode);
@@ -49,7 +35,7 @@ public class PathFinding {
                 return currentNode;
             }
             else {
-
+                /**Voor elke node waarmee de current node verbonden is*/
                 List<Connection> neighbourList = currentNode.getNeighbours();
                 for(Connection connection:neighbourList){
                     Node node = connection.getNode();
@@ -57,6 +43,7 @@ public class PathFinding {
                         continue;
                     }
                     double gCost = calGCost(currentNode,connection);
+                    /**Als het nieuwe pad naar de naaste node korter is OF als de node nog niet in de open list zit*/
                     if(gCost < node.getgCost() || !openList.contains(node)){
                         node.setgCost(gCost);
                         node.sethCost(calHCost(node, endNode));

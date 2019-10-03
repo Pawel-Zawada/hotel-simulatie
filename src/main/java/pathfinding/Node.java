@@ -15,6 +15,7 @@ public class Node {
     private Node parentNode;
 
     public Node(){} // Dijkstra
+
     public Node(int x, int y){ // A*
         this.x = x;
         this.y = y;
