@@ -6,8 +6,8 @@ import java.util.List;
 
 public class PathFinding {
     /**
-     *  openList deze bevat de nodes die nog berekend moeten worden
-     *  closedList bevat de nodes die al berekend zijn, hier gaan we niet meer naar terug
+     *  openList contains nodes yet to be calculated
+     *  closedList contains nodes already calculated, we wont return no this list
      */
 
     private ArrayList<Node> openList = new ArrayList<>();
@@ -16,7 +16,7 @@ public class PathFinding {
     /**
      * @param startNode
      * @param endNode
-     * @return de endNode met een parent node, de parent node heeft weer een parent node, enz., tot aan de startNode. Dit is het pad
+     * @return returns the endNode, the endNode contains a parentNode, every parentNode contains a parentNode, until the startNode, this is the path
      */
     public Node doPathFinding(Node startNode, Node endNode){
         Node currentNode = startNode;
@@ -24,10 +24,10 @@ public class PathFinding {
         openList.add(startNode);
 
         while(currentNode!=endNode){
-            /** gCost = afstand naar vorige node
-             * hCost = geschate affstand naar de eind node
+            /** gCost = distance to previous node
+             * hCost = estimated distance to end node
              * fCost = gCost + hCost
-             * currentNode = node in open list met de laagste fCost */
+             * currentNode = node in openList with the lowest fCost */
             currentNode = getLowestFCostNode(openList);
             openList.remove(currentNode);
             closedList.add(currentNode);
@@ -35,7 +35,7 @@ public class PathFinding {
                 return currentNode;
             }
             else {
-                /**Voor elke node waarmee de current node verbonden is*/
+                /**For every node connected to the current node*/
                 List<Connection> neighbourList = currentNode.getNeighbours();
                 for(Connection connection:neighbourList){
                     Node node = connection.getNode();
@@ -43,7 +43,7 @@ public class PathFinding {
                         continue;
                     }
                     double gCost = calGCost(currentNode,connection);
-                    /**Als het nieuwe pad naar de naaste node korter is OF als de node nog niet in de open list zit*/
+                    /**If the new path to the next node is shorter, of if the next node is not yet in the open list */
                     if(gCost < node.getgCost() || !openList.contains(node)){
                         node.setgCost(gCost);
                         node.sethCost(calHCost(node, endNode));
