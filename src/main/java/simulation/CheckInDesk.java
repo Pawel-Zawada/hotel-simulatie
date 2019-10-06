@@ -1,10 +1,12 @@
-public class Hallway implements HotelElement{
+package simulation;
+
+public class CheckInDesk implements HotelElement{
     private int width;
     private int height;
     private int x;
     private int y;
 
-    public Hallway(int width, int height, int x, int y){
+    public CheckInDesk(int width, int height,int x,int y){
         this.width = width;
         this.height = height;
         this.x = x;
@@ -33,4 +35,3 @@ public class Hallway implements HotelElement{
         return false;
     }
 }
-

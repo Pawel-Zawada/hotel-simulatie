@@ -1,10 +1,12 @@
-public class Elevator implements HotelElement {
+package simulation;
+
+public class Room implements HotelElement{
     private int width;
     private int height;
     private int x;
     private int y;
 
-    public Elevator(int width, int height, int x, int y){
+    public Room(int width, int height,int x,int y){
         this.width = width;
         this.height = height;
         this.x = x;
@@ -33,3 +35,4 @@ public class Elevator implements HotelElement {
         return false;
     }
 }
+

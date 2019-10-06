@@ -2,6 +2,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 
+import drawing.UserInterface;
+import simulation.Cleaner;
+import simulation.Floor;
+import simulation.Guest;
+import simulation.IObserver;
+import tasks.Task;
+import tasks.TaskRepository;
+
 public class Entry {
     public static void main(String[] args){
 

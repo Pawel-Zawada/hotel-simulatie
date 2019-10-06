@@ -1,16 +1,22 @@
-public class Gym implements HotelElement{
+
+package simulation;
+
+public class Cinema implements HotelElement, IObserver {
     private int width;
     private int height;
     private int x;
     private int y;
 
-    public Gym(int width, int height, int x, int y){
+    public Cinema(int width, int height, int x, int y){
         this.width = width;
         this.height = height;
         this.x = x;
         this.y = y;
     }
 
+    public void observe(){
+        //start playing a movie
+    }
 
     public int getWidth() {
         return width;
@@ -33,3 +39,4 @@ public class Gym implements HotelElement{
         return false;
     }
 }
+

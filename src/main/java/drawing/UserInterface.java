@@ -1,3 +1,8 @@
+package drawing;
+
+import assets.FileAssetLoader;
+import simulation.Hotel;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -7,7 +12,7 @@ import java.awt.*;
  * Contains functionality that allows the user to manipulate the application through settings.
  * For example: Changing HotelTimer's, switching floors, etc.
  */
-class UserInterface extends JFrame {
+public class UserInterface extends JFrame {
     private final JFrame frame = new JFrame("Hotel Simulator"); // Main frame to contain the menu panels.
 
     /**************
@@ -29,11 +34,12 @@ class UserInterface extends JFrame {
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH); // Set frame to fullscreen mode...
-        frame.setUndecorated(true); // ...*without* window bar.
+        frame.setSize(640,640);
+        //frame.setExtendedState(JFrame.MAXIMIZED_BOTH); // Set frame to fullscreen mode...
+        //frame.setUndecorated(true); // ...*without* window bar.
     }
 
-    UserInterface() {
+    public UserInterface() {
         setup();
         frame.setVisible(true);
     }
@@ -117,8 +123,13 @@ class UserInterface extends JFrame {
         ContentPanel() {
             super(new FlowLayout(FlowLayout.CENTER, 16, 8));
 
-            JLabel label = new JLabel("<html><font>Testing label text</font></html>");
-            add(label);
+
+            var component = new GameComponent(new FileAssetLoader());
+            add(component, BorderLayout.PAGE_END);
+            component.setHotel(new Hotel(0));
+
+            //JLabel label = new JLabel("<html><font>Testing label text</font></html>");
+            //add(label);
             setBackground(Color.white); // TODO: Remove this panel marker.
         }
     }

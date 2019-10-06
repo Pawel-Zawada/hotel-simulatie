@@ -1,10 +1,12 @@
-public class Restaurant implements HotelElement{
+package simulation;
+
+public class Lobby implements HotelElement{
     private int width;
     private int height;
     private int x;
     private int y;
 
-    public Restaurant(int width, int height, int x, int y){
+    public Lobby(int width, int height, int x, int y){
         this.width = width;
         this.height = height;
         this.x = x;

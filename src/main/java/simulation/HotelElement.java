@@ -1,3 +1,5 @@
+package simulation;
+
 public interface HotelElement {
     int getWidth();
     int getHeight();
