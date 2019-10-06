@@ -82,7 +82,7 @@ class UserInterface extends JFrame {
             SystemMenu() {
                 super("System");
 
-                settingsItem.addActionListener(e -> settingsDialog.setVisible(true));
+                settingsItem.addActionListener(e -> settingsDialog.setVisible(true)); // Open settings dialog.
                 add(settingsItem);
 
                 addSeparator();
@@ -95,9 +95,8 @@ class UserInterface extends JFrame {
              * General settings like changing HTE value.
              */
             private class SettingsDialog extends JDialog {
-                static final int HTE_MIN = 0;
-                static final int HTE_MAX = 30;
-                static final int HTE_INIT = 15;
+                HTESlider HTESlider = new HTESlider();
+                JLabel label = new JLabel("HTE ticks per second");
 
                 SettingsDialog() {
                     super(UserInterface.this.frame, "Settings", true);
@@ -106,16 +105,30 @@ class UserInterface extends JFrame {
                     setSize(new Dimension(800, 900));
                     setLocationRelativeTo(null);
 
-                    JLabel sliderLabel = new JLabel("HTE ticks per second");
-                    sliderLabel.setAlignmentX(LEFT_ALIGNMENT);
-                    sliderLabel.setBorder(new EmptyBorder(5,5,0,0));
+                    label.setAlignmentX(LEFT_ALIGNMENT);
+                    label.setBorder(new EmptyBorder(5, 5, 0, 0));
 
-                    JSlider slider = new JSlider(JSlider.HORIZONTAL,
-                            HTE_MIN, HTE_MAX, HTE_INIT);
-                    slider.setAlignmentX(LEFT_ALIGNMENT);
+                    add(label);
+                    add(HTESlider);
+                }
 
-                    add(sliderLabel);
-                    add(slider);
+                private class HTESlider extends JSlider {
+                    static final int HTE_MIN = 0;
+                    static final int HTE_MAX = 30;
+                    static final int HTE_INIT = 15;
+
+                    HTESlider() {
+                        super(JSlider.HORIZONTAL,
+                                HTE_MIN, HTE_MAX, HTE_INIT);
+
+                        // Display labels at major tick marks.
+                        setMajorTickSpacing(10);
+                        setMinorTickSpacing(1);
+                        setPaintTicks(true);
+                        setPaintLabels(true);
+
+                        setAlignmentX(LEFT_ALIGNMENT);
+                    }
                 }
             }
         }
