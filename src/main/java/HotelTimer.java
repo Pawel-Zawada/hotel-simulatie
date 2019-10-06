@@ -3,7 +3,7 @@ import java.util.List;
 import java.util.TimerTask;
 
 public class HotelTimer  extends TimerTask {
-    private List<IObserve> observers = new ArrayList();
+    private List<IObserver> observers = new ArrayList();
 
     HotelTimer(List observers){
         this.observers = observers;
@@ -15,9 +15,8 @@ public class HotelTimer  extends TimerTask {
     }
 
     private void notifyObservers(){
-        for(IObserve observer: observers){
+        for(IObserver observer: observers){
             observer.observe();
         }
     }
-
 }

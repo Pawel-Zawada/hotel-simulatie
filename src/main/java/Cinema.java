@@ -1,4 +1,4 @@
-public class Cinema implements HotelElement,IObserve{
+public class Cinema implements HotelElement, IObserver {
     private int width;
     private int height;
     private int x;

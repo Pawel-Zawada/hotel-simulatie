@@ -1,4 +1,4 @@
-public class Guest implements IObserve {
+public class Guest implements IObserver {
     public void observe() {
         System.out.println("I have been notified");
     }

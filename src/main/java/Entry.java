@@ -15,7 +15,7 @@ public class Entry {
         //temp guest and cleaner observers
         Cleaner tempCleaner = new Cleaner();
         Guest tempGuest = new Guest();
-        List<IObserve> tempObservers = new ArrayList<>();
+        List<IObserver> tempObservers = new ArrayList<>();
         tempObservers.add(tempCleaner);
         tempObservers.add(tempGuest);
         timer.schedule(new HotelTimer(tempObservers), 0, HotelTimeSpeed);
