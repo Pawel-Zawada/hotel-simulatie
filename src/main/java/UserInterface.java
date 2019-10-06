@@ -9,13 +9,9 @@ import java.awt.*;
  */
 class UserInterface extends JFrame {
     private final JFrame frame = new JFrame("Hotel Simulator"); // Main frame to contain the menu panels.
+    private final JMenuBar menuBar = new MenuBar();
 
-    /**************
-     * Containers *
-     **************/
-    private JMenuBar menuBar = new MenuBar();
-    private final MainPanel mainPanel = new MainPanel(); // Container panel to display subcomponents like navigation and content.
-    private final NavigationPanel navigationPanel = new NavigationPanel(); // Will act as the container for navigational buttons.
+    private final ContainerPanel containerPanel = new ContainerPanel(); // Container panel to display subcomponents like navigation and content.
     private final ContentPanel contentPanel = new ContentPanel(); // Contextual content of the currently selected navigation. (For example `settings`)
 
     /**
@@ -24,11 +20,10 @@ class UserInterface extends JFrame {
     private void setup() {
         frame.setJMenuBar(menuBar);
 
-        // Set `mainPanel` as the container to all components of the interface.
-        mainPanel.add(navigationPanel, BorderLayout.PAGE_START);
-        mainPanel.add(contentPanel, BorderLayout.CENTER);
+        // Set `containerPanel` as the container to all components of the interface.
+        containerPanel.add(contentPanel, BorderLayout.CENTER);
 
-        frame.setContentPane(mainPanel);
+        frame.setContentPane(containerPanel);
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -42,9 +37,31 @@ class UserInterface extends JFrame {
     }
 
     /**
+     * Contains all elements to be displayed to the end user.
+     */
+    private static class ContainerPanel extends JPanel {
+        ContainerPanel() {
+            super(new BorderLayout());
+        }
+    }
+
+    /**
+     * General content like hotel visualisation.
+     */
+    private static class ContentPanel extends JPanel {
+        ContentPanel() {
+            super(new FlowLayout(FlowLayout.CENTER, 16, 8));
+
+            JLabel label = new JLabel("<html><font>Testing label text</font></html>");
+            add(label);
+            setBackground(Color.white);
+        }
+    }
+
+    /**
      * Navigation for general options and settings
      */
-    private static class MenuBar extends JMenuBar {
+    private class MenuBar extends JMenuBar {
         JMenu mainMenu = new SystemMenu();
 
         MenuBar() {
@@ -52,102 +69,37 @@ class UserInterface extends JFrame {
             add(Box.createHorizontalGlue()); // Items added after this are glued to the right side of the window.
         }
 
-        private static class SystemMenu extends JMenu {
+        /**
+         * System related options, including the exit button.
+         */
+        private class SystemMenu extends JMenu {
             JMenuItem exitItem = new JMenuItem("Exit");
+            JMenuItem settingsItem = new JMenuItem("Settings");
+            SettingsDialog settingsDialog = new SettingsDialog();
 
             SystemMenu() {
                 super("System");
+
+                settingsItem.addActionListener(e -> settingsDialog.setVisible(true));
+                add(settingsItem);
 
                 addSeparator();
 
                 exitItem.addActionListener(e -> System.exit(0)); // Kill the program on button click.
                 add(exitItem);
             }
-        }
-    }
 
-    private static class MainPanel extends JPanel {
-        MainPanel() {
-            super(new BorderLayout());
-        }
-    }
+            /**
+             * General settings like changing HTE value.
+             */
+            private class SettingsDialog extends JDialog {
+                SettingsDialog() {
+                    super(UserInterface.this.frame, "Settings");
 
-    /**
-     * Shows options for traversing the hotel through it's floors.
-     */
-    private static class NavigationPanel extends JPanel {
-        Dimension dimension = new Dimension(80, 60);
-        FloorsPanel floorsPanel = new FloorsPanel();
-
-        NavigationPanel() {
-            super(new BorderLayout());
-
-            setPreferredSize(dimension);
-            setBackground(Color.lightGray);
-
-            add(floorsPanel, BorderLayout.LINE_START);
-        }
-
-        private static class FloorsPanel extends JPanel {
-            FloorsPanel() {
-                super(new BorderLayout());
-
-                setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 5));
-
-                add(new JLabel("Floors:"), BorderLayout.PAGE_START);
-
-                // TODO: Split this into inner class
-                JPanel panel = new JPanel(new FlowLayout());
-
-                // TODO: Implement button state manager to unselect other buttons on selection
-                panel.add(new FloorButton(1));
-                panel.add(new FloorButton(2));
-                panel.add(new FloorButton(3));
-                panel.add(new FloorButton(4));
-
-                add(panel, BorderLayout.LINE_START);
-            }
-
-            private static class FloorButton extends JButton {
-                boolean selected = false;
-                Integer number;
-
-                FloorButton(Integer number) {
-                    super(String.format("Floor %s", number));
-                    this.number = number;
-
-                    setBackground(Color.white);
-
-                    addActionListener(e -> changeSelectedState(!selected));
-                }
-
-                /**
-                 * Render button in either `selected` or `unselected` state by changing it's appearance.
-                 *
-                 * @param selected Boolean value whether or not the button is to shown as selected or unselected.
-                 */
-                void changeSelectedState(boolean selected) {
-                    this.selected = selected;
-
-                    if (selected) {
-                        setBackground(Color.blue);
-                        setText(String.format("<html><span style='color: white'>Floor %s</span></html>", this.number));
-                    } else {
-                        setBackground(Color.white);
-                        setText(String.format("<html>Floor %s</html>", this.number));
-                    }
+                    setSize(new Dimension(800, 900));
+                    setLocationRelativeTo(null);
                 }
             }
-        }
-    }
-
-    private static class ContentPanel extends JPanel {
-        ContentPanel() {
-            super(new FlowLayout(FlowLayout.CENTER, 16, 8));
-
-            JLabel label = new JLabel("<html><font>Testing label text</font></html>");
-            add(label);
-            setBackground(Color.white); // TODO: Remove this panel marker.
         }
     }
 }
