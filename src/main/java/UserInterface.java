@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 
 /**
@@ -75,6 +76,7 @@ class UserInterface extends JFrame {
         private class SystemMenu extends JMenu {
             JMenuItem exitItem = new JMenuItem("Exit");
             JMenuItem settingsItem = new JMenuItem("Settings");
+
             SettingsDialog settingsDialog = new SettingsDialog();
 
             SystemMenu() {
@@ -93,11 +95,27 @@ class UserInterface extends JFrame {
              * General settings like changing HTE value.
              */
             private class SettingsDialog extends JDialog {
+                static final int HTE_MIN = 0;
+                static final int HTE_MAX = 30;
+                static final int HTE_INIT = 15;
+
                 SettingsDialog() {
-                    super(UserInterface.this.frame, "Settings");
+                    super(UserInterface.this.frame, "Settings", true);
+                    setLayout(new BoxLayout(getContentPane(), BoxLayout.PAGE_AXIS));
 
                     setSize(new Dimension(800, 900));
                     setLocationRelativeTo(null);
+
+                    JLabel sliderLabel = new JLabel("HTE ticks per second");
+                    sliderLabel.setAlignmentX(LEFT_ALIGNMENT);
+                    sliderLabel.setBorder(new EmptyBorder(5,5,0,0));
+
+                    JSlider slider = new JSlider(JSlider.HORIZONTAL,
+                            HTE_MIN, HTE_MAX, HTE_INIT);
+                    slider.setAlignmentX(LEFT_ALIGNMENT);
+
+                    add(sliderLabel);
+                    add(slider);
                 }
             }
         }
