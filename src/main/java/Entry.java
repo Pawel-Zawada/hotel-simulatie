@@ -1,11 +1,24 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Timer;
+
 public class Entry {
     public static void main(String[] args){
 
+        int HotelTimeSpeed = 5000; // 1000 = 1 sec // this will be adjustable
 
 
         Floor floorOne = new Floor(10 ,10,1);
         Floor floorTwo = new Floor(10 ,10,2);
-     //   PathFinding pathFinding = new PathFinding(floorOne,floorTwo,floorOne.getHotelElements()[1],floorTwo.getHotelElements()[10]);
+
+        Timer timer = new Timer();
+        //temp guest and cleaner observers
+        Cleaner tempCleaner = new Cleaner();
+        Guest tempGuest = new Guest();
+        List<IObserver> tempObservers = new ArrayList<>();
+        tempObservers.add(tempCleaner);
+        tempObservers.add(tempGuest);
+        timer.schedule(new HotelTimer(tempObservers), 0, HotelTimeSpeed);
 
 
 

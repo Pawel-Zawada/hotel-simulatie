@@ -1,3 +1,5 @@
-public class Cleaner {
+public class Cleaner implements IObserver {
+    public void observe(){
 
+    }
 }

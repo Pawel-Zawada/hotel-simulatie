@@ -5,7 +5,7 @@ import java.awt.*;
  * @author Pawel Zawada
  * Core interface for main interactions between the user and application.
  * Contains functionality that allows the user to manipulate the application through settings.
- * For example: Changing HTE's, switching floors, etc.
+ * For example: Changing HotelTimer's, switching floors, etc.
  */
 class UserInterface extends JFrame {
     private final JFrame frame = new JFrame("Hotel Simulator"); // Main frame to contain the menu panels.
