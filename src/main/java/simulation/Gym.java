@@ -1,10 +1,12 @@
-public class Lobby implements HotelElement{
+package simulation;
+
+public class Gym implements HotelElement{
     private int width;
     private int height;
     private int x;
     private int y;
 
-    public Lobby(int width, int height, int x, int y){
+    public Gym(int width, int height, int x, int y){
         this.width = width;
         this.height = height;
         this.x = x;
@@ -33,4 +35,3 @@ public class Lobby implements HotelElement{
         return false;
     }
 }
-

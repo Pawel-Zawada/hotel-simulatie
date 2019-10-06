@@ -1,3 +1,5 @@
+package simulation;
+
 public class Floor {
     private int width;
     private int height;

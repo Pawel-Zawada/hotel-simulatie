@@ -1,4 +1,7 @@
 import org.junit.Test;
+import tasks.Task;
+import tasks.TaskRepository;
+
 import static org.junit.Assert.*;
 
 public class TaskRepositoryTest {
