@@ -2,6 +2,7 @@ package drawing;
 
 import assets.FileAssetLoader;
 import simulation.Hotel;
+import system.Core;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -13,7 +14,7 @@ import java.awt.*;
  * Contains functionality that allows the user to manipulate the application through settings.
  * For example: Changing HotelTimer's, switching floors, etc.
  */
-class UserInterface extends JFrame {
+public class UserInterface extends JFrame {
     private final JFrame frame = new JFrame("Hotel Simulator"); // Main frame to contain the menu panels.
     private final JMenuBar menuBar = new MenuBar();
 
@@ -37,7 +38,7 @@ class UserInterface extends JFrame {
         frame.setUndecorated(true); // ...*without* window bar.
     }
 
-    UserInterface() {
+    public UserInterface() {
         setup();
         frame.setVisible(true);
     }
@@ -131,7 +132,7 @@ class UserInterface extends JFrame {
                     static final int HTE_MAJOR_SPACING = 500;
 
                     HTESlider() {
-                        super(JSlider.HORIZONTAL, HTE_MIN, HTE_MAX, Entry.hotelTimer.getHTE());
+                        super(JSlider.HORIZONTAL, HTE_MIN, HTE_MAX, Core.hotelTimer.getHTE());
 
                         // Display labels at major tick marks.
                         setMinorTickSpacing(HTE_MINOR_SPACING);
@@ -143,7 +144,7 @@ class UserInterface extends JFrame {
                         setAlignmentX(LEFT_ALIGNMENT);
 
                         // Change HTE value on every slider value change. Should not mess up simulation as the dialog freezes the frame.
-                        addChangeListener(e -> Entry.hotelTimer.setHTE(getValue()));
+                        addChangeListener(e -> Core.hotelTimer.setHTE(getValue()));
                     }
                 }
             }

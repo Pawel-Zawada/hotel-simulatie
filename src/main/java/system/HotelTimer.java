@@ -1,10 +1,14 @@
+package system;
+
 import simulation.IObserver;
 
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-class HotelTimer {
+public class HotelTimer {
+    public static HotelTimer hotelTimer;
+
     private Timer timer = new Timer();
     private ArrayList<IObserver> observers;
     // Initial HTE value.
@@ -48,7 +52,7 @@ class HotelTimer {
         scheduleTimer(); // Schedule task in newly built timer.
     }
 
-    int getHTE() {
+    public int getHTE() {
         return HTE;
     }
 
@@ -57,7 +61,7 @@ class HotelTimer {
      *
      * @param HTE How many seconds a tick takes.
      */
-    void setHTE(int HTE) {
+    public void setHTE(int HTE) {
         this.HTE = HTE;
 
         rescheduleTimer(); // Reschedule timer with the new HTE value.
