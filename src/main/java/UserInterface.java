@@ -96,7 +96,7 @@ class UserInterface extends JFrame {
              */
             private class SettingsDialog extends JDialog {
                 HTESlider HTESlider = new HTESlider();
-                JLabel label = new JLabel("HTE ticks per second");
+                JLabel label = new JLabel("Milliseconds interval per HTE tick");
 
                 SettingsDialog() {
                     super(UserInterface.this.frame, "Settings", true);
@@ -108,26 +108,34 @@ class UserInterface extends JFrame {
                     label.setAlignmentX(LEFT_ALIGNMENT);
                     label.setBorder(new EmptyBorder(5, 5, 0, 0));
 
+                    // HTE setting label & slider
                     add(label);
                     add(HTESlider);
                 }
 
+                /**
+                 * Slider that enables the user to change the amount of HTE ticks every X amount of seconds.
+                 */
                 private class HTESlider extends JSlider {
-                    static final int HTE_MIN = 0;
-                    static final int HTE_MAX = 30;
-                    static final int HTE_INIT = 15;
+                    static final int HTE_MIN = 500;
+                    static final int HTE_MAX = 5000;
+                    static final int HTE_MINOR_SPACING = 500;
+                    static final int HTE_MAJOR_SPACING = 500;
 
                     HTESlider() {
-                        super(JSlider.HORIZONTAL,
-                                HTE_MIN, HTE_MAX, HTE_INIT);
+                        super(JSlider.HORIZONTAL, HTE_MIN, HTE_MAX, Entry.hotelTimer.getHTE());
 
                         // Display labels at major tick marks.
-                        setMajorTickSpacing(10);
-                        setMinorTickSpacing(1);
+                        setMinorTickSpacing(HTE_MINOR_SPACING);
+                        setMajorTickSpacing(HTE_MAJOR_SPACING);
+
                         setPaintTicks(true);
                         setPaintLabels(true);
-
+                        setSnapToTicks(true);
                         setAlignmentX(LEFT_ALIGNMENT);
+
+                        // Change HTE value on every slider value change. Should not mess up simulation as the dialog freezes the frame.
+                        addChangeListener(e -> Entry.hotelTimer.setHTE(getValue()));
                     }
                 }
             }
