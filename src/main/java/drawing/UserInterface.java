@@ -126,7 +126,7 @@ public class UserInterface extends JFrame {
 
             var component = new GameComponent(new FileAssetLoader());
             add(component, BorderLayout.PAGE_END);
-            component.setHotel(new Hotel(0));
+        //    component.setHotel(new Hotel(0));
 
             //JLabel label = new JLabel("<html><font>Testing label text</font></html>");
             //add(label);

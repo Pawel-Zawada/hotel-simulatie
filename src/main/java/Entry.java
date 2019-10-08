@@ -4,10 +4,8 @@ import java.util.List;
 import java.util.Timer;
 
 import drawing.UserInterface;
-import simulation.Cleaner;
-import simulation.Floor;
-import simulation.Guest;
-import simulation.IObserver;
+import json.JsonReader;
+import simulation.*;
 import tasks.Task;
 import tasks.TaskRepository;
 
@@ -16,9 +14,8 @@ public class Entry {
 
         int HotelTimeSpeed = 5000; // 1000 = 1 sec // this will be adjustable
 
-
-        Floor floorOne = new Floor(10 ,10,1);
-        Floor floorTwo = new Floor(10 ,10,2);
+        HotelFactory hotelFactory = new HotelFactory();
+        hotelFactory.createHotel("json/hotel4.json");
 
         Timer timer = new Timer();
         //temp guest and cleaner observers
@@ -28,8 +25,6 @@ public class Entry {
         tempObservers.add(tempCleaner);
         tempObservers.add(tempGuest);
         timer.schedule(new HotelTimer(tempObservers), 0, HotelTimeSpeed);
-
-
 
         //System.out.println(pathFinding.doPathFinding());
 
