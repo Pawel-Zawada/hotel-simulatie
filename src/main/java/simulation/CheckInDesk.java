@@ -1,5 +1,7 @@
 package simulation;
 
+import drawing.DrawHelper;
+
 public class CheckInDesk implements HotelElement{
     private int width;
     private int height;
@@ -33,5 +35,10 @@ public class CheckInDesk implements HotelElement{
 
     public boolean isWalkable() {
         return false;
+    }
+
+    @Override
+    public void draw(DrawHelper drawHelper) {
+        drawHelper.drawSprite("checkin", x, y);
     }
 }

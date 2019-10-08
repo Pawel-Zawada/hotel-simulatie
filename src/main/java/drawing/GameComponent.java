@@ -16,7 +16,8 @@ public class GameComponent extends JComponent {
     public GameComponent(AssetLoader assetLoader) {
         this.drawHelper = new DrawHelper(assetLoader);
 
-        super.setPreferredSize(new Dimension(800, 600));
+        setPreferredSize(new Dimension(800, 600));
+        setBorder(BorderFactory.createLineBorder(Color.red));
     }
 
     @Override
@@ -30,18 +31,34 @@ public class GameComponent extends JComponent {
         drawHelper.setRandomSeed(baseSeed);
         drawHelper.setGraphics((Graphics2D)g);
 
+//        for(int i = 0; i < 10; i++){
+//            for(int j = 0; j < 10; j++){
+//                drawHelper.drawSprite("elevator", i, j);
+//            }
+//        }
+
         hotel.draw(drawHelper);
     }
 
     public void setHotel(Hotel hotel) {
         this.baseSeed = new Random().nextInt();
         this.hotel = hotel;
+        this.drawHelper.setHotel(hotel);
 
-        var preferredWidth = hotel.getWidth() * DrawHelper.SPRITE_SIZE * DrawHelper.SCALE_FACTOR;
-        var preferredHeight = hotel.getHeight() * DrawHelper.SPRITE_SIZE * DrawHelper.SCALE_FACTOR;
+        var size = getPreferredSize();
 
-        super.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
-        super.setMinimumSize(new Dimension(preferredWidth, preferredHeight));
+        var xScale = (float)size.width / hotel.getWidth() / DrawHelper.SPRITE_SIZE;
+        var yScale = (float)size.height / hotel.getHeight() / DrawHelper.SPRITE_SIZE;
+
+        var minScale = Math.min(xScale, yScale);
+
+        drawHelper.setScaleFactor(minScale);
+
+        //var preferredWidth = hotel.getWidth() * DrawHelper.SPRITE_SIZE * ;
+        //var preferredHeight = hotel.getHeight() * DrawHelper.SPRITE_SIZE * DrawHelper.SCALE_FACTOR;
+
+        //super.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
+        //super.setMinimumSize(new Dimension(preferredWidth, preferredHeight));
         super.repaint();
     }
 }
