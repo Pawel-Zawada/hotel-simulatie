@@ -13,7 +13,6 @@ public class Elevator implements HotelElement {
         this.y = y;
     }
 
-
     public int getWidth() {
         return width;
     }
@@ -34,4 +33,6 @@ public class Elevator implements HotelElement {
     public boolean isWalkable() {
         return false;
     }
+
+//    public static ArrayList<Guest> guestsInElevator = new ArrayList<>();
 }

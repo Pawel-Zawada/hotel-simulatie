@@ -15,17 +15,17 @@ public class Hotel {
         return floors;
     }
 
-    ArrayList<Guest> guests = new ArrayList<>();
+    public static ArrayList<Guest> guests = new ArrayList<>();
 
     public void newGuest() {
-        guests.add(GuestFactory.makeNewGeust());
+        guests.add(GuestFactory.makeNewGuest());
     }
 
     public void deadGuest(Guest guest) {
         guests.remove(guest);
     }
 
-    public int numberOfGuests() {
+    public static int numberOfGuests() {
         return guests.size();
     }
 }
