@@ -8,6 +8,9 @@ import java.util.ArrayList;
 
 public class Hotel implements Drawable {
     ArrayList<HotelElement> hotelElements;
+    ArrayList<Guest> guests = new ArrayList<>();
+
+
     private final int width;
     private final int height;
 
@@ -26,7 +29,20 @@ public class Hotel implements Drawable {
     }
 
     public void draw(DrawHelper drawHelper) {
-        drawHelper.drawSprite("player_right", 0,0);
-        //loop over hotel elements and draw elements
+        for(var element: hotelElements){
+            element.draw(drawHelper);
+        }
+    }
+
+    public void newGuest() {
+        guests.add(GuestFactory.makeNewGeust());
+    }
+
+    public void deadGuest(Guest guest) {
+        guests.remove(guest);
+    }
+
+    public int numberOfGuests() {
+        return guests.size();
     }
 }

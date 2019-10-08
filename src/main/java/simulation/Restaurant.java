@@ -1,5 +1,7 @@
 package simulation;
 
+import drawing.DrawHelper;
+
 public class Restaurant implements HotelElement{
     private int width;
     private int height;
@@ -14,7 +16,6 @@ public class Restaurant implements HotelElement{
         this.y = y;
         this.capacity = capacity;
     }
-
 
     public int getWidth() {
         return width;
@@ -35,6 +36,16 @@ public class Restaurant implements HotelElement{
 
     public boolean isWalkable() {
         return false;
+    }
+
+    @Override
+    public void draw(DrawHelper drawHelper) {
+        for(int x = 0; x < this.width; x++){
+            // Also support rooms higher than 1.
+            for(int y = 0; y < this.height; y++){
+                drawHelper.drawSprite("player_right", this.x + x, this.y + y);
+            }
+        }
     }
 }
 

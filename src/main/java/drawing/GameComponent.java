@@ -36,6 +36,7 @@ public class GameComponent extends JComponent {
     public void setHotel(Hotel hotel) {
         this.baseSeed = new Random().nextInt();
         this.hotel = hotel;
+        this.drawHelper.setHotel(hotel);
 
         var preferredWidth = hotel.getWidth() * DrawHelper.SPRITE_SIZE * DrawHelper.SCALE_FACTOR;
         var preferredHeight = hotel.getHeight() * DrawHelper.SPRITE_SIZE * DrawHelper.SCALE_FACTOR;

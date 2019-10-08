@@ -1,6 +1,8 @@
 
 package simulation;
 
+import drawing.DrawHelper;
+
 public class Cinema implements HotelElement, IObserver {
     private int width;
     private int height;
@@ -37,6 +39,11 @@ public class Cinema implements HotelElement, IObserver {
 
     public boolean isWalkable() {
         return false;
+    }
+
+    @Override
+    public void draw(DrawHelper drawHelper) {
+        drawHelper.drawSprite("player_right", x, y);
     }
 }
 

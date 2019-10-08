@@ -48,7 +48,7 @@ public class JsonReader {
         }
         int[] splitStringToIn = new int[2];
         splitStringToIn[0] = Integer.parseInt(splitString[0]);
-        splitStringToIn[1] = Integer.parseInt(splitString[0]);
+        splitStringToIn[1] = Integer.parseInt(splitString[1]);
         return splitStringToIn;
     }
 }

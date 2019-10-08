@@ -19,12 +19,14 @@ public class UserInterface extends JFrame {
     private final JMenuBar menuBar = new MenuBar();
 
     private final ContainerPanel containerPanel = new ContainerPanel(); // Container panel to display subcomponents like navigation and content.
-    private final ContentPanel contentPanel = new ContentPanel(); // Contextual content of the currently selected navigation. (For example `settings`)
+    private ContentPanel contentPanel; // Contextual content of the currently selected navigation. (For example `settings`)
+    private Hotel hotel;
 
     /**
      * Build frame & containing panels with respective components.
      */
     private void setup() {
+        contentPanel = new ContentPanel(hotel);
         frame.setJMenuBar(menuBar);
 
         // Set `containerPanel` as the container to all components of the interface.
@@ -34,11 +36,13 @@ public class UserInterface extends JFrame {
 
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH); // Set frame to fullscreen mode...
-        frame.setUndecorated(true); // ...*without* window bar.
+        frame.setSize(1000, 1000);
+//        frame.setExtendedState(JFrame.MAXIMIZED_BOTH); // Set frame to fullscreen mode...
+//        frame.setUndecorated(true); // ...*without* window bar.
     }
 
-    public UserInterface() {
+    public UserInterface(Hotel hotel) {
+        this.hotel = hotel;
         setup();
         frame.setVisible(true);
     }
@@ -56,7 +60,7 @@ public class UserInterface extends JFrame {
      * General content like hotel visualisation.
      */
     private static class ContentPanel extends JPanel {
-        ContentPanel() {
+        ContentPanel(Hotel hotel) {
             super(new FlowLayout(FlowLayout.CENTER, 16, 8));
 
             JLabel label = new JLabel("<html><font>Testing label text</font></html>");
@@ -64,7 +68,7 @@ public class UserInterface extends JFrame {
             setBackground(Color.white);
             GameComponent component = new GameComponent(new FileAssetLoader());
             add(component, BorderLayout.PAGE_END);
-            component.setHotel(new Hotel(0));
+            component.setHotel(hotel);
         }
     }
 

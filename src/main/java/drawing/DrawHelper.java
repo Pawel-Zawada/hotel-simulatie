@@ -2,6 +2,7 @@ package drawing;
 
 import assets.AssetLoader;
 import simulation.Direction;
+import simulation.Hotel;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -12,8 +13,8 @@ import java.util.Random;
 
 public class DrawHelper {
 
-    public static final int SPRITE_SIZE = 16;
-    public static final int SCALE_FACTOR = 4;
+    public static final int SPRITE_SIZE = 32;
+    public static final int SCALE_FACTOR = 1;
 
     private final AssetLoader assetLoader;
     private final Random random = new Random();
@@ -24,6 +25,7 @@ public class DrawHelper {
     private Map<String, Font> fontMap = new HashMap<>();
     private int originX;
     private int originY;
+    private Hotel hotel;
 
     public DrawHelper(AssetLoader assetLoader){
         this.assetLoader = assetLoader;
@@ -128,6 +130,8 @@ public class DrawHelper {
     }
 
     private void drawSprite(Image sprite, Direction direction, int x, int y) {
+        y = hotel.getHeight() - y;
+
         var rotation = direction.ordinal() * Math.PI * 0.5; // 1/2pi rad = 90°
 
         // Create a fresh transform to apply to the sprite.
@@ -139,5 +143,9 @@ public class DrawHelper {
         transform.translate(-0.5 * SPRITE_SIZE, -0.5 * SPRITE_SIZE);
 
         graphics.drawImage(sprite, transform, null);
+    }
+
+    public void setHotel(Hotel hotel) {
+        this.hotel = hotel;
     }
 }

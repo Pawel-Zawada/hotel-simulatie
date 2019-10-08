@@ -1,5 +1,7 @@
 package simulation;
 
+import drawing.DrawHelper;
+
 public class Elevator implements HotelElement {
     private int width;
     private int height;
@@ -33,5 +35,10 @@ public class Elevator implements HotelElement {
 
     public boolean isWalkable() {
         return false;
+    }
+
+    @Override
+    public void draw(DrawHelper drawHelper) {
+        drawHelper.drawSprite("player_right", x, y);
     }
 }
