@@ -5,12 +5,14 @@ public class Restaurant implements HotelElement{
     private int height;
     private int x;
     private int y;
+    private int capacity;
 
-    public Restaurant(int width, int height, int x, int y){
+    public Restaurant(int width, int height, int x, int y, int capacity){
         this.width = width;
         this.height = height;
         this.x = x;
         this.y = y;
+        this.capacity = capacity;
     }
 
 
