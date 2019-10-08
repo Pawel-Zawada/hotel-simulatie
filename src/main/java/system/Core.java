@@ -1,6 +1,7 @@
 package system;
 
 import drawing.UserInterface;
+import events.EventsAdapter;
 import simulation.Cleaner;
 import simulation.Guest;
 import simulation.HotelFactory;
@@ -24,6 +25,8 @@ public class Core {
         tempObservers.add(tempGuest);
 
         hotelTimer = new HotelTimer(tempObservers);
+
+        EventsAdapter adapter = new EventsAdapter();
 
         // System.out.println(pathFinding.doPathFinding()); // TODO: Uncomment or remove this line.
 
