@@ -1,7 +1,7 @@
 package simulation;
 
 public class GuestFactory {
-    public Guest makeNewGeust() {
+    public static Guest makeNewGeust() {
         return new Guest();
     }
 }
