@@ -1,8 +1,10 @@
 package system;
 
 import drawing.UserInterface;
-import pathfinding.Graph;
-import simulation.*;
+import events.EventsAdapter;
+import simulation.Cleaner;
+import simulation.HotelFactory;
+import simulation.IObserver;
 
 import java.util.ArrayList;
 
@@ -18,6 +20,7 @@ public class Core {
         hotel.newGuest();
         ArrayList<IObserver> tempObservers = new ArrayList<>();
         tempObservers.add(tempCleaner);
+        EventsAdapter adapter = new EventsAdapter();
 
         userInterface = new UserInterface(hotel);
     }
