@@ -7,7 +7,7 @@ import json.JsonReader;
 import java.util.ArrayList;
 
 public class Hotel implements Drawable {
-    ArrayList<HotelElement> hotelElements = new ArrayList<>();
+    ArrayList<HotelElement> hotelElements;
     private final int width;
     private final int height;
 
@@ -15,7 +15,6 @@ public class Hotel implements Drawable {
         this.hotelElements = hotelElements;
         this.width = width;
         this.height = height;
-        System.out.println(hotelElements.get(0));
     }
 
     public int getWidth() {
@@ -28,5 +27,6 @@ public class Hotel implements Drawable {
 
     public void draw(DrawHelper drawHelper) {
         drawHelper.drawSprite("player_right", 0,0);
+        //loop over hotel elements and draw elements
     }
 }

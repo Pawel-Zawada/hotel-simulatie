@@ -13,10 +13,12 @@ public class HotelFactory {
         return new Hotel(hotelElements, numberOfFloors(hotelElements),width(hotelElements));
     }
 
+    //create lift and stairs and lobby
+
     private int numberOfFloors(ArrayList<HotelElement> hotelElements){
         int numberOfFloors = 1;
         for(HotelElement hotelElement: hotelElements){
-            if(hotelElement.getY() > numberOfFloors){
+            if(hotelElement.getY()+1 > numberOfFloors){
                 numberOfFloors = hotelElement.getY();
             }
         }
@@ -26,7 +28,7 @@ public class HotelFactory {
     private int width(ArrayList<HotelElement> hotelElements){
         int width = 1;
         for(HotelElement hotelElement: hotelElements){
-            if(hotelElement.getX() > width){
+            if(hotelElement.getX()+2 > width){
                 width = hotelElement.getX();
             }
         }
