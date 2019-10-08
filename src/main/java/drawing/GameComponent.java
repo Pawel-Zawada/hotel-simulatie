@@ -16,7 +16,8 @@ public class GameComponent extends JComponent {
     public GameComponent(AssetLoader assetLoader) {
         this.drawHelper = new DrawHelper(assetLoader);
 
-        super.setPreferredSize(new Dimension(800, 600));
+        setPreferredSize(new Dimension(800, 600));
+        setBorder(BorderFactory.createLineBorder(Color.red));
     }
 
     @Override
@@ -29,6 +30,12 @@ public class GameComponent extends JComponent {
         // so random objects are drawn in the same location.
         drawHelper.setRandomSeed(baseSeed);
         drawHelper.setGraphics((Graphics2D)g);
+
+//        for(int i = 0; i < 10; i++){
+//            for(int j = 0; j < 10; j++){
+//                drawHelper.drawSprite("elevator", i, j);
+//            }
+//        }
 
         hotel.draw(drawHelper);
     }

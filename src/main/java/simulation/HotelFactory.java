@@ -10,7 +10,16 @@ public class HotelFactory {
         //load Hotel from json file
         JsonReader jsonReader = new JsonReader();
         ArrayList<HotelElement> hotelElements = jsonReader.loadHotelElements(jsonFile);
-        return new Hotel(hotelElements, numberOfFloors(hotelElements),width(hotelElements));
+
+        var numberOfFloors = numberOfFloors(hotelElements);
+        var width = width(hotelElements);
+
+        hotelElements.add(new Elevator(1, numberOfFloors, 0, 0));
+        hotelElements.add(new Stairs(1, numberOfFloors, width - 1, 0));
+        hotelElements.add(new CheckInDesk(1, 1, 1, 0));
+        hotelElements.add(new Lobby(width - 3, 1, 2,0 ));
+
+        return new Hotel(hotelElements, width, numberOfFloors);
     }
 
     //create lift and stairs and lobby
@@ -18,8 +27,10 @@ public class HotelFactory {
     private int numberOfFloors(ArrayList<HotelElement> hotelElements){
         int numberOfFloors = 1;
         for(HotelElement hotelElement: hotelElements){
-            if(hotelElement.getY()+1 > numberOfFloors){
-                numberOfFloors = hotelElement.getY();
+            int y = hotelElement.getY();
+            int yMax = y+hotelElement.getHeight();
+            if(yMax > numberOfFloors){
+                numberOfFloors = yMax;
             }
         }
         return numberOfFloors;
@@ -28,11 +39,14 @@ public class HotelFactory {
     private int width(ArrayList<HotelElement> hotelElements){
         int width = 1;
         for(HotelElement hotelElement: hotelElements){
-            if(hotelElement.getX()+2 > width){
-                width = hotelElement.getX();
+            int x = hotelElement.getX();
+            int xMax = x + hotelElement.getWidth();
+            if(xMax > width){
+                width = xMax;
             }
         }
-        return width;
+        // Add one to account for the stairs all the way at the right.
+        return width + 1;
     }
 }
 

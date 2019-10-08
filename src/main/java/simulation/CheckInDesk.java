@@ -39,6 +39,6 @@ public class CheckInDesk implements HotelElement{
 
     @Override
     public void draw(DrawHelper drawHelper) {
-        drawHelper.drawSprite("player_right", x, y);
+        drawHelper.drawSprite("checkin", x, y);
     }
 }

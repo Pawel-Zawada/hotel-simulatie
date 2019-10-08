@@ -43,7 +43,7 @@ public class Restaurant implements HotelElement{
         for(int x = 0; x < this.width; x++){
             // Also support rooms higher than 1.
             for(int y = 0; y < this.height; y++){
-                drawHelper.drawSprite("player_right", this.x + x, this.y + y);
+                drawHelper.drawSprite("restaurant", this.x + x, this.y + y);
             }
         }
     }

@@ -43,7 +43,16 @@ public class Cinema implements HotelElement, IObserver {
 
     @Override
     public void draw(DrawHelper drawHelper) {
-        drawHelper.drawSprite("player_right", x, y);
+        for(int x = 0; x < this.width; x++){
+            // Also support rooms higher than 1.
+            for(int y = 0; y < this.height; y++){
+                if(y == 0){
+                    drawHelper.drawSprite("cinema", this.x + x, this.y + y);
+                }else{
+                    drawHelper.drawSprite("cinema_background", this.x + x, this.y + y);
+                }
+            }
+        }
     }
 }
 

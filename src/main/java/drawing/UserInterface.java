@@ -61,14 +61,15 @@ public class UserInterface extends JFrame {
      */
     private static class ContentPanel extends JPanel {
         ContentPanel(Hotel hotel) {
-            super(new FlowLayout(FlowLayout.CENTER, 16, 8));
+            super(new FlowLayout());
 
-            JLabel label = new JLabel("<html><font>Testing label text</font></html>");
-            add(label);
             setBackground(Color.white);
             GameComponent component = new GameComponent(new FileAssetLoader());
             add(component, BorderLayout.PAGE_END);
             component.setHotel(hotel);
+
+
+            setBorder(BorderFactory.createLineBorder(Color.blue));
         }
     }
 

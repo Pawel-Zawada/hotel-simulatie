@@ -130,7 +130,7 @@ public class DrawHelper {
     }
 
     private void drawSprite(Image sprite, Direction direction, int x, int y) {
-        y = hotel.getHeight() - y;
+        y = hotel.getHeight() - y - 1;
 
         var rotation = direction.ordinal() * Math.PI * 0.5; // 1/2pi rad = 90°
 
