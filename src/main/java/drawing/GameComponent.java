@@ -45,11 +45,20 @@ public class GameComponent extends JComponent {
         this.hotel = hotel;
         this.drawHelper.setHotel(hotel);
 
-        var preferredWidth = hotel.getWidth() * DrawHelper.SPRITE_SIZE * DrawHelper.SCALE_FACTOR;
-        var preferredHeight = hotel.getHeight() * DrawHelper.SPRITE_SIZE * DrawHelper.SCALE_FACTOR;
+        var size = getPreferredSize();
 
-        super.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
-        super.setMinimumSize(new Dimension(preferredWidth, preferredHeight));
+        var xScale = (float)size.width / hotel.getWidth() / DrawHelper.SPRITE_SIZE;
+        var yScale = (float)size.height / hotel.getHeight() / DrawHelper.SPRITE_SIZE;
+
+        var minScale = Math.min(xScale, yScale);
+
+        drawHelper.setScaleFactor(minScale);
+
+        //var preferredWidth = hotel.getWidth() * DrawHelper.SPRITE_SIZE * ;
+        //var preferredHeight = hotel.getHeight() * DrawHelper.SPRITE_SIZE * DrawHelper.SCALE_FACTOR;
+
+        //super.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
+        //super.setMinimumSize(new Dimension(preferredWidth, preferredHeight));
         super.repaint();
     }
 }
