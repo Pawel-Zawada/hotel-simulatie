@@ -14,7 +14,7 @@ public class Core {
 
     public Core() {
         var factory = new HotelFactory();
-        var hotel = factory.createHotel("assets/hotels/hotel_1.layout");
+        var hotel = factory.createHotel("assets/hotels/hotel_2.layout");
 
         // Temp guest and cleaner observers
         Cleaner tempCleaner = new Cleaner();
