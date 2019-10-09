@@ -3,19 +3,20 @@ package simulation;
 import drawing.DrawHelper;
 import drawing.Drawable;
 import json.JsonReader;
+import pathfinding.Graph;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class Hotel implements Drawable {
 
     ArrayList<HotelElement> hotelElements;
     ArrayList<Guest> guests = new ArrayList<>();
-
-
     private final int width;
     private final int height;
     private int elevatorWeight;
     private int stairsWeight;
+    Graph graph;
 
     public Hotel( ArrayList<HotelElement> hotelElements,int width,int height){
         this.hotelElements = hotelElements;
@@ -24,6 +25,7 @@ public class Hotel implements Drawable {
         // temp, will be dynamic
         this.elevatorWeight = 10;
         this.stairsWeight = 4;
+        graph = Graph.createGraph(this);
     }
 
     public int getWidth() {
@@ -38,10 +40,17 @@ public class Hotel implements Drawable {
         for(var element: hotelElements){
             element.draw(drawHelper);
         }
+        for(var guest: guests){
+            guest.draw(drawHelper);
+        }
     }
 
     public void newGuest() {
-        guests.add(GuestFactory.makeNewGeust());
+        var guest = GuestFactory.makeNewGeust(this);
+        guests.add(guest);
+        var destinations = hotelElements.stream().filter(e->e.getClass()==Room.class).collect(Collectors.toList());
+
+        guest.moveTo(graph, destinations.get(destinations.size()-1));
     }
 
     public void deadGuest(Guest guest) {
@@ -72,4 +81,7 @@ public class Hotel implements Drawable {
         this.stairsWeight = stairsWeight;
     }
 
+    public CheckInDesk getCheckInDesk() {
+        return (CheckInDesk)hotelElements.stream().filter(e->e.getClass()==CheckInDesk.class).findFirst().get();
+    }
 }
