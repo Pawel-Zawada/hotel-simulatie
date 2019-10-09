@@ -155,7 +155,12 @@ public class UserInterface extends JFrame {
                     setAlignmentX(LEFT);
 
                     // Change HTE value on every slider value change. Should not mess up simulation as the dialog freezes the frame.
-                    addChangeListener(e -> hotel.getHotelTimer().setHTE(getValue()));
+                    addChangeListener(e -> {
+                        JSlider source = (JSlider) e.getSource();
+                        if (!source.getValueIsAdjusting()) {
+                            Core.hotelTimer.setHTE(source.getValue());
+                        }
+                    });
                 }
             }
 
