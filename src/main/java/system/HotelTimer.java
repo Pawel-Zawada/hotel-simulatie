@@ -11,8 +11,9 @@ public class HotelTimer {
 
     private Timer timer = new Timer();
     private ArrayList<IObserver> observers;
+
     // Initial HTE value.
-    private int HTE = 5000; // 1000 = 1 sec
+    private int HTE = 1000; // 1000 = 1 sec
 
     HotelTimer(ArrayList<IObserver> observers) {
         this.observers = observers; // Store observers that are to be notified after every tick.
