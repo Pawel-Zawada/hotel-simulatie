@@ -4,28 +4,30 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Node {
+public class Node<T> {
 
     private int x;
     private int y;
     private double gCost; // distance to previous node
     private double hCost; //estimated distance to the end node
-    private List<Connection> neighbours = new ArrayList<>();
+    private List<Connection<T>> neighbours = new ArrayList<>();
+    private T element;
 
-    private Node parentNode;
+    private Node<T> parentNode;
 
-    public Node(){} //Dijkstra
+    public Node(T element){this.element = element;} //Dijkstra
 
-    public Node(int x, int y){ //A*
+    public Node(int x, int y, T element){ //A*
         this.x = x;
         this.y = y;
+        this.element = element;
     }
 
-    public List<Connection> getNeighbours(){
+    public List<Connection<T>> getNeighbours(){
         return Collections.unmodifiableList(neighbours);
     }
 
-    public void setParentNode(Node node) {
+    public void setParentNode(Node<T> node) {
         this.parentNode= node;
     }
 
@@ -49,11 +51,11 @@ public class Node {
         return gCost+hCost;
     }
 
-    public Node getParentNode() {
+    public Node<T> getParentNode() {
         return parentNode;
     }
 
-    public void connect(Node node, double weight) {
+    public void connect(Node<T> node, double weight) {
         Connection connection = new Connection(node,weight);
         neighbours.add(connection);
     }
@@ -64,5 +66,9 @@ public class Node {
 
     public int getY() {
         return y;
+    }
+
+    public T getElement() {
+        return element;
     }
 }

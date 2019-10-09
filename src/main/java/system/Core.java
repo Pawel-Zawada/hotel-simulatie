@@ -16,7 +16,7 @@ public class Core {
     public Core() {
         var factory = new HotelFactory();
         var hotel = factory.createHotel("assets/hotels/hotel_2.layout");
-        var graph = new Graph(hotel);
+        var graph = Graph.createGraph(hotel);
 
         // Temp guest and cleaner observers
         Cleaner tempCleaner = new Cleaner();

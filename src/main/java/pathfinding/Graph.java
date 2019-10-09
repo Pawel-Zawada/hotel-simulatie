@@ -1,89 +1,104 @@
 package pathfinding;
 import simulation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 public class Graph {
     private ArrayList<HotelElement> hotelElements;
     private int width;
     private Hotel hotel;
-    HashMap<HotelElement, Node> hotelElementNodeHashMap = new HashMap<>();
+    private List<Node<HotelElement>> nodeList = new ArrayList<>();
 
-    public Graph(Hotel hotel){
+    private Graph(Hotel hotel){
         this.hotel = hotel;
         this.hotelElements = hotel.getHotelElements();
         this.width = hotel.getWidth();
-        fillHotelElementNodeHashMap();
-        setHotelElementNeighbours();
     }
 
-    private void fillHotelElementNodeHashMap(){
+    public static Graph createGraph(Hotel hotel){
+        Graph graph = new Graph(hotel);
+        graph.fillNodeList();
+        graph.setHotelElementNeighbours();
+        return graph;
+    }
+
+    private void fillNodeList(){
         for(HotelElement hotelElement:hotelElements){
             /** Nodes get a X and a Y just in case we want to use A* **/
-            hotelElementNodeHashMap.put( hotelElement,new Node(hotelElement.getX(),hotelElement.getY()));
+            nodeList.add(new Node<>(hotelElement.getX(),hotelElement.getY(),hotelElement));
         }
     }
 
     private void setHotelElementNeighbours(){
-        for(HotelElement hotelElement:hotelElementNodeHashMap.keySet()){
-            if (hotelElement.getClass() == Elevator.class){
-                for(Node node:hotelElementNodeHashMap.values()){
-                    if (hotelElement.getX()+hotelElement.getWidth() == getElementOfNode(node).getX()) {
-                        hotelElementNodeHashMap.get(hotelElement).connect(node, hotel.getElevatorWeight());
+
+        for(Node<HotelElement> node: nodeList){
+            HotelElement hotelElement = node.getElement();
+            if (hotelElement.getClass() == Elevator.class){ //connect elevator to left nodes. in applies elevator weight
+                for(Node<HotelElement> neigbourCandidate: nodeList){
+                    if (hotelElement.getX()+hotelElement.getWidth() == neigbourCandidate.getElement().getX()) {
+                        neigbourCandidate.connect(node, hotel.getElevatorWeight());
+                        node.connect(neigbourCandidate, hotelElement.getWidth());
                     }
                 }
             } else if (hotelElement.getClass() == Stairs.class){
                 //connect left nodes
-                int xOfLeftNode = 0;
-                Node leftNode = null;
-                for(Node node:hotelElementNodeHashMap.values()){
-                    if (hotelElement.getY()==getElementOfNode(node).getY()) { //same floor
-                        if (xOfLeftNode<getElementOfNode(node).getX() && getElementOfNode(node).getX() != hotelElement.getX()){
-                            xOfLeftNode = getElementOfNode(node).getX();
-                            leftNode = node;
-                        }
-                    }
-                }
+                var leftNode = findLeftNeighbour(hotelElement);
                 if (leftNode!= null) {
-                    int weight = hotelElement.getX()-xOfLeftNode;
-                    hotelElementNodeHashMap.get(hotelElement).connect(leftNode, weight);
+                    int weight = hotelElement.getX()-leftNode.getElement().getX();
+                    node.connect(leftNode, weight);
                 }
+
                 //connect top and bottom nodes
-                for(Node node:hotelElementNodeHashMap.values()){
-                    if (hotelElement.getX()==getElementOfNode(node).getX()) { //node is a stairs
-                        if (getElementOfNode(node).getY() == hotelElement.getY()+1 || getElementOfNode(node).getY() == hotelElement.getY()-1){
-                            hotelElementNodeHashMap.get(hotelElement).connect(node, hotel.getStairsWeight());
+                for(Node<HotelElement> neigbourCandidate: nodeList){
+                    if (hotelElement.getX()==neigbourCandidate.getElement().getX()) { //node is a stairs
+                        if (neigbourCandidate.getElement().getY() == hotelElement.getY()+1 || neigbourCandidate.getElement().getY() == hotelElement.getY()-1){
+                            node.connect(neigbourCandidate, hotel.getStairsWeight());
                         }
                     }
                 }
             } else{
-                for (Node node:hotelElementNodeHashMap.values()){
-                    if(getElementOfNode(node).getX() != 0 && getElementOfNode(node).getX() != width-1) {
-                        if (getElementOfNode(node).getY() == hotelElement.getY()) { //same floor
-                            if (getElementOfNode(node).getX() == hotelElement.getX() + hotelElement.getWidth()) { //connect right node
-                                int weight = hotelElement.getX() + hotelElement.getWidth();
-                                hotelElementNodeHashMap.get(hotelElement).connect(node, weight);
-                            }
-
-                            if ((hotelElement.getX()- getElementOfNode(node).getWidth()) == getElementOfNode(node).getX()){ //connect left node
-                                int weight = hotelElement.getX() - getElementOfNode(node).getX();
-                                hotelElementNodeHashMap.get(hotelElement).connect(node, weight);
-                            }
-                        }
-                    }
+                var leftNode = findLeftNeighbour(hotelElement);
+                if (leftNode!= null) {
+                    int weight = hotelElement.getX()-leftNode.getElement().getX();
+                    node.connect(leftNode, weight);
+                }
+                var rightNode = findRightNeighbour(hotelElement);
+                if (rightNode!=null){
+                    int weight = hotelElement.getWidth();
+                    node.connect(rightNode,weight);
                 }
             }
         }
     }
 
-    private HotelElement getElementOfNode(Node node) {
-        HotelElement hotelElement = null;
-        for (HotelElement tmpElement: hotelElementNodeHashMap.keySet()){
-            if (hotelElementNodeHashMap.get(tmpElement) == node){
-                hotelElement = tmpElement;
+
+    public List<Node<HotelElement>> getNodeList(){
+        return Collections.unmodifiableList(nodeList);
+    }
+
+    private Node<HotelElement> findLeftNeighbour(HotelElement hotelElement){
+        int xOfLeftNode = 0;
+        Node leftNode = null;
+        for(Node<HotelElement> neigbourCandidate: nodeList){
+            if (hotelElement.getY()==neigbourCandidate.getElement().getY()) { //same floor
+                if (xOfLeftNode<neigbourCandidate.getElement().getX() && neigbourCandidate.getElement().getX() != hotelElement.getX()){
+                    xOfLeftNode = neigbourCandidate.getElement().getX();
+                    leftNode = neigbourCandidate;
+                }
             }
         }
-        return hotelElement;
+        return leftNode;
+    }
+
+    private Node<HotelElement> findRightNeighbour(HotelElement hotelElement){
+        Node rightNode = null;
+        for(Node<HotelElement> neigbourCandidate: nodeList){
+            if (hotelElement.getY()==neigbourCandidate.getElement().getY()) { //same floor
+                if (hotelElement.getX()+hotelElement.getWidth() == neigbourCandidate.getElement().getX()){
+                    rightNode = neigbourCandidate;
+                }
+            }
+        }
+        return rightNode;
     }
 }
