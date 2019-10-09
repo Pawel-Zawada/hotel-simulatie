@@ -22,6 +22,7 @@ public class Hotel implements Drawable {
         return 10;
     }
 
+
     @Override
     public void draw(DrawHelper drawHelper) {
         drawHelper.drawSprite("player_right", 0,0);

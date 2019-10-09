@@ -1,3 +1,4 @@
+import simulation.Elevator;
 import tasks.TaskRepository;
 
 public class DataCollector {
@@ -35,7 +36,7 @@ public class DataCollector {
     }
 
     public static int guestsInElevator(){
-        return -1;
+        return Elevator.guestsInElevator.size();
     }
 
 
