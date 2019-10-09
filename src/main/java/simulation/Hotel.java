@@ -4,6 +4,7 @@ import drawing.DrawHelper;
 import drawing.Drawable;
 import json.JsonReader;
 import pathfinding.Graph;
+import system.HotelTimer;
 
 import java.util.ArrayList;
 import java.util.stream.Collectors;
@@ -16,16 +17,19 @@ public class Hotel implements Drawable {
     private final int height;
     private int elevatorWeight;
     private int stairsWeight;
-    Graph graph;
+
+    private HotelTimer hotelTimer;
+    private Graph graph;
 
     public Hotel( ArrayList<HotelElement> hotelElements,int width,int height){
         this.hotelElements = hotelElements;
         this.width = width;
         this.height = height;
         // temp, will be dynamic
-        this.elevatorWeight = 10;
+        this.elevatorWeight = 12;
         this.stairsWeight = 4;
         graph = Graph.createGraph(this);
+        hotelTimer = new HotelTimer();
     }
 
     public int getWidth() {
@@ -48,7 +52,9 @@ public class Hotel implements Drawable {
     public void newGuest() {
         var guest = GuestFactory.makeNewGeust(this);
         guests.add(guest);
-        var destinations = hotelElements.stream().filter(e->e.getClass()==Room.class).collect(Collectors.toList());
+        hotelTimer.addObserver(guest);
+
+        var destinations = hotelElements.stream().filter(e->e.getClass()==Cinema.class).collect(Collectors.toList());
 
         guest.moveTo(graph, destinations.get(destinations.size()-1));
     }
@@ -83,5 +89,9 @@ public class Hotel implements Drawable {
 
     public CheckInDesk getCheckInDesk() {
         return (CheckInDesk)hotelElements.stream().filter(e->e.getClass()==CheckInDesk.class).findFirst().get();
+    }
+
+    public HotelTimer getHotelTimer() {
+        return hotelTimer;
     }
 }

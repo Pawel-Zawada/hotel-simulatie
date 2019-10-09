@@ -2,12 +2,13 @@ package drawing;
 
 import assets.AssetLoader;
 import simulation.Hotel;
+import simulation.IObserver;
 
 import javax.swing.*;
 import java.awt.*;
 import java.util.Random;
 
-public class GameComponent extends JComponent {
+public class GameComponent extends JComponent implements IObserver {
     private Hotel hotel;
     private Random random = new Random();
     private DrawHelper drawHelper;
@@ -59,6 +60,11 @@ public class GameComponent extends JComponent {
 
         //super.setPreferredSize(new Dimension(preferredWidth, preferredHeight));
         //super.setMinimumSize(new Dimension(preferredWidth, preferredHeight));
+        super.repaint();
+    }
+
+    @Override
+    public void observe() {
         super.repaint();
     }
 }

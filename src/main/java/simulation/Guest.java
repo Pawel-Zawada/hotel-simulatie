@@ -6,12 +6,16 @@ import pathfinding.Graph;
 import pathfinding.Node;
 import pathfinding.PathFinding;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public class Guest implements IObserver, Drawable {
     private String name;
     private static int guestID = 00;
     private int x;
     private int y;
-    private Node<HotelElement> destinationNode;
+    private List<HotelElement> path = new ArrayList<>();
 
     public Guest(int x, int y){
         guestID++;
@@ -28,8 +32,13 @@ public class Guest implements IObserver, Drawable {
     }
 
     public void observe() {
-        while (destinationNode.getElement().getX() != x && destinationNode.getElement().getY() != y){
+        System.out.println("Step");
+        if(path.size() > 0){
+            var nextElement = path.get(0);
+            path.remove(0);
 
+            this.x = nextElement.getX();
+            this.y = nextElement.getY();
         }
     }
 
@@ -53,6 +62,15 @@ public class Guest implements IObserver, Drawable {
             }
         }
 
-        destinationNode = pathFinding.doPathFinding(startNode,endNode);
+        Node<HotelElement> destinationNode = pathFinding.doPathFinding(startNode,endNode);
+        List<HotelElement> path = new ArrayList<>();
+        var currentNode = destinationNode;
+        do{
+            path.add(currentNode.getElement());
+            currentNode = currentNode.getParentNode();
+        }while(currentNode != null);
+
+        Collections.reverse(path);
+        this.path = path;
     }
 }

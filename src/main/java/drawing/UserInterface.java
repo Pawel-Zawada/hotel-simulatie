@@ -16,9 +16,9 @@ import java.awt.*;
  */
 public class UserInterface extends JFrame {
     private final JFrame frame = new JFrame("Hotel Simulator"); // Main frame to contain the menu panels.
-    private final JMenuBar menuBar = new MenuBar();
+    private final JMenuBar menuBar;
 
-    private final ContainerPanel containerPanel = new ContainerPanel(); // Container panel to display subcomponents like navigation and content.
+    private ContainerPanel containerPanel; // Container panel to display subcomponents like navigation and content.
     private ContentPanel contentPanel; // Contextual content of the currently selected navigation. (For example `settings`)
     private Hotel hotel;
 
@@ -43,6 +43,8 @@ public class UserInterface extends JFrame {
 
     public UserInterface(Hotel hotel) {
         this.hotel = hotel;
+        this.menuBar = new MenuBar();
+        this.containerPanel = new ContainerPanel();
         setup();
         frame.setVisible(true);
     }
@@ -68,6 +70,7 @@ public class UserInterface extends JFrame {
             add(component, BorderLayout.PAGE_END);
             component.setHotel(hotel);
 
+            hotel.getHotelTimer().addAfterEventObserver(component);
 
             setBorder(BorderFactory.createLineBorder(Color.blue));
         }
@@ -137,7 +140,7 @@ public class UserInterface extends JFrame {
                     static final int HTE_MAJOR_SPACING = 500;
 
                     HTESlider() {
-                        super(JSlider.HORIZONTAL, HTE_MIN, HTE_MAX, Core.hotelTimer.getHTE());
+                        super(JSlider.HORIZONTAL, HTE_MIN, HTE_MAX, hotel.getHotelTimer().getHTE());
 
                         // Display labels at major tick marks.
                         setMinorTickSpacing(HTE_MINOR_SPACING);
@@ -149,7 +152,7 @@ public class UserInterface extends JFrame {
                         setAlignmentX(LEFT_ALIGNMENT);
 
                         // Change HTE value on every slider value change. Should not mess up simulation as the dialog freezes the frame.
-                        addChangeListener(e -> Core.hotelTimer.setHTE(getValue()));
+                        addChangeListener(e -> hotel.getHotelTimer().setHTE(getValue()));
                     }
                 }
             }
