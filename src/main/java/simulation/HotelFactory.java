@@ -15,7 +15,11 @@ public class HotelFactory {
         var width = width(hotelElements);
 
         hotelElements.add(new Elevator(1, numberOfFloors, 0, 0));
-        hotelElements.add(new Stairs(1, numberOfFloors, width - 1, 0));
+
+        for(int i = 0; i<numberOfFloors; i++) {
+            hotelElements.add(new Stairs(1, 1, width - 1, i));
+        }
+
         hotelElements.add(new CheckInDesk(1, 1, 1, 0));
         hotelElements.add(new Lobby(width - 3, 1, 2,0 ));
 
