@@ -1,6 +1,7 @@
 package system;
 
 import drawing.UserInterface;
+import pathfinding.Graph;
 import simulation.Cleaner;
 import simulation.Guest;
 import simulation.HotelFactory;
@@ -15,6 +16,7 @@ public class Core {
     public Core() {
         var factory = new HotelFactory();
         var hotel = factory.createHotel("assets/hotels/hotel_2.layout");
+        var graph = Graph.createGraph(hotel);
 
         // Temp guest and cleaner observers
         Cleaner tempCleaner = new Cleaner();
