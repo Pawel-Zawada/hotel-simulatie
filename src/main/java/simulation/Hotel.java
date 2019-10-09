@@ -71,4 +71,5 @@ public class Hotel implements Drawable {
     public void setStairsWeight(int stairsWeight) {
         this.stairsWeight = stairsWeight;
     }
+
 }

@@ -17,7 +17,6 @@ public class Graph {
         this.width = hotel.getWidth();
         this.height = hotel.getHeight();
         fillHotelElementNodeHashMap();
-
         setHotelElementNeighbours();
     }
 
@@ -64,12 +63,13 @@ public class Graph {
                     if(node.getX() != 0 && node.getX() != width-1) {
                         if (node.getY() == hotelElement.getY()) { //same floor
                             if (node.getX() == hotelElement.getX() + hotelElement.getWidth()) { //connect right node
-                                hotelElementNodeHashMap.get(hotelElement).connect(node, 1);
+                                int weight = hotelElement.getX() + hotelElement.getWidth();
+                                hotelElementNodeHashMap.get(hotelElement).connect(node, weight);
                             }
 
                             if ((hotelElement.getX()- getElementOfNode(node).getWidth()) == node.getX()){ //connect left node
-                                hotelElementNodeHashMap.get(hotelElement).connect(node, 1);
-                                System.out.println(node.getX() +" || "+ hotelElement.getX() +" || "+hotelElement.getY());
+                                int weight = hotelElement.getX() - node.getX();
+                                hotelElementNodeHashMap.get(hotelElement).connect(node, weight);
                             }
                         }
                     }
