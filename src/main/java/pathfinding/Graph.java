@@ -40,21 +40,32 @@ public class Graph {
                         node.connect(neigbourCandidate, hotelElement.getWidth());
                     }
                 }
-            } else if (hotelElement.getClass() == Stairs.class){
+            } else if (hotelElement.getClass() == Stairs.class) {
                 //connect left nodes
+                var leftNode = findLeftNeighbour(hotelElement);
+                if (leftNode != null) {
+                    int weight = hotelElement.getX() - leftNode.getElement().getX();
+                    node.connect(leftNode, weight);
+                }
+
+                //connect top and bottom nodes
+                for (Node<HotelElement> neigbourCandidate : nodeList) {
+                    if (hotelElement.getX() == neigbourCandidate.getElement().getX()) { //node is a stairs
+                        if (neigbourCandidate.getElement().getY() == hotelElement.getY() + 1 || neigbourCandidate.getElement().getY() == hotelElement.getY() - 1) {
+                            node.connect(neigbourCandidate, hotel.getStairsWeight());
+                        }
+                    }
+                }
+            }else if(hotelElement.getClass() == Lobby.class){
                 var leftNode = findLeftNeighbour(hotelElement);
                 if (leftNode!= null) {
                     int weight = hotelElement.getX()-leftNode.getElement().getX();
                     node.connect(leftNode, weight);
                 }
-
-                //connect top and bottom nodes
-                for(Node<HotelElement> neigbourCandidate: nodeList){
-                    if (hotelElement.getX()==neigbourCandidate.getElement().getX()) { //node is a stairs
-                        if (neigbourCandidate.getElement().getY() == hotelElement.getY()+1 || neigbourCandidate.getElement().getY() == hotelElement.getY()-1){
-                            node.connect(neigbourCandidate, hotel.getStairsWeight());
-                        }
-                    }
+                var rightNode = findRightNeighbour(hotelElement);
+                if (rightNode!=null){
+                    int weight = hotelElement.getWidth();
+                    node.connect(rightNode,weight);
                 }
             } else{
                 var leftNode = findLeftNeighbour(hotelElement);
@@ -81,7 +92,7 @@ public class Graph {
         Node leftNode = null;
         for(Node<HotelElement> neigbourCandidate: nodeList){
             if (hotelElement.getY()==neigbourCandidate.getElement().getY()) { //same floor
-                if (xOfLeftNode<neigbourCandidate.getElement().getX() && neigbourCandidate.getElement().getX() != hotelElement.getX()){
+                if (xOfLeftNode<neigbourCandidate.getElement().getX() && neigbourCandidate.getElement().getX() < hotelElement.getX()){
                     xOfLeftNode = neigbourCandidate.getElement().getX();
                     leftNode = neigbourCandidate;
                 }
