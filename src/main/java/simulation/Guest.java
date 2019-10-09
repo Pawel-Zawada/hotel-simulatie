@@ -5,41 +5,54 @@ import drawing.Drawable;
 import pathfinding.Graph;
 import pathfinding.Node;
 import pathfinding.PathFinding;
+import tasks.MoveToTask;
+import tasks.Task;
+import tasks.TaskRepository;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Guest implements IObserver, Drawable {
+public class Guest implements IObserver, Person, Drawable {
     private String name;
-    private static int guestID = 00;
     private int x;
     private int y;
-    private List<HotelElement> path = new ArrayList<>();
+    private int guestNumber;
+    private HotelElement currentRoom;
 
-    public Guest(int x, int y){
-        guestID++;
-        this.name = "Guest: " + guestID;
+    private TaskRepository personalTasks = new TaskRepository();
+
+    public Guest(int x, int y, int guestNumber){
+        this.name = "Guest: " + guestNumber;
         this.x = x;
         this.y = y;
+        this.guestNumber = guestNumber;
     }
 
     public String getName(){
         return name;
     }
-    public int getGuestID() {
-        return guestID;
-    }
 
     public void observe() {
-        System.out.println("Step");
-        if(path.size() > 0){
-            var nextElement = path.get(0);
-            path.remove(0);
+        Task task;
+        do{
+            task = personalTasks.peek();
+            if(task == null){
+                // No more tasks left.
+                return;
+            }
+            if(task.isDone()){
+                try {
+                    personalTasks.deQueue();
+                } catch (Exception e) {
+                    // This should never happen (famous last words)
+                    throw new RuntimeException("Attempted to dequeue from an already empty task list.");
+                }
+            }
+        }while (task.isDone());
 
-            this.x = nextElement.getX();
-            this.y = nextElement.getY();
-        }
+        // We now have an active task.
+        task.executeStep();
     }
 
     public void draw(DrawHelper drawHelper) {
@@ -71,6 +84,39 @@ public class Guest implements IObserver, Drawable {
         }while(currentNode != null);
 
         Collections.reverse(path);
-        this.path = path;
+
+        personalTasks.enQueue(new MoveToTask(path, this));
+    }
+
+    @Override
+    public int getX() {
+        return x;
+    }
+
+    @Override
+    public int getY() {
+        return y;
+    }
+
+    @Override
+    public HotelElement getCurrentRoom() {
+        return null;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
+    @Override
+    public void setCurrentRoom(HotelElement room) {
+        this.currentRoom = room;
+    }
+
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public int getGuestNumber() {
+        return this.guestNumber;
     }
 }

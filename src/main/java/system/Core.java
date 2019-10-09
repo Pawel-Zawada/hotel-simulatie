@@ -15,12 +15,7 @@ public class Core {
         var factory = new HotelFactory();
         var hotel = factory.createHotel("assets/hotels/hotel_2.layout");
 
-        // Temp guest and cleaner observers
-        Cleaner tempCleaner = new Cleaner();
-        hotel.newGuest();
-        ArrayList<IObserver> tempObservers = new ArrayList<>();
-        tempObservers.add(tempCleaner);
-        EventsAdapter adapter = new EventsAdapter();
+        EventsAdapter adapter = new EventsAdapter(hotel);
 
         userInterface = new UserInterface(hotel);
     }

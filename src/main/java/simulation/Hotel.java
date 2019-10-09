@@ -2,7 +2,6 @@ package simulation;
 
 import drawing.DrawHelper;
 import drawing.Drawable;
-import json.JsonReader;
 import pathfinding.Graph;
 import system.HotelTimer;
 
@@ -49,14 +48,33 @@ public class Hotel implements Drawable {
         }
     }
 
-    public void newGuest() {
-        var guest = GuestFactory.makeNewGeust(this);
-        guests.add(guest);
-        hotelTimer.addObserver(guest);
+    public void newGuest(int guestNumber, int requestedClassification) {
+        var guest = GuestFactory.makeNewGuest(this, guestNumber);
 
-        var destinations = hotelElements.stream().filter(e->e.getClass()==Cinema.class).collect(Collectors.toList());
+        var destinations = hotelElements.stream()
+                .filter(e->e.getClass()==Room.class)
+                .map(e -> (Room) e)
+                .filter(r -> !r.isOccupied() && !r.isDirty() && r.getClassification() >= requestedClassification)
+                .sorted(new RoomComparator())
+                .collect(Collectors.toList());
 
-        guest.moveTo(graph, destinations.get(destinations.size()-1));
+        if(destinations.size() == 0){
+            // No rooms found. Guest leaves the building.
+            System.out.println("Guest " + guestNumber + " could not get a room.");
+        }else{
+            guests.add(guest);
+            hotelTimer.addObserver(guest);
+            var room = destinations.get(0);
+
+            room.setOccupied(true);
+            if(room.getClassification() > requestedClassification){
+                System.out.println("Guest " + guestNumber + " received a free upgrade (" + requestedClassification + " -> " + room.getClassification() + " stars), room number " + room.getRoomNumber());
+            }else{
+                System.out.println("Guest " + guestNumber + " received room number " + room.getRoomNumber());
+            }
+            guest.moveTo(graph, destinations.get(0));
+        }
+
     }
 
     public void deadGuest(Guest guest) {
@@ -93,5 +111,15 @@ public class Hotel implements Drawable {
 
     public HotelTimer getHotelTimer() {
         return hotelTimer;
+    }
+
+    public void checkOut(int guestNumber) {
+        var guest = getByNumber(guestNumber);
+
+        
+    }
+
+    public Guest getByNumber(int guestNumber){
+        return guests.stream().filter(g -> g.getGuestNumber() == guestNumber).findFirst().get();
     }
 }

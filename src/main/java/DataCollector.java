@@ -16,11 +16,10 @@ public class DataCollector {
     public long getTotalOfGuests() {
         Stream<Guest> guestStream = Stream.of();
         return guestStream
-                .map(Guest::getGuestID)
                 .collect(Collectors.counting());
     }
 
     public static long getNumberOfTasks() {
-        return TaskRepository.getTaskQueue().size();
+        return 0;
     }
 }

@@ -3,7 +3,7 @@ package tasks;
 import java.util.ArrayList;
 
 public class TaskRepository {
-    private static ArrayList<Task> taskQueue;
+    private ArrayList<Task> taskQueue;
     private boolean isEmpty;
 
     public TaskRepository() {
@@ -33,6 +33,9 @@ public class TaskRepository {
     }
 
     public Task peek() {
+        if(taskQueue.size() == 0){
+            return null;
+        }
         return taskQueue.get(0);
     }
 
@@ -43,14 +46,5 @@ public class TaskRepository {
             taskQueue.add(0, emergencyTask);
         }
     }
-
-    public static ArrayList<Task> getTaskQueue(){
-        return taskQueue;
-    }
-
-    public void elements() {
-        taskQueue.forEach(task -> System.out.println(task.getTaskNumber()));
-    }
-
 }
 

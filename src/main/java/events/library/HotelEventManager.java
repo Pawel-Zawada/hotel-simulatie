@@ -337,7 +337,7 @@ public class HotelEventManager implements Runnable {
                         //cont = false;
                         counterHTE++;
 
-                        System.out.println("Event fired at time: " + counterHTE);
+                        //System.out.println("Event fired at time: " + counterHTE);
 
                         cont = fireEvent();
 
