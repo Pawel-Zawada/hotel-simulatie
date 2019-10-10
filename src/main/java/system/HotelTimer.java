@@ -9,13 +9,12 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class HotelTimer {
-    public static HotelTimer hotelTimer;
-
     private Timer timer = new Timer();
     private List<IObserver> observers = new ArrayList<>();
     private List<IObserver> afterEventObservers = new ArrayList<>();
     // Initial HTE value.
     private int HTE = 1000; // 1000 = 1 sec
+    private int HTEIteration = 0; // Which iteration the current tick is.
 
     public HotelTimer() {
         scheduleTimer();
@@ -58,6 +57,10 @@ public class HotelTimer {
         return HTE;
     }
 
+    public int getHTEIteration() {
+        return HTEIteration;
+    }
+
     /**
      * Change the timer interval of the HTE ticks.
      *
@@ -77,7 +80,7 @@ public class HotelTimer {
      * TimerTask responsible for performing action according to every fulfilled tick.
      * Pass this into the `.schedule()` method as the task parameter.
      */
-    private static class HotelTimerTask extends TimerTask {
+    private class HotelTimerTask extends TimerTask {
         private List<IObserver> observers;
         private List<IObserver> afterEventObservers;
 
@@ -92,6 +95,7 @@ public class HotelTimer {
         }
 
         private void notifyObservers() {
+            HotelTimer.this.HTEIteration++; // Update the tick iteration
             for (IObserver observer : observers) {
                 observer.observe();
             }

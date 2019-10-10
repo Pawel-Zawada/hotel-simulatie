@@ -59,7 +59,7 @@ public class Hotel implements Drawable {
         guest.moveTo(graph, destinations.get(destinations.size()-1));
     }
 
-    public void deadGuest(Guest guest) {
+    public void killGuest(Guest guest) { // Muahahaha >:)
         guests.remove(guest);
     }
 
