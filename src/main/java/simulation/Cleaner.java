@@ -1,11 +1,9 @@
 package simulation;
 
-public class Cleaner implements IObserver, Person {
-    public void observe(){
 import tasks.Task;
 import tasks.TaskRepository;
 
-public class Cleaner implements IObserver {
+public class Cleaner implements IObserver, Person {
     public void observe() {
     }
 
@@ -52,9 +50,6 @@ public class Cleaner implements IObserver {
     }
 
     public boolean waitForTask(TaskRepository taskRepository) {
-        if (taskRepository.isEmpty()) {
-            return true;
-        }
-        return false;
+        return taskRepository.isEmpty();
     }
 }

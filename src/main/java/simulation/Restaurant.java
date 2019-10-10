@@ -2,13 +2,17 @@ package simulation;
 
 import drawing.DrawHelper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Restaurant implements HotelElement {
     private int width;
     private int height;
     private int x;
     private int y;
     private int capacity;
-    private int restaurantID;
+
+    private List<Guest> guests = new ArrayList<>();
 
     public Restaurant(int width, int height, int x, int y, int capacity) {
         this.width = width;
@@ -39,37 +43,22 @@ public class Restaurant implements HotelElement {
         return capacity;
     }
 
-    public int getRestaurantID(){
-        return restaurantID;
-    }
-
     public boolean isWalkable() {
-        return false;
+        return true;
     }
-
-    public Guest[] guestsInRestaurant = new Guest[capacity - 1];
 
     public void enterRestaurant(Guest guest) {
-        if (!restaurantFull(guestsInRestaurant)) {
-            for (int i = 0; i < guestsInRestaurant.length - 1; i++) {
-                guestsInRestaurant[i] = guest;
-            }
+        if (!isFull()) {
+            guests.add(guest);
         }
     }
 
-    public boolean restaurantFull(Guest[] guestsInRestaurant) {
-        return guestsInRestaurant.length == capacity - 1;
+    public boolean isFull() {
+        return guests.size() >= capacity;
     }
 
-    public int restaurantGuest(Guest[] guestsInRestaurant) {
-        int numberOfGuestsInRestaurant;
-        if (restaurantFull(guestsInRestaurant)) {
-            return capacity;
-        } else {
-            numberOfGuestsInRestaurant = guestsInRestaurant.length;
-        }
-        return numberOfGuestsInRestaurant;
-
+    public int getNumberOfGuests() {
+        return guests.size();
     }
 
 

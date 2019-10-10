@@ -10,7 +10,7 @@ public class TaskRepository {
         taskQueue = new ArrayList<>();
     }
 
-    public static ArrayList<Task> getTaskQueue() {
+    public ArrayList<Task> getTaskQueue() {
         return taskQueue;
     }
 
@@ -28,7 +28,7 @@ public class TaskRepository {
 
     public Task deQueue() throws Exception {
         if (taskQueue.size() > 0) {
-            taskQueue.remove(0);
+            return taskQueue.remove(0);
         } else {
             throw new Exception("Cannot dequeue when task queue is empty.");
         }

@@ -2,11 +2,12 @@ package simulation;
 
 import drawing.DrawHelper;
 import drawing.Drawable;
-import json.JsonReader;
 import pathfinding.Graph;
 import system.HotelTimer;
+import tasks.TaskRepository;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class Hotel implements Drawable {
@@ -138,5 +139,15 @@ public class Hotel implements Drawable {
             }
         }
         return null;
+    }
+
+    public TaskRepository getTaskQueue() {
+        return new TaskRepository();
+    }
+
+    public List<Restaurant> getRestaurants() {
+        return hotelElements.stream()
+                .filter(e -> e.getClass() == Restaurant.class)
+                .map(e -> (Restaurant) e).collect(Collectors.toList());
     }
 }
