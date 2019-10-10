@@ -5,6 +5,7 @@ import drawing.Drawable;
 import pathfinding.Graph;
 import pathfinding.Node;
 import pathfinding.PathFinding;
+import tasks.CheckOutTask;
 import tasks.MoveToTask;
 import tasks.Task;
 import tasks.TaskRepository;
@@ -18,15 +19,18 @@ public class Guest implements IObserver, Person, Drawable {
     private int x;
     private int y;
     private int guestNumber;
+    private final Hotel hotel;
     private HotelElement currentRoom;
+    private Room room;
 
     private TaskRepository personalTasks = new TaskRepository();
 
-    public Guest(int x, int y, int guestNumber){
+    public Guest(int x, int y, int guestNumber, Hotel hotel){
         this.name = "Guest: " + guestNumber;
         this.x = x;
         this.y = y;
         this.guestNumber = guestNumber;
+        this.hotel = hotel;
     }
 
     public String getName(){
@@ -50,7 +54,6 @@ public class Guest implements IObserver, Person, Drawable {
                 }
             }
         }while (task.isDone());
-
         // We now have an active task.
         task.executeStep();
     }
@@ -76,16 +79,21 @@ public class Guest implements IObserver, Person, Drawable {
         }
 
         Node<HotelElement> destinationNode = pathFinding.doPathFinding(startNode,endNode);
-        List<HotelElement> path = new ArrayList<>();
-        var currentNode = destinationNode;
-        do{
-            path.add(currentNode.getElement());
-            currentNode = currentNode.getParentNode();
-        }while(currentNode != null);
+        if(destinationNode == null){
+            System.out.println("Could not find a path to destination: " + destination.getClass().getName());
 
-        Collections.reverse(path);
+        } else {
+            List<HotelElement> path = new ArrayList<>();
+            var currentNode = destinationNode;
+            do {
+                path.add(currentNode.getElement());
+                currentNode = currentNode.getParentNode();
+            } while (currentNode != null);
 
-        personalTasks.enQueue(new MoveToTask(path, this));
+            Collections.reverse(path);
+
+            personalTasks.enQueue(new MoveToTask(path, this));
+        }
     }
 
     @Override
@@ -100,7 +108,7 @@ public class Guest implements IObserver, Person, Drawable {
 
     @Override
     public HotelElement getCurrentRoom() {
-        return null;
+        return currentRoom;
     }
 
     public void setY(int y) {
@@ -118,5 +126,17 @@ public class Guest implements IObserver, Person, Drawable {
 
     public int getGuestNumber() {
         return this.guestNumber;
+    }
+
+    public void checkOut(){
+        personalTasks.enQueue(new CheckOutTask(hotel, this));
+    }
+
+    public void setRoom(Room room) {
+        this.room = room;
+    }
+
+    public Room getRoom() {
+        return room;
     }
 }

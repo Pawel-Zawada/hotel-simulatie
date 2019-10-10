@@ -56,7 +56,7 @@ public class EventsAdapter implements HotelEventListener, IObserver {
                 hotel.newGuest(checkInEvent.guestNumber, checkInEvent.classification);
             case CHECK_OUT:
                 var checkOutEvent = parseCheckOutEvent(event);
-                hotel.checkOut(checkOutEvent.guestNumber);
+                hotel.requestCheckOut(checkOutEvent.guestNumber);
                 break;
             case CLEANING_EMERGENCY:
                 break;
@@ -76,7 +76,10 @@ public class EventsAdapter implements HotelEventListener, IObserver {
     }
 
     private CheckOutEvent parseCheckOutEvent(HotelEvent event) {
-        return new CheckOutEvent();
+        var eventKey = event.Data.keySet().iterator().next();
+        var guestNumber = Integer.parseInt(eventKey.split(" ")[1]);
+
+        return new CheckOutEvent(guestNumber);
     }
 
     private static CheckInEvent parseCheckInEvent(HotelEvent event){
@@ -103,5 +106,9 @@ public class EventsAdapter implements HotelEventListener, IObserver {
 
     private class CheckOutEvent {
         public int guestNumber;
+
+        public CheckOutEvent(int guestNumber) {
+            this.guestNumber = guestNumber;
+        }
     }
 }

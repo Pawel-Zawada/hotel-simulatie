@@ -67,6 +67,7 @@ public class Hotel implements Drawable {
             var room = destinations.get(0);
 
             room.setOccupied(true);
+            guest.setRoom(room);
             if(room.getClassification() > requestedClassification){
                 System.out.println("Guest " + guestNumber + " received a free upgrade (" + requestedClassification + " -> " + room.getClassification() + " stars), room number " + room.getRoomNumber());
             }else{
@@ -113,13 +114,25 @@ public class Hotel implements Drawable {
         return hotelTimer;
     }
 
-    public void checkOut(int guestNumber) {
+    public void requestCheckOut(int guestNumber) {
         var guest = getByNumber(guestNumber);
+        guest.moveTo(graph, getCheckInDesk());
+        guest.checkOut();
+    }
 
-        
+    public void checkOut(Guest guest){
+        guest.getRoom().setOccupied(false);
+        guest.getRoom().setDirty(true);
+        guests.remove(guest);
+
     }
 
     public Guest getByNumber(int guestNumber){
-        return guests.stream().filter(g -> g.getGuestNumber() == guestNumber).findFirst().get();
+        for(Guest guest:guests){
+            if (guest.getGuestNumber() == guestNumber){
+                return guest;
+            }
+        }
+        return null;
     }
 }
