@@ -4,10 +4,13 @@ import java.util.ArrayList;
 
 public class TaskRepository {
     private static ArrayList<Task> taskQueue;
-    private boolean isEmpty;
 
     public TaskRepository() {
-        this.taskQueue = new ArrayList<>();
+        taskQueue = new ArrayList<>();
+    }
+
+    public static ArrayList<Task> getTaskQueue() {
+        return taskQueue;
     }
 
     public int getSize() {
@@ -15,24 +18,17 @@ public class TaskRepository {
     }
 
     public void enQueue(Task newTask) {
-        this.taskQueue.add(newTask);
-        isEmpty = false;
+        taskQueue.add(newTask);
     }
 
     public boolean isEmpty() {
-        if(taskQueue.size()==0) {
-            return true;
-        } else {
-            return false;
-        }
-
+        return taskQueue.size() == 0;
     }
 
-    public Task deQueue() throws Exception {
+    public void deQueue() throws Exception {
         if (taskQueue.size() > 0) {
-            Task removed = this.taskQueue.remove(0);
-            return removed;
-        }else{
+            taskQueue.remove(0);
+        } else {
             throw new Exception("Cannot dequeue when task queue is empty.");
         }
     }
@@ -47,10 +43,6 @@ public class TaskRepository {
         } else {
             taskQueue.add(0, emergencyTask);
         }
-    }
-
-    public static ArrayList<Task> getTaskQueue(){
-        return taskQueue;
     }
 
     public void elements() {
