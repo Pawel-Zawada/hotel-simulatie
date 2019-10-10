@@ -13,6 +13,8 @@ public class JsonReader {
     private ArrayList<HotelElement> parseJason(String fileName){
         ArrayList<HotelElement> hotelElements = new ArrayList<>();
         Gson gson = new Gson();
+
+        int roomNumber = 1;
         try {
             JsonElement hotelElement = gson.fromJson(new FileReader(fileName), JsonElement.class);
             for (JsonElement.Container container : hotelElement) {
@@ -24,7 +26,7 @@ public class JsonReader {
 
                 switch (container.getAreaType()) {
                     case "Room":
-                        hotelElements.add(new Room(width,height,x,y,Integer.parseInt(container.getClassification().substring(0,1))));
+                        hotelElements.add(new Room(width,height,x,y,Integer.parseInt(container.getClassification().substring(0,1)), roomNumber++));
                         break;
                     case "Restaurant":
                         hotelElements.add(new Restaurant(width,height,x,y, Integer.parseInt(container.getCapacity().substring(0,1))));

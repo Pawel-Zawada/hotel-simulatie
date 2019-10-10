@@ -1,14 +1,8 @@
 package tasks;
 
-public class Task {
-    private int taskNumber;
+public abstract class Task {
+    public abstract boolean isDone();
 
-    public Task(int taskNumber){
-        this.taskNumber = taskNumber;
-    }
-
-    public int getTaskNumber() {
-        return taskNumber;
-    }
+    public abstract void executeStep();
 }
 

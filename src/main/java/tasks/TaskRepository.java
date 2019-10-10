@@ -3,13 +3,14 @@ package tasks;
 import java.util.ArrayList;
 
 public class TaskRepository {
-    private static ArrayList<Task> taskQueue;
+    private ArrayList<Task> taskQueue;
+    private boolean isEmpty;
 
     public TaskRepository() {
         taskQueue = new ArrayList<>();
     }
 
-    public static ArrayList<Task> getTaskQueue() {
+    public ArrayList<Task> getTaskQueue() {
         return taskQueue;
     }
 
@@ -25,15 +26,18 @@ public class TaskRepository {
         return taskQueue.size() == 0;
     }
 
-    public void deQueue() throws Exception {
+    public Task deQueue() throws Exception {
         if (taskQueue.size() > 0) {
-            taskQueue.remove(0);
+            return taskQueue.remove(0);
         } else {
             throw new Exception("Cannot dequeue when task queue is empty.");
         }
     }
 
     public Task peek() {
+        if(taskQueue.size() == 0){
+            return null;
+        }
         return taskQueue.get(0);
     }
 
@@ -44,10 +48,5 @@ public class TaskRepository {
             taskQueue.add(0, emergencyTask);
         }
     }
-
-    public void elements() {
-        taskQueue.forEach(task -> System.out.println(task.getTaskNumber()));
-    }
-
 }
 

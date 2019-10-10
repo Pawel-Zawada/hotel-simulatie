@@ -4,8 +4,10 @@ import drawing.DrawHelper;
 import drawing.Drawable;
 import pathfinding.Graph;
 import system.HotelTimer;
+import tasks.TaskRepository;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class Hotel implements Drawable {
@@ -50,12 +52,33 @@ public class Hotel implements Drawable {
         }
     }
 
-    public void newGuest() {
-        var guest = new GuestFactory().makeNewGuest(this);
-        guests.add(guest);
-        hotelTimer.addObserver(guest);
+    public void newGuest(int guestNumber, int requestedClassification) {
+        var guest = GuestFactory.makeNewGuest(this, guestNumber);
 
-        var destinations = hotelElements.stream().filter(e->e.getClass()==Cinema.class).collect(Collectors.toList());
+        var destinations = hotelElements.stream()
+                .filter(e->e.getClass()==Room.class)
+                .map(e -> (Room) e)
+                .filter(r -> !r.isOccupied() && !r.isDirty() && r.getClassification() >= requestedClassification)
+                .sorted(new RoomComparator())
+                .collect(Collectors.toList());
+
+        if(destinations.size() == 0){
+            // No rooms found. Guest leaves the building.
+            System.out.println("Guest " + guestNumber + " could not get a room.");
+        }else{
+            guests.add(guest);
+            hotelTimer.addObserver(guest);
+            var room = destinations.get(0);
+
+            room.setOccupied(true);
+            guest.setRoom(room);
+            if(room.getClassification() > requestedClassification){
+                System.out.println("Guest " + guestNumber + " received a free upgrade (" + requestedClassification + " -> " + room.getClassification() + " stars), room number " + room.getRoomNumber());
+            }else{
+                System.out.println("Guest " + guestNumber + " received room number " + room.getRoomNumber());
+            }
+            guest.moveTo(graph, destinations.get(0));
+        }
 
         guest.moveTo(graph, destinations.get(destinations.size()-1));
     }
@@ -94,5 +117,37 @@ public class Hotel implements Drawable {
 
     public HotelTimer getHotelTimer() {
         return hotelTimer;
+    }
+
+    public void requestCheckOut(int guestNumber) {
+        var guest = getByNumber(guestNumber);
+        guest.moveTo(graph, getCheckInDesk());
+        guest.checkOut();
+    }
+
+    public void checkOut(Guest guest){
+        guest.getRoom().setOccupied(false);
+        guest.getRoom().setDirty(true);
+        guests.remove(guest);
+
+    }
+
+    public Guest getByNumber(int guestNumber){
+        for(Guest guest:guests){
+            if (guest.getGuestNumber() == guestNumber){
+                return guest;
+            }
+        }
+        return null;
+    }
+
+    public TaskRepository getTaskQueue() {
+        return new TaskRepository();
+    }
+
+    public List<Restaurant> getRestaurants() {
+        return hotelElements.stream()
+                .filter(e -> e.getClass() == Restaurant.class)
+                .map(e -> (Restaurant) e).collect(Collectors.toList());
     }
 }

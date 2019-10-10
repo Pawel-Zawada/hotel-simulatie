@@ -4,19 +4,21 @@ import simulation.Elevator;
 import simulation.Gym;
 import simulation.Hotel;
 import simulation.Restaurant;
-import tasks.TaskRepository;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class DataCollector {
     Hotel hotel;
-    Restaurant restaurant;
+    List<Restaurant> restaurants;
 
-    DataCollector(Hotel hotel, Restaurant restaurant) {
+    public DataCollector(Hotel hotel) {
         this.hotel = hotel;
-        this.restaurant = restaurant;
+        this.restaurants = hotel.getRestaurants();
     }
 
-    public static int getNumberOfTasks() {
-        return TaskRepository.getTaskQueue().size();
+    public int getNumberOfTasks() {
+        return hotel.getTaskQueue().getSize();
     }
 
     public static int getNumberOfOneStarRooms() {
@@ -48,7 +50,7 @@ public class DataCollector {
     }
 
     public int guestsInRestaurant() {
-        return restaurant.guestsInRestaurant.length;
+        return restaurants.stream().collect(Collectors.summingInt(r -> r.getNumberOfGuests()));
     }
 
     public int getTotalOfGuests() {

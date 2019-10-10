@@ -6,7 +6,6 @@ import org.knowm.xchart.XChartPanel;
 import org.knowm.xchart.XYChart;
 import simulation.Hotel;
 import simulation.IObserver;
-import system.Core;
 import system.DataCollector;
 
 import javax.swing.*;
@@ -27,6 +26,7 @@ public class UserInterface extends JFrame {
     private ContainerPanel containerPanel; // Container panel to display subcomponents like navigation and content.
     private ContentPanel contentPanel; // Contextual content of the currently selected navigation. (For example `settings`)
     private Hotel hotel;
+    private DataCollector dataCollector;
 
     /**
      * Build frame & containing panels with respective components.
@@ -49,6 +49,7 @@ public class UserInterface extends JFrame {
 
     public UserInterface(Hotel hotel) {
         this.hotel = hotel;
+        this.dataCollector = new DataCollector(hotel);
         this.menuBar = new MenuBar();
         this.containerPanel = new ContainerPanel();
         setup();
@@ -160,7 +161,7 @@ public class UserInterface extends JFrame {
                     addChangeListener(e -> {
                         JSlider source = (JSlider) e.getSource();
                         if (!source.getValueIsAdjusting()) {
-                            Core.hotelTimer.setHTE(source.getValue());
+                            hotel.getHotelTimer().setHTE(source.getValue());
                         }
                     });
                 }
@@ -199,15 +200,15 @@ public class UserInterface extends JFrame {
                     add(xChartPanel); // Add the panel into the dialog
 
                     // Update statistics every tick
-                    Core.hotelTimer.addObserver(new StatisticsObserver());
+                    hotel.getHotelTimer().addObserver(new StatisticsObserver());
                 }
 
                 /**
                  * Update the data arrays with the latest tick number and number of tasks.
                  */
                 private void updateData() {
-                    xData.add((double) Core.hotelTimer.getHTEIteration());
-                    yData.add((double) DataCollector.getNumberOfTasks());
+                    xData.add((double) hotel.getHotelTimer().getHTEIteration());
+                    yData.add((double) dataCollector.getNumberOfTasks());
                 }
 
                 /**
@@ -225,7 +226,7 @@ public class UserInterface extends JFrame {
                         xChartPanel.revalidate();
                         xChartPanel.repaint();
 
-                        System.out.println(String.format("Number of tasks %s", DataCollector.getNumberOfTasks()));
+                        System.out.println(String.format("Number of tasks %s", dataCollector.getNumberOfTasks()));
                     }
                 }
             }

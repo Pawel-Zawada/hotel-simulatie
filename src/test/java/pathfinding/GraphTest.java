@@ -16,7 +16,7 @@ public class GraphTest {
         hotelElements.add(new Stairs(1,1,2,0));
         hotelElements.add(new Stairs(1,1,2,1));
         hotelElements.add(new CheckInDesk(1,1,1,0));
-        hotelElements.add(new Room(1,1,1,1,1));
+        hotelElements.add(new Room(1,1,1,1,1, 1));
         Hotel hotel = new Hotel(hotelElements,3,2);
         var graph = Graph.createGraph(hotel);
 
@@ -34,7 +34,7 @@ public class GraphTest {
         hotelElements.add(new Stairs(1, 1, 2, 0));
         hotelElements.add(new Stairs(1, 1, 2, 1));
         hotelElements.add(new CheckInDesk(1, 1, 1, 0));
-        hotelElements.add(new Room(1, 1, 1, 1, 1));
+        hotelElements.add(new Room(1, 1, 1, 1, 1, 1));
         Hotel hotel = new Hotel(hotelElements, 3, 2);
         var graph = Graph.createGraph(hotel);
 

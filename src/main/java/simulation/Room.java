@@ -8,13 +8,17 @@ public class Room implements HotelElement{
     private int x;
     private int y;
     private int classification;
+    private int roomNumber;
+    private boolean isOccupied;
+    private boolean isDirty;
 
-    public Room(int width, int height,int x,int y, int classification ){
+    public Room(int width, int height, int x, int y, int classification, int roomNumber){
         this.width = width;
         this.height = height;
         this.x = x;
         this.y = y;
         this.classification = classification;
+        this.roomNumber = roomNumber;
     }
 
     public int getWidth() {
@@ -56,6 +60,26 @@ public class Room implements HotelElement{
                 }
             }
         }
+    }
+
+    public boolean isDirty() {
+        return isDirty;
+    }
+
+    public void setDirty(boolean dirty) {
+        isDirty = dirty;
+    }
+
+    public boolean isOccupied() {
+        return isOccupied;
+    }
+
+    public void setOccupied(boolean occuplied) {
+        isOccupied = occuplied;
+    }
+
+    public int getRoomNumber() {
+        return roomNumber;
     }
 }
 
