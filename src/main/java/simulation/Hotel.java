@@ -2,7 +2,6 @@ package simulation;
 
 import drawing.DrawHelper;
 import drawing.Drawable;
-import json.JsonReader;
 import pathfinding.Graph;
 import system.HotelTimer;
 
@@ -40,6 +39,8 @@ public class Hotel implements Drawable {
         return height;
     }
 
+
+    @Override
     public void draw(DrawHelper drawHelper) {
         for(var element: hotelElements){
             element.draw(drawHelper);
@@ -50,7 +51,7 @@ public class Hotel implements Drawable {
     }
 
     public void newGuest() {
-        var guest = GuestFactory.makeNewGeust(this);
+        var guest = new GuestFactory().makeNewGuest(this);
         guests.add(guest);
         hotelTimer.addObserver(guest);
 

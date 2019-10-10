@@ -1,5 +1,7 @@
 package simulation;
 
+import java.util.ArrayList;
+
 import drawing.DrawHelper;
 
 public class Gym implements HotelElement{
@@ -35,6 +37,20 @@ public class Gym implements HotelElement{
 
     public boolean isWalkable() {
         return false;
+    }
+
+    public static ArrayList<Guest> guestsInGym = new ArrayList<>();
+
+    public void enterGym(Guest guest){
+        guestsInGym.add(guest);
+    }
+
+    public void leaveGym(Guest guest){
+        guestsInGym.remove(guest);
+    }
+
+    public int totalGuestsInGym(){
+        return guestsInGym.size();
     }
 
     @Override

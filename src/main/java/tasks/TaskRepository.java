@@ -21,6 +21,10 @@ public class TaskRepository {
         taskQueue.add(newTask);
     }
 
+    public boolean isEmpty() {
+        return taskQueue.size() == 0;
+    }
+
     public void deQueue() throws Exception {
         if (taskQueue.size() > 0) {
             taskQueue.remove(0);
