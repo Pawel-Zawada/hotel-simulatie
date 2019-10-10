@@ -2,7 +2,6 @@ package simulation;
 
 import drawing.DrawHelper;
 import drawing.Drawable;
-import json.JsonReader;
 
 import java.util.ArrayList;
 
@@ -34,11 +33,11 @@ public class Hotel implements Drawable {
         }
     }
 
-    public void newGuest() {
+    public void addGuest() {
         guests.add(GuestFactory.makeNewGeust());
     }
 
-    public void deadGuest(Guest guest) {
+    public void killGuest(Guest guest) { // Muahahaha >:)
         guests.remove(guest);
     }
 

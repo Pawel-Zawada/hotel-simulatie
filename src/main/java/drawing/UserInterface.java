@@ -12,6 +12,7 @@ import system.DataCollector;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * @author Pawel Zawada
@@ -26,6 +27,12 @@ public class UserInterface extends JFrame {
     private final ContainerPanel containerPanel = new ContainerPanel(); // Container panel to display subcomponents like navigation and content.
     private ContentPanel contentPanel; // Contextual content of the currently selected navigation. (For example `settings`)
     private Hotel hotel;
+
+    public UserInterface(Hotel hotel) {
+        this.hotel = hotel;
+        setup();
+        frame.setVisible(true);
+    }
 
     /**
      * Build frame & containing panels with respective components.
@@ -44,12 +51,6 @@ public class UserInterface extends JFrame {
         frame.setSize(1000, 1000);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH); // Set frame to fullscreen mode...
         frame.setUndecorated(true); // ...*without* window bar.
-    }
-
-    public UserInterface(Hotel hotel) {
-        this.hotel = hotel;
-        setup();
-        frame.setVisible(true);
     }
 
     /**
@@ -169,52 +170,48 @@ public class UserInterface extends JFrame {
             private class StatisticsDialog extends Dialog {
                 HTESlider HTESlider = new HTESlider();
 
-                private double phase;
+                ArrayList<Double> xData = new ArrayList<>();
+                ArrayList<Double> yData = new ArrayList<>();
+
                 private XYChart chart;
                 private XChartPanel xChartPanel;
 
                 StatisticsDialog() {
                     super("Statistics");
 
+                    HTESlider.setAlignmentX(CENTER_ALIGNMENT);
                     add(HTESlider);
 
-                    double phase = 0;
-                    double[][] initdata = getSineData(phase);
+                    // Assign initial values
+                    updateData();
 
                     // Create Chart
-                    chart = QuickChart.getChart("Simple XChart Real-time Demo", "Radians", "Sine", "sine", initdata[0], initdata[1]);
+                    chart = QuickChart.getChart("Totaal taken per tick", "Tick", "Tasks", "tasks", xData, yData);
 
                     // Display chart panel in dialog.
                     xChartPanel = new XChartPanel<>(chart);
                     add(xChartPanel);
 
-                    //
+                    // Update statistics every tick.
                     Core.hotelTimer.addObserver(new StatisticsObserver());
                 }
 
-                private double[][] getSineData(double phase) {
-                    double[] xData = new double[100];
-                    double[] yData = new double[100];
-                    for (int i = 0; i < xData.length; i++) {
-                        double radians = phase + (2 * Math.PI / xData.length * i);
-                        xData[i] = radians;
-                        yData[i] = Math.sin(radians);
-                    }
-                    return new double[][]{xData, yData};
+                /**
+                 * Update the data arrays with the latest tick number and number of tasks.
+                 */
+                private void updateData() {
+                    xData.add((double) Core.hotelTimer.getHTEIteration());
+                    yData.add((double) DataCollector.getNumberOfTasks());
                 }
 
                 private class StatisticsObserver implements IObserver {
                     @Override
                     public void observe() {
-                        StatisticsDialog.this.phase += 2 * Math.PI * 2 / 20.0;
+                        updateData();
 
-                        final double[][] data = getSineData(phase);
-
-                        javax.swing.SwingUtilities.invokeLater(() -> {
-                            StatisticsDialog.this.chart.updateXYSeries("sine", data[0], data[1], null);
-                            xChartPanel.revalidate();
-                            xChartPanel.repaint();
-                        });
+                        chart.updateXYSeries("tasks", xData, yData, null);
+                        xChartPanel.revalidate();
+                        xChartPanel.repaint();
 
                         System.out.println(String.format("Number of tasks %s", DataCollector.getNumberOfTasks()));
                     }
@@ -230,7 +227,9 @@ public class UserInterface extends JFrame {
 
                 SettingsDialog() {
                     super("Settings");
+
                     label.setAlignmentX(LEFT_ALIGNMENT);
+                    HTESlider.setAlignmentX(LEFT_ALIGNMENT);
                     label.setBorder(new EmptyBorder(5, 5, 0, 0));
 
                     // HTE setting label & slider
