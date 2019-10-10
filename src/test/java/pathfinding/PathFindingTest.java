@@ -12,7 +12,7 @@ public class PathFindingTest {
         for(int i  = 0 ; i<25; i++){
             int _x = i%5;
             int _y = i/5;
-            nodes[i] = new Node(_x,_y);
+            nodes[i] = new Node(_x,_y,null);
         }
         for(int x = 0; x<5; x++){
             for(int y= 0; y<5; y++){

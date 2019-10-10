@@ -1,6 +1,8 @@
 package simulation;
 
-public interface HotelElement {
+import drawing.Drawable;
+
+public interface HotelElement extends Drawable {
     int getWidth();
     int getHeight();
     int getX();

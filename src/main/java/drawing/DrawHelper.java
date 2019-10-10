@@ -2,6 +2,7 @@ package drawing;
 
 import assets.AssetLoader;
 import simulation.Direction;
+import simulation.Hotel;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -12,8 +13,7 @@ import java.util.Random;
 
 public class DrawHelper {
 
-    public static final int SPRITE_SIZE = 16;
-    public static final int SCALE_FACTOR = 4;
+    public static final int SPRITE_SIZE = 32;
 
     private final AssetLoader assetLoader;
     private final Random random = new Random();
@@ -24,6 +24,8 @@ public class DrawHelper {
     private Map<String, Font> fontMap = new HashMap<>();
     private int originX;
     private int originY;
+    private Hotel hotel;
+    private float scaleFactor = 2;
 
     public DrawHelper(AssetLoader assetLoader){
         this.assetLoader = assetLoader;
@@ -54,11 +56,11 @@ public class DrawHelper {
         var font = getFont(fontName);
         var size = font.getSize2D();
 
-        var screenX = x * SPRITE_SIZE * SCALE_FACTOR;
-        var screenY = Math.round(y * SPRITE_SIZE * SCALE_FACTOR + size);
+        var screenX = x * SPRITE_SIZE * scaleFactor;
+        var screenY = Math.round(y * SPRITE_SIZE * scaleFactor + size);
 
-        screenX += SCALE_FACTOR * 6;
-        screenY += SCALE_FACTOR * 1;
+        screenX += scaleFactor * 6;
+        screenY += scaleFactor * 1;
 
         graphics.drawString(text, screenX, screenY);
     }
@@ -128,16 +130,26 @@ public class DrawHelper {
     }
 
     private void drawSprite(Image sprite, Direction direction, int x, int y) {
+        y = hotel.getHeight() - y - 1;
+
         var rotation = direction.ordinal() * Math.PI * 0.5; // 1/2pi rad = 90°
 
         // Create a fresh transform to apply to the sprite.
         var transform = new AffineTransform();
 
-        transform.scale(SCALE_FACTOR, SCALE_FACTOR);
+        transform.scale(scaleFactor, scaleFactor);
         transform.translate(x * SPRITE_SIZE + (0.5 * SPRITE_SIZE), y * SPRITE_SIZE + (0.5 * SPRITE_SIZE));
         transform.rotate(rotation);
         transform.translate(-0.5 * SPRITE_SIZE, -0.5 * SPRITE_SIZE);
 
         graphics.drawImage(sprite, transform, null);
+    }
+
+    public void setHotel(Hotel hotel) {
+        this.hotel = hotel;
+    }
+
+    public void setScaleFactor(float minScale) {
+        this.scaleFactor = minScale;
     }
 }

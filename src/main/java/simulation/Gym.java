@@ -2,6 +2,8 @@ package simulation;
 
 import java.util.ArrayList;
 
+import drawing.DrawHelper;
+
 public class Gym implements HotelElement{
     private int width;
     private int height;
@@ -49,5 +51,15 @@ public class Gym implements HotelElement{
 
     public int totalGuestsInGym(){
         return guestsInGym.size();
+    }
+
+    @Override
+    public void draw(DrawHelper drawHelper) {
+        for(int x = 0; x < this.width; x++){
+            // Also support rooms higher than 1.
+            for(int y = 0; y < this.height; y++){
+                drawHelper.drawSprite("gym", this.x + x, this.y + y);
+            }
+        }
     }
 }
