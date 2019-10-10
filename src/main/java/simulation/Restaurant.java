@@ -8,7 +8,6 @@ public class Restaurant implements HotelElement {
     private int x;
     private int y;
     private int capacity;
-    private static int capacity;
     private int restaurantID;
 
     public Restaurant(int width, int height, int x, int y, int capacity) {
@@ -48,7 +47,7 @@ public class Restaurant implements HotelElement {
         return false;
     }
 
-    public static Guest[] guestsInRestaurant = new Guest[capacity - 1];
+    public Guest[] guestsInRestaurant = new Guest[capacity - 1];
 
     public void enterRestaurant(Guest guest) {
         if (!restaurantFull(guestsInRestaurant)) {
@@ -59,10 +58,7 @@ public class Restaurant implements HotelElement {
     }
 
     public boolean restaurantFull(Guest[] guestsInRestaurant) {
-        if (guestsInRestaurant.length == capacity - 1) {
-            return true;
-        }
-        return false;
+        return guestsInRestaurant.length == capacity - 1;
     }
 
     public int restaurantGuest(Guest[] guestsInRestaurant) {
