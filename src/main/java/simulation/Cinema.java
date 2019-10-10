@@ -8,6 +8,7 @@ public class Cinema implements HotelElement, IObserver {
     private int height;
     private int x;
     private int y;
+  //  private int cinemaID;
 
     public Cinema(int width, int height, int x, int y){
         this.width = width;
@@ -36,6 +37,10 @@ public class Cinema implements HotelElement, IObserver {
     public int getY() {
         return y;
     }
+
+    /*public int getCinemaID(){
+        return cinemaID;
+    }*/
 
     public boolean isWalkable() {
         return false;

@@ -2,6 +2,11 @@ package simulation;
 
 public class Cleaner implements IObserver, Person {
     public void observe(){
+import tasks.Task;
+import tasks.TaskRepository;
+
+public class Cleaner implements IObserver {
+    public void observe() {
     }
 
     @Override
@@ -37,5 +42,19 @@ public class Cleaner implements IObserver, Person {
     @Override
     public String getName() {
         return "CLEANER";
+    }
+
+    public static Task goToNextTask(TaskRepository taskRepository) {
+        if (taskRepository.getSize() == 0) {
+            return null;
+        }
+        return taskRepository.peek();
+    }
+
+    public boolean waitForTask(TaskRepository taskRepository) {
+        if (taskRepository.isEmpty()) {
+            return true;
+        }
+        return false;
     }
 }

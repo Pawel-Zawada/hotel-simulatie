@@ -1,12 +1,18 @@
 package drawing;
 
 import assets.FileAssetLoader;
+import org.knowm.xchart.QuickChart;
+import org.knowm.xchart.XChartPanel;
+import org.knowm.xchart.XYChart;
 import simulation.Hotel;
+import simulation.IObserver;
 import system.Core;
+import system.DataCollector;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.util.ArrayList;
 
 /**
  * @author Pawel Zawada
@@ -37,8 +43,8 @@ public class UserInterface extends JFrame {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         frame.setSize(1000, 1000);
-//        frame.setExtendedState(JFrame.MAXIMIZED_BOTH); // Set frame to fullscreen mode...
-//        frame.setUndecorated(true); // ...*without* window bar.
+        frame.setExtendedState(JFrame.MAXIMIZED_BOTH); // Set frame to fullscreen mode...
+        frame.setUndecorated(true); // ...*without* window bar.
     }
 
     public UserInterface(Hotel hotel) {
@@ -91,13 +97,18 @@ public class UserInterface extends JFrame {
          * System related options, including the exit button.
          */
         private class SystemMenu extends JMenu {
-            JMenuItem exitItem = new JMenuItem("Exit");
+            JMenuItem statisticsItem = new JMenuItem("Statistics");
             JMenuItem settingsItem = new JMenuItem("Settings");
+            JMenuItem exitItem = new JMenuItem("Exit");
 
+            StatisticsDialog statisticsDialog = new StatisticsDialog();
             SettingsDialog settingsDialog = new SettingsDialog();
 
             SystemMenu() {
                 super("System");
+
+                statisticsItem.addActionListener(e -> statisticsDialog.setVisible(true)); // Open statistics dialog.
+                add(statisticsItem);
 
                 settingsItem.addActionListener(e -> settingsDialog.setVisible(true)); // Open settings dialog.
                 add(settingsItem);
@@ -109,51 +120,133 @@ public class UserInterface extends JFrame {
             }
 
             /**
-             * General settings like changing HTE value.
+             * Abstract class that contains default logic for setting up the layout, size and location of the dialog.
+             * Dialog extend this dialog to ensure DRY code and not repeat the setup logic.
              */
-            private class SettingsDialog extends JDialog {
-                HTESlider HTESlider = new HTESlider();
-                JLabel label = new JLabel("Milliseconds interval per HTE tick");
-
-                SettingsDialog() {
-                    super(UserInterface.this.frame, "Settings", true);
+            private abstract class Dialog extends JDialog {
+                Dialog(String title) {
+                    super(UserInterface.this.frame, title, true);
                     setLayout(new BoxLayout(getContentPane(), BoxLayout.PAGE_AXIS));
 
                     setSize(new Dimension(800, 900));
                     setLocationRelativeTo(null);
+                }
+            }
 
-                    label.setAlignmentX(LEFT_ALIGNMENT);
-                    label.setBorder(new EmptyBorder(5, 5, 0, 0));
+            /**
+             * Slider that enables the user to change the amount of HTE ticks every X amount of seconds.
+             */
+            private class HTESlider extends JSlider {
+                // TODO: The higher the slider value, the faster the simulation goes.
+                static final int HTE_MIN = 0;
+                static final int HTE_MAX = 1000;
+                static final int HTE_MINOR_SPACING = 100;
+                static final int HTE_MAJOR_SPACING = 500;
 
-                    // HTE setting label & slider
-                    add(label);
+                HTESlider() {
+                    super(JSlider.HORIZONTAL, HTE_MIN, HTE_MAX, hotel.getHotelTimer().getHTE());
+
+                    // Display labels at major tick marks
+                    setMinorTickSpacing(HTE_MINOR_SPACING);
+                    setMajorTickSpacing(HTE_MAJOR_SPACING);
+
+                    // Display labels at major and minor spacing values
+                    setPaintTicks(true);
+                    setPaintLabels(true);
+                    setSnapToTicks(true); // Snap the slider to only major and minor marks, no free floating values.
+                    setAlignmentX(LEFT);
+
+                    // Change HTE value on every slider value change. Should not mess up simulation as the dialog freezes the frame.
+                    addChangeListener(e -> {
+                        JSlider source = (JSlider) e.getSource();
+                        if (!source.getValueIsAdjusting()) {
+                            Core.hotelTimer.setHTE(source.getValue());
+                        }
+                    });
+                }
+            }
+
+            // TODO: These `StatisticsDialog` & `SettingsDialog` need code splitting. Throw them into their own package or something.
+
+            /**
+             * Display statistical data on various hotel elements, like guest count, task queue
+             */
+            private class StatisticsDialog extends Dialog {
+                // Slider making possible the changing the HTE value of the simulation.
+                HTESlider HTESlider = new HTESlider();
+
+                // Chart data storage for the x & y coordinates
+                ArrayList<Double> xData = new ArrayList<>();
+                ArrayList<Double> yData = new ArrayList<>();
+
+                private XYChart chart;
+                private XChartPanel xChartPanel; // Used to render the chart into
+
+                StatisticsDialog() {
+                    super("Statistics");
+
+                    HTESlider.setAlignmentX(CENTER_ALIGNMENT);
                     add(HTESlider);
+
+                    // Assign initial values
+                    updateData();
+
+                    // Create chart with initial data
+                    chart = QuickChart.getChart("Totaal taken per tick", "Tick", "Tasks", "tasks", xData, yData);
+
+                    // Display chart panel in dialog
+                    xChartPanel = new XChartPanel<>(chart);
+                    add(xChartPanel); // Add the panel into the dialog
+
+                    // Update statistics every tick
+                    Core.hotelTimer.addObserver(new StatisticsObserver());
                 }
 
                 /**
-                 * Slider that enables the user to change the amount of HTE ticks every X amount of seconds.
+                 * Update the data arrays with the latest tick number and number of tasks.
                  */
-                private class HTESlider extends JSlider {
-                    static final int HTE_MIN = 500;
-                    static final int HTE_MAX = 5000;
-                    static final int HTE_MINOR_SPACING = 500;
-                    static final int HTE_MAJOR_SPACING = 500;
+                private void updateData() {
+                    xData.add((double) Core.hotelTimer.getHTEIteration());
+                    yData.add((double) DataCollector.getNumberOfTasks());
+                }
 
-                    HTESlider() {
-                        super(JSlider.HORIZONTAL, HTE_MIN, HTE_MAX, hotel.getHotelTimer().getHTE());
+                /**
+                 * Update the chart data on every tick event.
+                 */
+                private class StatisticsObserver implements IObserver {
+                    @Override
+                    public void observe() {
+                        updateData(); // Update the parent class's x & y data variables with the newest values
 
-                        // Display labels at major tick marks.
-                        setMinorTickSpacing(HTE_MINOR_SPACING);
-                        setMajorTickSpacing(HTE_MAJOR_SPACING);
+                        // Update the chart's data with the newly set x & y data from `updateData()`.
+                        chart.updateXYSeries("tasks", xData, yData, null);
 
-                        setPaintTicks(true);
-                        setPaintLabels(true);
-                        setSnapToTicks(true);
-                        setAlignmentX(LEFT_ALIGNMENT);
+                        // Repaint the chart's panel
+                        xChartPanel.revalidate();
+                        xChartPanel.repaint();
 
-                        // Change HTE value on every slider value change. Should not mess up simulation as the dialog freezes the frame.
-                        addChangeListener(e -> hotel.getHotelTimer().setHTE(getValue()));
+                        System.out.println(String.format("Number of tasks %s", DataCollector.getNumberOfTasks()));
                     }
+                }
+            }
+
+            /**
+             * General settings like changing HTE value.
+             */
+            private class SettingsDialog extends Dialog {
+                HTESlider HTESlider = new HTESlider();
+                JLabel label = new JLabel("Milliseconds interval per HTE tick");
+
+                SettingsDialog() {
+                    super("Settings");
+
+                    label.setAlignmentX(LEFT_ALIGNMENT);
+                    HTESlider.setAlignmentX(LEFT_ALIGNMENT);
+                    label.setBorder(new EmptyBorder(5, 5, 0, 0));
+
+                    // Add the HTE setting label & slider to the dialog's content.
+                    add(label);
+                    add(HTESlider);
                 }
             }
         }
