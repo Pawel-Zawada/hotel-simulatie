@@ -39,6 +39,4 @@ public class DataCollector {
         return Elevator.guestsInElevator.size();
     }
 
-
-
 }
