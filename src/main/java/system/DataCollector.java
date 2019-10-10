@@ -1,28 +1,14 @@
 package system;
 
-import simulation.Guest;
 import simulation.Elevator;
 import simulation.Gym;
 import simulation.Hotel;
 import simulation.Restaurant;
 import tasks.TaskRepository;
 
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
 public class DataCollector {
-    public static int getNumberOfTasks() {
-        return TaskRepository.getTaskQueue().size();
-    }
-
-    public long getTotalOfGuests() {
-        Stream<Guest> guestStream = Stream.of();
-        return guestStream
-                .map(Guest::getGuestID)
-                .collect(Collectors.counting());
-
-    private final Hotel hotel;
-    private final Restaurant restaurant;
+    Hotel hotel;
+    Restaurant restaurant;
 
     DataCollector(Hotel hotel, Restaurant restaurant) {
         this.hotel = hotel;
