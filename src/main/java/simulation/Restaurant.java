@@ -2,14 +2,16 @@ package simulation;
 
 import drawing.DrawHelper;
 
-public class Restaurant implements HotelElement{
+public class Restaurant implements HotelElement {
     private int width;
     private int height;
     private int x;
     private int y;
     private int capacity;
+    private static int capacity;
+    private int restaurantID;
 
-    public Restaurant(int width, int height, int x, int y, int capacity){
+    public Restaurant(int width, int height, int x, int y, int capacity) {
         this.width = width;
         this.height = height;
         this.x = x;
@@ -34,9 +36,46 @@ public class Restaurant implements HotelElement{
         return y;
     }
 
+    public int getCapacity() {
+        return capacity;
+    }
+
+    public int getRestaurantID(){
+        return restaurantID;
+    }
+
     public boolean isWalkable() {
         return false;
     }
+
+    public static Guest[] guestsInRestaurant = new Guest[capacity - 1];
+
+    public void enterRestaurant(Guest guest) {
+        if (!restaurantFull(guestsInRestaurant)) {
+            for (int i = 0; i < guestsInRestaurant.length - 1; i++) {
+                guestsInRestaurant[i] = guest;
+            }
+        }
+    }
+
+    public boolean restaurantFull(Guest[] guestsInRestaurant) {
+        if (guestsInRestaurant.length == capacity - 1) {
+            return true;
+        }
+        return false;
+    }
+
+    public int restaurantGuest(Guest[] guestsInRestaurant) {
+        int numberOfGuestsInRestaurant;
+        if (restaurantFull(guestsInRestaurant)) {
+            return capacity;
+        } else {
+            numberOfGuestsInRestaurant = guestsInRestaurant.length;
+        }
+        return numberOfGuestsInRestaurant;
+
+    }
+
 
     @Override
     public void draw(DrawHelper drawHelper) {

@@ -40,6 +40,8 @@ public class Hotel implements Drawable {
         return height;
     }
 
+
+    @Override
     public void draw(DrawHelper drawHelper) {
         for(var element: hotelElements){
             element.draw(drawHelper);

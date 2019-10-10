@@ -1,5 +1,7 @@
 package simulation;
 
+import java.util.ArrayList;
+
 import drawing.DrawHelper;
 
 public class Elevator implements HotelElement {
@@ -14,7 +16,6 @@ public class Elevator implements HotelElement {
         this.x = x;
         this.y = y;
     }
-
 
     public int getWidth() {
         return width;
@@ -35,6 +36,20 @@ public class Elevator implements HotelElement {
 
     public boolean isWalkable() {
         return false;
+    }
+
+    public static ArrayList<Guest> guestsInElevator = new ArrayList<>();
+
+    public void guestStepInElevator(Guest guest){
+        guestsInElevator.add(guest);
+    }
+
+    public void guestStepOutOfElevator(Guest guest){
+        guestsInElevator.remove(guest);
+    }
+
+    public int numberOfGuestsInElevator(){
+        return guestsInElevator.size();
     }
 
     @Override

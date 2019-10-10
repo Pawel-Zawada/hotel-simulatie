@@ -19,8 +19,13 @@ public class TaskRepository {
         isEmpty = false;
     }
 
-    private boolean isEmpty() {
-        return true;
+    public boolean isEmpty() {
+        if(taskQueue.size()==0) {
+            return true;
+        } else {
+            return false;
+        }
+
     }
 
     public Task deQueue() throws Exception {
