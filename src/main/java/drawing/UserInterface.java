@@ -28,12 +28,6 @@ public class UserInterface extends JFrame {
     private ContentPanel contentPanel; // Contextual content of the currently selected navigation. (For example `settings`)
     private Hotel hotel;
 
-    public UserInterface(Hotel hotel) {
-        this.hotel = hotel;
-        setup();
-        frame.setVisible(true);
-    }
-
     /**
      * Build frame & containing panels with respective components.
      */
@@ -152,13 +146,14 @@ public class UserInterface extends JFrame {
                 HTESlider() {
                     super(JSlider.HORIZONTAL, HTE_MIN, HTE_MAX, hotel.getHotelTimer().getHTE());
 
-                    // Display labels at major tick marks.
+                    // Display labels at major tick marks
                     setMinorTickSpacing(HTE_MINOR_SPACING);
                     setMajorTickSpacing(HTE_MAJOR_SPACING);
 
+                    // Display labels at major and minor spacing values
                     setPaintTicks(true);
                     setPaintLabels(true);
-                    setSnapToTicks(true);
+                    setSnapToTicks(true); // Snap the slider to only major and minor marks, no free floating values.
                     setAlignmentX(LEFT);
 
                     // Change HTE value on every slider value change. Should not mess up simulation as the dialog freezes the frame.
@@ -177,13 +172,15 @@ public class UserInterface extends JFrame {
              * Display statistical data on various hotel elements, like guest count, task queue
              */
             private class StatisticsDialog extends Dialog {
+                // Slider making possible the changing the HTE value of the simulation.
                 HTESlider HTESlider = new HTESlider();
 
+                // Chart data storage for the x & y coordinates
                 ArrayList<Double> xData = new ArrayList<>();
                 ArrayList<Double> yData = new ArrayList<>();
 
                 private XYChart chart;
-                private XChartPanel xChartPanel;
+                private XChartPanel xChartPanel; // Used to render the chart into
 
                 StatisticsDialog() {
                     super("Statistics");
@@ -194,14 +191,14 @@ public class UserInterface extends JFrame {
                     // Assign initial values
                     updateData();
 
-                    // Create Chart
+                    // Create chart with initial data
                     chart = QuickChart.getChart("Totaal taken per tick", "Tick", "Tasks", "tasks", xData, yData);
 
-                    // Display chart panel in dialog.
+                    // Display chart panel in dialog
                     xChartPanel = new XChartPanel<>(chart);
-                    add(xChartPanel);
+                    add(xChartPanel); // Add the panel into the dialog
 
-                    // Update statistics every tick.
+                    // Update statistics every tick
                     Core.hotelTimer.addObserver(new StatisticsObserver());
                 }
 
@@ -213,12 +210,18 @@ public class UserInterface extends JFrame {
                     yData.add((double) DataCollector.getNumberOfTasks());
                 }
 
+                /**
+                 * Update the chart data on every tick event.
+                 */
                 private class StatisticsObserver implements IObserver {
                     @Override
                     public void observe() {
-                        updateData();
+                        updateData(); // Update the parent class's x & y data variables with the newest values
 
+                        // Update the chart's data with the newly set x & y data from `updateData()`.
                         chart.updateXYSeries("tasks", xData, yData, null);
+
+                        // Repaint the chart's panel
                         xChartPanel.revalidate();
                         xChartPanel.repaint();
 
@@ -241,7 +244,7 @@ public class UserInterface extends JFrame {
                     HTESlider.setAlignmentX(LEFT_ALIGNMENT);
                     label.setBorder(new EmptyBorder(5, 5, 0, 0));
 
-                    // HTE setting label & slider
+                    // Add the HTE setting label & slider to the dialog's content.
                     add(label);
                     add(HTESlider);
                 }
