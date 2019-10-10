@@ -6,6 +6,7 @@ public class Restaurant implements HotelElement {
     private int x;
     private int y;
     private static int capacity;
+    private int restaurantID;
 
     public Restaurant(int width, int height, int x, int y) {
         this.width = width;
@@ -34,6 +35,10 @@ public class Restaurant implements HotelElement {
 
     public int getCapacity() {
         return capacity;
+    }
+
+    public int getRestaurantID(){
+        return restaurantID;
     }
 
     public boolean isWalkable() {

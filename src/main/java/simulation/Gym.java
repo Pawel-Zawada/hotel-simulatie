@@ -1,5 +1,7 @@
 package simulation;
 
+import java.util.ArrayList;
+
 public class Gym implements HotelElement{
     private int width;
     private int height;
@@ -35,5 +37,17 @@ public class Gym implements HotelElement{
         return false;
     }
 
-    //public static ArrayList<Guest> guestsInGym = new ArrayList<>();
+    public static ArrayList<Guest> guestsInGym = new ArrayList<>();
+
+    public void enterGym(Guest guest){
+        guestsInGym.add(guest);
+    }
+
+    public void leaveGym(Guest guest){
+        guestsInGym.remove(guest);
+    }
+
+    public int totalGuestsInGym(){
+        return guestsInGym.size();
+    }
 }

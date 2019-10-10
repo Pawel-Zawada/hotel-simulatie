@@ -1,4 +1,6 @@
 import simulation.Elevator;
+import simulation.Gym;
+import simulation.Restaurant;
 import tasks.TaskRepository;
 
 public class DataCollector {
@@ -32,11 +34,15 @@ public class DataCollector {
     }
 
     public static int guestsInGym(){
-        return -1;
+        return Gym.guestsInGym.size();
     }
 
     public static int guestsInElevator(){
         return Elevator.guestsInElevator.size();
+    }
+
+    public static int guestsInRestaurant(){
+        return Restaurant.guestsInRestaurant.length;
     }
 
 }
