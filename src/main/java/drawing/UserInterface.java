@@ -44,8 +44,8 @@ public class UserInterface extends JFrame {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         frame.setSize(1000, 1000);
-        frame.setExtendedState(JFrame.MAXIMIZED_BOTH); // Set frame to fullscreen mode...
-        frame.setUndecorated(true); // ...*without* window bar.
+        //frame.setExtendedState(JFrame.MAXIMIZED_BOTH); // Set frame to fullscreen mode...
+        //frame.setUndecorated(true); // ...*without* window bar.
     }
 
     /**

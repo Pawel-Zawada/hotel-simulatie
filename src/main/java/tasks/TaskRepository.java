@@ -29,11 +29,11 @@ public class TaskRepository {
         return taskQueue.size() == 0;
     }
 
-    public Task deQueue() throws Exception {
+    public Task deQueue() {
         if (taskQueue.size() > 0) {
             return taskQueue.remove(0);
         } else {
-            throw new Exception("Cannot dequeue when task queue is empty.");
+            throw new RuntimeException("Cannot dequeue when task queue is empty.");
         }
     }
 
@@ -50,6 +50,21 @@ public class TaskRepository {
         } else {
             taskQueue.add(0, emergencyTask);
         }
+    }
+
+    public Task getNextActiveTask(){
+        Task task;
+        do{
+            task = peek();
+            if(task == null){
+                // No more tasks left.
+                return null;
+            }
+            if(task.isDone()){
+                deQueue();
+            }
+        }while (task.isDone());
+        return task;
     }
 }
 

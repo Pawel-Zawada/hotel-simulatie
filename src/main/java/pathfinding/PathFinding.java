@@ -51,6 +51,9 @@ public class PathFinding {
                         node.setgCost(gCost);
                         node.sethCost(calHCost(node, endNode));
                         node.setParentNode(currentNode);
+                        if(currentNode.getParentNode() == node.getParentNode()){
+                            System.out.println("oh no.");
+                        }
                         if(!openList.contains(node)){
                             openList.add(node);
                         }
