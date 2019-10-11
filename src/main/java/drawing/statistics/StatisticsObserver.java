@@ -2,12 +2,12 @@ package drawing.statistics;
 
 import org.knowm.xchart.XChartPanel;
 import org.knowm.xchart.XYChart;
-import simulation.IObserver;
+import simulation.HteObserver;
 
 /**
  * Update the chart data on every tick event.
  */
-public class StatisticsObserver implements IObserver {
+public class StatisticsObserver implements HteObserver {
     private AbstractChartData[] chartData;
     private XChartPanel xChartPanel;
 
@@ -17,7 +17,7 @@ public class StatisticsObserver implements IObserver {
     }
 
     @Override
-    public void observe() {
+    public void observeHTE() {
         for (AbstractChartData chartData : chartData) {
             // Update the x & y data variables with the newest values...
             chartData.updateData();
