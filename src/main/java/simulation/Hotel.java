@@ -19,19 +19,16 @@ public class Hotel implements Drawable {
 
     private final int width;
     private final int height;
-    private int elevatorWeight;
-    private int stairsWeight;
 
     private HotelTimer hotelTimer;
     private TaskRepository cleanerTasks = new TaskRepository();
+    private HotelConfiguration configuration = new HotelConfiguration();
 
     public Hotel( ArrayList<HotelElement> hotelElements,int width,int height){
         this.hotelElements = hotelElements;
         this.width = width;
         this.height = height;
 
-        this.elevatorWeight = 12;
-        this.stairsWeight = 4;
 
         hotelTimer = new HotelTimer();
 
@@ -82,22 +79,6 @@ public class Hotel implements Drawable {
 
     public ArrayList<HotelElement> getHotelElements(){
         return hotelElements;
-    }
-
-    public int getElevatorWeight() {
-        return elevatorWeight;
-    }
-
-    public void setElevatorWeight(int elevatorWeight) {
-        this.elevatorWeight = elevatorWeight;
-    }
-
-    public int getStairsWeight() {
-        return stairsWeight;
-    }
-
-    public void setStairsWeight(int stairsWeight) {
-        this.stairsWeight = stairsWeight;
     }
 
     public CheckInDesk getCheckInDesk() {
@@ -162,5 +143,9 @@ public class Hotel implements Drawable {
         for(var cleaner: cleaners){
             cleaner.draw(drawHelper);
         }
+    }
+
+    public HotelConfiguration getConfiguration() {
+        return configuration;
     }
 }
