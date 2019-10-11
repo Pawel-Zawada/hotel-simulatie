@@ -94,8 +94,7 @@ public class Hotel implements Drawable {
             guest.moveTo(getCheckInDesk());
             guest.checkOut();
         }else{
-            System.out.println("He's dead jim");
-
+            System.out.println("He's dead Jim");
         }
     }
 

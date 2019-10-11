@@ -37,6 +37,9 @@ public class Guest extends Person implements HteObserver, Drawable {
         if(task != null){
             task.executeStep();
         }
+        else if(getCurrentRoom() != room){
+            this.moveTo(room);
+        }
     }
 
     public void draw(DrawHelper drawHelper) {
@@ -51,7 +54,6 @@ public class Guest extends Person implements HteObserver, Drawable {
     public void assignRoom(Room room){
         room.setOccupied(true);
         this.room = room;
-        moveTo(room);
     }
 
 
