@@ -2,7 +2,7 @@ package drawing;
 
 import assets.AssetLoader;
 import simulation.Hotel;
-import simulation.IObserver;
+import simulation.HteObserver;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,7 +10,7 @@ import java.awt.*;
 /**
  * @author Johan Geluk
  */
-public class GameComponent extends JComponent implements IObserver {
+public class GameComponent extends JComponent implements HteObserver {
     private Hotel hotel;
     private DrawHelper drawHelper;
 
@@ -55,7 +55,7 @@ public class GameComponent extends JComponent implements IObserver {
     /**
      * When called, forces the component to repaint.
      */
-    public void observe() {
+    public void observeHTE() {
         super.repaint();
     }
 }

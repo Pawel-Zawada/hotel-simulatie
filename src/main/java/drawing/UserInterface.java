@@ -5,7 +5,7 @@ import org.knowm.xchart.QuickChart;
 import org.knowm.xchart.XChartPanel;
 import org.knowm.xchart.XYChart;
 import simulation.Hotel;
-import simulation.IObserver;
+import simulation.HteObserver;
 import system.DataCollector;
 
 import javax.swing.*;
@@ -214,9 +214,9 @@ public class UserInterface extends JFrame {
                 /**
                  * Update the chart data on every tick event.
                  */
-                private class StatisticsObserver implements IObserver {
+                private class StatisticsObserver implements HteObserver {
                     @Override
-                    public void observe() {
+                    public void observeHTE() {
                         updateData(); // Update the parent class's x & y data variables with the newest values
 
                         // Update the chart's data with the newly set x & y data from `updateData()`.

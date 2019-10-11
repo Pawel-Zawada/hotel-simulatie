@@ -3,8 +3,8 @@ package simulation;
 import tasks.Task;
 import tasks.TaskRepository;
 
-public class Cleaner implements IObserver, Person {
-    public void observe() {
+public class Cleaner implements HteObserver, Person {
+    public void observeHTE() {
     }
 
     @Override
@@ -47,9 +47,5 @@ public class Cleaner implements IObserver, Person {
             return null;
         }
         return taskRepository.peek();
-    }
-
-    public boolean waitForTask(TaskRepository taskRepository) {
-        return taskRepository.isEmpty();
     }
 }

@@ -1,8 +1,8 @@
 package simulation;
 
-public interface IObserver {
+public interface HteObserver {
     /**
      * Method that will be called every tick.
      */
-    void observe();
+    void observeHTE();
 }

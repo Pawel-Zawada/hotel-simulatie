@@ -3,7 +3,7 @@ package simulation;
 
 import drawing.DrawHelper;
 
-public class Cinema implements HotelElement, IObserver {
+public class Cinema implements HotelElement, HteObserver {
     private int width;
     private int height;
     private int x;
@@ -17,7 +17,7 @@ public class Cinema implements HotelElement, IObserver {
         this.y = y;
     }
 
-    public void observe(){
+    public void observeHTE(){
         //start playing a movie
     }
 

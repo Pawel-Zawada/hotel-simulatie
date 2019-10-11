@@ -1,6 +1,6 @@
 package system;
 
-import simulation.IObserver;
+import simulation.HteObserver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,8 +12,8 @@ import java.util.TimerTask;
  */
 public class HotelTimer {
     private Timer timer = new Timer();
-    private List<IObserver> observers = new ArrayList<>();
-    private List<IObserver> afterEventObservers = new ArrayList<>();
+    private List<HteObserver> observers = new ArrayList<>();
+    private List<HteObserver> afterEventObservers = new ArrayList<>();
     // Initial HTE value.
     private int HTE = 1000; // 1000 = 1 sec
     private int HTEIteration = 0; // Which iteration the current tick is.
@@ -23,15 +23,15 @@ public class HotelTimer {
     }
 
     // Can be used for statistics?
-    public List<IObserver> getObservers() {
+    public List<HteObserver> getObservers() {
         return observers;
     }
 
-    public void setObservers(ArrayList<IObserver> observers) {
+    public void setObservers(ArrayList<HteObserver> observers) {
         this.observers = observers;
     }
 
-    public void addObserver(IObserver observer) {
+    public void addObserver(HteObserver observer) {
         this.observers.add(observer);
     }
 
@@ -74,7 +74,7 @@ public class HotelTimer {
         rescheduleTimer(); // Reschedule timer with the new HTE value.
     }
 
-    public void addAfterEventObserver(IObserver observer) {
+    public void addAfterEventObserver(HteObserver observer) {
         this.afterEventObservers.add(observer);
     }
 
@@ -83,10 +83,10 @@ public class HotelTimer {
      * Pass this into the `.schedule()` method as the task parameter.
      */
     private class HotelTimerTask extends TimerTask {
-        private List<IObserver> observers;
-        private List<IObserver> afterEventObservers;
+        private List<HteObserver> observers;
+        private List<HteObserver> afterEventObservers;
 
-        HotelTimerTask(List<IObserver> observers, List<IObserver> afterEventObservers) {
+        HotelTimerTask(List<HteObserver> observers, List<HteObserver> afterEventObservers) {
             this.observers = observers;
             this.afterEventObservers = afterEventObservers;
         }
@@ -98,11 +98,11 @@ public class HotelTimer {
 
         private void notifyObservers() {
             HotelTimer.this.HTEIteration++; // Update the tick iteration
-            for (IObserver observer : observers) {
-                observer.observe();
+            for (HteObserver observer : observers) {
+                observer.observeHTE();
             }
-            for (IObserver observer : afterEventObservers) {
-                observer.observe();
+            for (HteObserver observer : afterEventObservers) {
+                observer.observeHTE();
             }
         }
     }

@@ -4,7 +4,7 @@ import events.library.HotelEvent;
 import events.library.HotelEventListener;
 import events.library.HotelEventManager;
 import simulation.Hotel;
-import simulation.IObserver;
+import simulation.HteObserver;
 
 import java.util.LinkedList;
 import java.util.Queue;
@@ -13,7 +13,7 @@ import java.util.Queue;
  * @author Johan Geluk
  * Collects events from the library, rewrites them, and forwards them to the hotel to be processed.
  */
-public class EventsAdapter implements HotelEventListener, IObserver {
+public class EventsAdapter implements HotelEventListener, HteObserver {
     private HotelEventManager hotelEventManager;
     private Hotel hotel;
 
@@ -50,7 +50,7 @@ public class EventsAdapter implements HotelEventListener, IObserver {
     /**
      * Checks which events need to be dispatched for the upcoming HTE tick.
      */
-    public void observe() {
+    public void observeHTE() {
         while(eventQueue.size() > 0 && eventQueue.peek().Time <= tickCount){
             // We have events to process.
             handleEvent(eventQueue.remove());

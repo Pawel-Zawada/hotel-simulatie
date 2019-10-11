@@ -18,7 +18,7 @@ import java.util.List;
  * @author Ümit Tokmak, Marc Kemp, Johan Geluk
  * Represents a guest in the hotel.
  */
-public class Guest implements IObserver, Person, Drawable {
+public class Guest implements HteObserver, Person, Drawable {
     private String name;
     private int x;
     private int y;
@@ -41,7 +41,7 @@ public class Guest implements IObserver, Person, Drawable {
         return name;
     }
 
-    public void observe() {
+    public void observeHTE() {
         Task task;
         do{
             task = personalTasks.peek();

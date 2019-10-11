@@ -14,6 +14,7 @@ public class Hotel implements Drawable {
 
     ArrayList<HotelElement> hotelElements;
     ArrayList<Guest> guests = new ArrayList<>();
+
     private final int width;
     private final int height;
     private int elevatorWeight;
