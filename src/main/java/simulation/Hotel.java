@@ -134,7 +134,7 @@ public class Hotel implements Drawable {
     }
 
     public TaskRepository getTaskQueue() {
-        return new TaskRepository();
+        return cleanerTasks;
     }
 
     public List<Restaurant> getRestaurants() {
