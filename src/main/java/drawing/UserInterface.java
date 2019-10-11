@@ -28,6 +28,15 @@ public class UserInterface extends JFrame {
     private Hotel hotel;
     private DataCollector dataCollector;
 
+    public UserInterface(Hotel hotel) {
+        this.hotel = hotel;
+        this.dataCollector = new DataCollector(hotel);
+        this.menuBar = new MenuBar();
+        this.containerPanel = new ContainerPanel();
+        setup();
+        frame.setVisible(true);
+    }
+
     /**
      * Build frame & containing panels with respective components.
      */
@@ -45,15 +54,6 @@ public class UserInterface extends JFrame {
         frame.setSize(1000, 1000);
         frame.setExtendedState(JFrame.MAXIMIZED_BOTH); // Set frame to fullscreen mode...
         frame.setUndecorated(true); // ...*without* window bar.
-    }
-
-    public UserInterface(Hotel hotel) {
-        this.hotel = hotel;
-        this.dataCollector = new DataCollector(hotel);
-        this.menuBar = new MenuBar();
-        this.containerPanel = new ContainerPanel();
-        setup();
-        frame.setVisible(true);
     }
 
     /**
@@ -176,9 +176,9 @@ public class UserInterface extends JFrame {
                 // Slider making possible the changing the HTE value of the simulation.
                 HTESlider HTESlider = new HTESlider();
 
-                // Chart data storage for the x & y coordinates
-                ArrayList<Double> xData = new ArrayList<>();
-                ArrayList<Double> yData = new ArrayList<>();
+                // Task data storage for the x & y coordinates
+                TaskData taskData = new TaskData();
+                GuestData guestData = new GuestData();
 
                 private XYChart chart;
                 private XChartPanel xChartPanel; // Used to render the chart into
@@ -189,11 +189,9 @@ public class UserInterface extends JFrame {
                     HTESlider.setAlignmentX(CENTER_ALIGNMENT);
                     add(HTESlider);
 
-                    // Assign initial values
-                    updateData();
-
                     // Create chart with initial data
-                    chart = QuickChart.getChart("Totaal taken per tick", "Tick", "Tasks", "tasks", xData, yData);
+                    chart = QuickChart.getChart("Totaal taken per tick", "Tick", "Tasks", "tasks", taskData.xData, taskData.yData);
+                    chart.addSeries("guests", guestData.xData, guestData.yData);
 
                     // Display chart panel in dialog
                     xChartPanel = new XChartPanel<>(chart);
@@ -203,12 +201,67 @@ public class UserInterface extends JFrame {
                     hotel.getHotelTimer().addObserver(new StatisticsObserver());
                 }
 
-                /**
-                 * Update the data arrays with the latest tick number and number of tasks.
-                 */
-                private void updateData() {
-                    xData.add((double) hotel.getHotelTimer().getHTEIteration());
-                    yData.add((double) dataCollector.getNumberOfTasks());
+                private abstract class ChartData {
+                    String seriesName; // Used for updating the corresponding chart series.
+
+                    ArrayList<Double> xData = new ArrayList<>();
+                    ArrayList<Double> yData = new ArrayList<>();
+
+                    ChartData(String seriesName) {
+                        this.seriesName = seriesName;
+                        updateData();
+                    }
+
+                    /**
+                     * Add the latest x & y values to the local storage variables.
+                     */
+                    void updateData() {
+                        xData.add(getXData());
+                        yData.add(getYData());
+                    }
+
+                    abstract double getYData();
+
+                    abstract double getXData();
+
+                    /**
+                     * Update the chart's corresponding series with the currently stored data.
+                     */
+                    void updateChart() {
+                        chart.updateXYSeries(seriesName, xData, yData, null);
+                    }
+                }
+
+                private class TaskData extends ChartData {
+                    TaskData() {
+                        super("tasks");
+                    }
+
+                    @Override
+                    double getYData() {
+                        return dataCollector.getNumberOfTasks();
+                    }
+
+                    @Override
+                    double getXData() {
+                        return hotel.getHotelTimer().getHTEIteration();
+                    }
+                }
+
+                private class GuestData extends ChartData {
+                    GuestData() {
+                        super("guests");
+                    }
+
+                    @Override
+                    double getYData() {
+                        return dataCollector.getTotalOfGuests();
+                    }
+
+                    @Override
+                    double getXData() {
+                        return hotel.getHotelTimer().getHTEIteration();
+                    }
                 }
 
                 /**
@@ -217,10 +270,13 @@ public class UserInterface extends JFrame {
                 private class StatisticsObserver implements HteObserver {
                     @Override
                     public void observeHTE() {
-                        updateData(); // Update the parent class's x & y data variables with the newest values
+                        // Update the x & y data variables with the newest values...
+                        taskData.updateData();
+                        // ...and push them into the chart series
+                        taskData.updateChart();
 
-                        // Update the chart's data with the newly set x & y data from `updateData()`.
-                        chart.updateXYSeries("tasks", xData, yData, null);
+                        guestData.updateData();
+                        guestData.updateChart();
 
                         // Repaint the chart's panel
                         xChartPanel.revalidate();
