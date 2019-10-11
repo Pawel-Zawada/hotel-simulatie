@@ -20,6 +20,9 @@ public class FileAssetLoader implements AssetLoader {
 
     @Override
     public Font loadFont(String name) throws IOException, FontFormatException {
+        if(name == "default"){
+            return Font.getFont(Font.SANS_SERIF);
+        }
         var fontFile = new File("assets/fonts/" + name + ".ttf");
         var font = Font.createFont(Font.TRUETYPE_FONT, fontFile);
         return font;

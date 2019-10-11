@@ -9,6 +9,8 @@ import simulation.HteObserver;
 import java.util.LinkedList;
 import java.util.Queue;
 
+import static javax.swing.UIManager.put;
+
 /**
  * @author Johan Geluk
  * Collects events from the library, rewrites them, and forwards them to the hotel to be processed.
@@ -85,14 +87,31 @@ public class EventsAdapter implements HotelEventListener, HteObserver {
             case GODZILLA:
                 break;
             case NEED_FOOD:
+                var needFoodEvent = parseNeedFoodEvent(event);
                 break;
             case GOTO_CINEMA:
                 break;
             case GOTO_FITNESS:
+                var goToFitnessEvent = parseGoToFitnessEvent(event);
+                hotel.handleGoToFitness(goToFitnessEvent.guestNumber, goToFitnessEvent.duration);
                 break;
             case START_CINEMA:
                 break;
         }
+    }
+
+    private GoToFitnessEvent parseGoToFitnessEvent(HotelEvent event) {
+        var eventKey = event.Data.keySet().iterator().next();
+        var eventValue = event.Data.get(eventKey).split(" ");
+
+        int guestNumber = Integer.parseInt(eventKey.split(" ")[1]);
+        int duration = Integer.parseInt(eventValue[0]);
+        return new GoToFitnessEvent(guestNumber, duration);
+    }
+
+    private NeedFoodEvent parseNeedFoodEvent(HotelEvent event) {
+        String guest = event.Data.get("Guest");
+        return new NeedFoodEvent(Integer.parseInt(guest));
     }
 
     private CleaningEmergencyEvent parseCleaningEmergencyEvent(HotelEvent event) {
@@ -152,6 +171,25 @@ public class EventsAdapter implements HotelEventListener, HteObserver {
 
         public CleaningEmergencyEvent(int guestNumber) {
             this.guestNumber = guestNumber;
+        }
+    }
+
+    private class NeedFoodEvent {
+        private int guestNumber;
+
+        public NeedFoodEvent(int guestNumber) {
+
+            this.guestNumber = guestNumber;
+        }
+    }
+
+    private class GoToFitnessEvent {
+        private final int guestNumber;
+        private final int duration;
+
+        public GoToFitnessEvent(int guestNumber, int duration) {
+            this.guestNumber = guestNumber;
+            this.duration = duration;
         }
     }
 }

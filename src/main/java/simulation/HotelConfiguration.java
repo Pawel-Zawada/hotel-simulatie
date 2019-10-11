@@ -2,9 +2,11 @@ package simulation;
 
 public class HotelConfiguration {
 
-    private int elevatorWeight;
-    private int stairsWeight;
+    private int elevatorWeight = 12;
+    private int stairsWeight = 4;
+    
     private int dinnerTime = 5;
+    private int cleaningTime = 2;
 
     public int getElevatorWeight() {
         return elevatorWeight;
@@ -28,5 +30,13 @@ public class HotelConfiguration {
 
     public void setDinnerTime(int dinnerTime) {
         this.dinnerTime = dinnerTime;
+    }
+
+    public int getCleaningTime() {
+        return this.cleaningTime;
+    }
+    
+    public void setCleaningTime(int cleaningTime) {
+        this.cleaningTime = cleaningTime;
     }
 }

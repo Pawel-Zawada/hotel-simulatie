@@ -102,7 +102,7 @@ public class Hotel implements Drawable {
     public void checkOut(Guest guest){
         guest.getRoom().setOccupied(false);
         guest.getRoom().setDirty(true);
-        cleanerTasks.enQueue(new CleanRoomTask(guest.getRoom()));
+        cleanerTasks.enQueue(new CleanRoomTask(this, guest.getRoom()));
         guests.remove(guest);
     }
 
@@ -128,7 +128,7 @@ public class Hotel implements Drawable {
     public void handleCleaningEmergency(int guestNumber) {
         var room = getGuestByNumber(guestNumber).getRoom();
         room.setDirty(true);
-        cleanerTasks.addEmergencyTask(new CleanRoomTask(room));
+        cleanerTasks.addEmergencyTask(new CleanRoomTask(this, room));
     }
 
     public void handleDinnerRequest(int guestNumber, ArrayList<Restaurant> restaurantsToExclude){
@@ -140,6 +140,7 @@ public class Hotel implements Drawable {
 
     @Override
     public void draw(DrawHelper drawHelper) {
+        hotelElements.stream();
         for(var element: hotelElements){
             element.draw(drawHelper);
         }
@@ -153,5 +154,18 @@ public class Hotel implements Drawable {
 
     public HotelConfiguration getConfiguration() {
         return configuration;
+    }
+
+    public void handleGoToFitness(int guestNumber, int duration) {
+        var guest = getGuestByNumber(guestNumber);
+        var gym = getGym();
+        guest.moveTo(gym);
+        guest.workOut(duration);
+    }
+
+    private Gym getGym() {
+        return hotelElements.stream()
+                .filter(e -> e.getClass() == Gym.class)
+                .map(e -> (Gym) e).findFirst().get();
     }
 }

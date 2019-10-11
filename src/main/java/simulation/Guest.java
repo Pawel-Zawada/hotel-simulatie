@@ -4,6 +4,7 @@ import drawing.DrawHelper;
 import drawing.Drawable;
 import tasks.CheckOutTask;
 import tasks.EatAtRestaurantTask;
+import tasks.WorkOutTask;
 import tasks.Task;
 
 import java.util.ArrayList;
@@ -44,6 +45,7 @@ public class Guest extends Person implements HteObserver, Drawable {
         }else{
             drawHelper.drawSprite("guest", this.x, this.y);
         }
+        //drawHelper.drawString(name, "default", x, y);
     }
 
     public void assignRoom(Room room){
@@ -67,5 +69,9 @@ public class Guest extends Person implements HteObserver, Drawable {
 
     public Room getRoom() {
         return room;
+    }
+
+    public void workOut(int duration) {
+        personalTasks.enQueue(new WorkOutTask(hotel, duration));
     }
 }

@@ -1,15 +1,16 @@
 package tasks;
 
+import simulation.Hotel;
 import simulation.HotelElement;
 import simulation.Room;
 
 public class CleanRoomTask extends Task {
-    private static final int ticksRequiredToClean = 2;
-
+    private final int ticksRequiredToClean;
     private Room room;
     private int ticksDone = 0;
 
-    public CleanRoomTask(Room room) {
+    public CleanRoomTask(Hotel hotel, Room room) {
+        this.ticksRequiredToClean = hotel.getConfiguration().getCleaningTime();
         this.room = room;
     }
 
