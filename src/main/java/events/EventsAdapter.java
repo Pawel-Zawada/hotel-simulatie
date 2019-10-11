@@ -6,6 +6,7 @@ import events.library.HotelEventManager;
 import simulation.Hotel;
 import simulation.HteObserver;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 
@@ -88,6 +89,7 @@ public class EventsAdapter implements HotelEventListener, HteObserver {
                 break;
             case NEED_FOOD:
                 var needFoodEvent = parseNeedFoodEvent(event);
+                hotel.handleDinnerRequest(needFoodEvent.guestNumber, new ArrayList<>());
                 break;
             case GOTO_CINEMA:
                 break;
