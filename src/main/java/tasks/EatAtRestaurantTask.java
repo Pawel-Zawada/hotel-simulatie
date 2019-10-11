@@ -35,8 +35,12 @@ public class EatAtRestaurantTask extends Task{
             System.out.println("Guest "+guest.getName()+" arrived at a restaurant but it was full");
             isDone = true;
         }
+        if(timeStayed==0 && !restaurant.isFull()){
+            restaurant.enterRestaurant(guest);
+        }
         else if(timeStayed >= hotel.getConfiguration().getDinnerTime()){
             System.out.println("Guest "+guest.getName()+" is done eating");
+            restaurant.leaveRestaurant(guest);
             isDone = true;
         }
         timeStayed++;

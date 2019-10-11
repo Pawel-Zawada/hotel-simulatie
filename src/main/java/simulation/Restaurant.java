@@ -53,6 +53,10 @@ public class Restaurant implements HotelElement {
         }
     }
 
+    public void leaveRestaurant(Guest guest){
+        guests.remove(guest);
+    }
+
     public boolean isFull() {
         return guests.size() >= capacity;
     }
