@@ -14,7 +14,7 @@ public class TaskRepositoryTest {
         assertEquals(100,((TestTask)taskRepository.peek()).getTaskNumber());
     }
 
-    private class TestTask extends Task {
+    public class TestTask extends Task {
         private int number;
 
         public TestTask(int number) {
