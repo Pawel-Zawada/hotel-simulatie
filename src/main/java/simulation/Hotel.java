@@ -37,8 +37,6 @@ public class Hotel implements Drawable {
 
         this.cleaners.add(CleanerFactory.createCleaner(this, cleanerTasks));
         this.cleaners.add(CleanerFactory.createCleaner(this, cleanerTasks));
-        this.cleaners.add(CleanerFactory.createCleaner(this, cleanerTasks));
-        this.cleaners.add(CleanerFactory.createCleaner(this, cleanerTasks));
     }
 
     public int getWidth() {
