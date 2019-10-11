@@ -2,7 +2,6 @@ package simulation;
 
 import drawing.DrawHelper;
 import drawing.Drawable;
-import pathfinding.Graph;
 import system.HotelTimer;
 import tasks.CleanRoomTask;
 import tasks.TaskRepository;
@@ -130,6 +129,13 @@ public class Hotel implements Drawable {
         var room = getGuestByNumber(guestNumber).getRoom();
         room.setDirty(true);
         cleanerTasks.addEmergencyTask(new CleanRoomTask(room));
+    }
+
+    public void handleDinnerRequest(int guestNumber, ArrayList<Restaurant> restaurantsToExclude){
+        var restaurantsToTry = getRestaurants().stream().filter(r->!restaurantsToExclude.contains(r)).collect(Collectors.toList());
+        Guest guest = getGuestByNumber(guestNumber);
+        guest.moveTo(restaurantsToTry.get(0)); //find nearest
+        guest.eatAtRestaurant(restaurantsToTry.get(0),restaurantsToExclude);
     }
 
     @Override

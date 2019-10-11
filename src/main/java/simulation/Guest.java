@@ -3,7 +3,10 @@ package simulation;
 import drawing.DrawHelper;
 import drawing.Drawable;
 import tasks.CheckOutTask;
+import tasks.EatAtRestaurantTask;
 import tasks.Task;
+
+import java.util.ArrayList;
 
 /**
  * @author Ümit Tokmak, Marc Kemp, Johan Geluk
@@ -56,6 +59,10 @@ public class Guest extends Person implements HteObserver, Drawable {
 
     public void checkOut(){
         personalTasks.enQueue(new CheckOutTask(hotel, this));
+    }
+
+    public void eatAtRestaurant(Restaurant restaurant, ArrayList<Restaurant> restaurantsToExclude){
+        personalTasks.enQueue(new EatAtRestaurantTask(hotel,restaurant,restaurantsToExclude, this));
     }
 
     public Room getRoom() {

@@ -18,7 +18,6 @@ public class CheckOutTask extends Task {
 
     @Override
     public boolean isDone() {
-
         return isDone;
     }
 
