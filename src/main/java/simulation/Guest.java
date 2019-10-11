@@ -2,10 +2,7 @@ package simulation;
 
 import drawing.DrawHelper;
 import drawing.Drawable;
-import tasks.CheckOutTask;
-import tasks.EatAtRestaurantTask;
-import tasks.WorkOutTask;
-import tasks.Task;
+import tasks.*;
 
 import java.util.ArrayList;
 
@@ -75,5 +72,9 @@ public class Guest extends Person implements HteObserver, Drawable {
 
     public void workOut(int duration) {
         personalTasks.enQueue(new WorkOutTask(hotel, duration));
+    }
+
+    public void watchMovie(Cinema cinema) {
+        personalTasks.enQueue(new WatchMovieTask(hotel, cinema));
     }
 }

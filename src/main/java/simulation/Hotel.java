@@ -62,7 +62,7 @@ public class Hotel implements Drawable {
             if(room.getClassification() > requestedClassification){
                 System.out.println("Guest " + guestNumber + " received a free upgrade (" + requestedClassification + " -> " + room.getClassification() + " stars), room number " + room.getRoomNumber());
             }else{
-                System.out.println("Guest " + guestNumber + " received room number " + room.getRoomNumber());
+                System.out.println("Guest " + guestNumber + " received room number " + room.getRoomNumber() + " (" + requestedClassification + " stars).");
             }
             guest.assignRoom(room);
         }
@@ -172,5 +172,22 @@ public class Hotel implements Drawable {
         return hotelElements.stream()
                 .filter(e -> e.getClass() == Gym.class)
                 .map(e -> (Gym) e).findFirst().get();
+    }
+
+    public void handleGoToCinema(int guestNumber) {
+        var guest = getGuestByNumber(guestNumber);
+        if(guest == null){
+            System.out.println("A dead guest can't go to the cinema!");
+            return;
+        }
+        var cinema = getCinema();
+        guest.moveTo(cinema);
+        guest.watchMovie(cinema);
+    }
+
+    private Cinema getCinema() {
+        return hotelElements.stream()
+                .filter(e -> e.getClass() == Cinema.class)
+                .map(e -> (Cinema) e).findFirst().get();
     }
 }
