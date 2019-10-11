@@ -6,8 +6,11 @@ import events.library.HotelEventManager;
 import simulation.Hotel;
 import simulation.HteObserver;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
+
+import static javax.swing.UIManager.put;
 
 /**
  * @author Johan Geluk
@@ -81,18 +84,51 @@ public class EventsAdapter implements HotelEventListener, HteObserver {
                 hotel.handleCleaningEmergency(emergencyEvent.guestNumber);
                 break;
             case EVACUATE:
+                hotel.handleEvacuation();
                 break;
             case GODZILLA:
+                hotel.handleGodzilla();
                 break;
             case NEED_FOOD:
+                var needFoodEvent = parseNeedFoodEvent(event);
+                hotel.handleDinnerRequest(needFoodEvent.guestNumber, new ArrayList<>());
                 break;
             case GOTO_CINEMA:
+                var goToCinemaEvent = parseGoToCinemaEvent(event);
+                hotel.handleGoToCinema(goToCinemaEvent.guestNumber);
                 break;
             case GOTO_FITNESS:
+                var goToFitnessEvent = parseGoToFitnessEvent(event);
+                hotel.handleGoToFitness(goToFitnessEvent.guestNumber, goToFitnessEvent.duration);
                 break;
             case START_CINEMA:
+                var startCinemaEvent = parseStartCinemaEvent(event);
+                hotel.handleStartCinema(startCinemaEvent.cinemaId);
                 break;
         }
+    }
+
+    private StartCinemaEvent parseStartCinemaEvent(HotelEvent event) {
+        return new StartCinemaEvent(Integer.parseInt(event.Data.get("ID")));
+    }
+
+    private GoToCinemaEvent parseGoToCinemaEvent(HotelEvent event) {
+        String guest = event.Data.get("Guest");
+        return new GoToCinemaEvent(Integer.parseInt(guest));
+    }
+
+    private GoToFitnessEvent parseGoToFitnessEvent(HotelEvent event) {
+        var eventKey = event.Data.keySet().iterator().next();
+        var eventValue = event.Data.get(eventKey).split(" ");
+
+        int guestNumber = Integer.parseInt(eventKey.split(" ")[1]);
+        int duration = Integer.parseInt(eventValue[0]);
+        return new GoToFitnessEvent(guestNumber, duration);
+    }
+
+    private NeedFoodEvent parseNeedFoodEvent(HotelEvent event) {
+        String guest = event.Data.get("Guest");
+        return new NeedFoodEvent(Integer.parseInt(guest));
     }
 
     private CleaningEmergencyEvent parseCleaningEmergencyEvent(HotelEvent event) {
@@ -152,6 +188,41 @@ public class EventsAdapter implements HotelEventListener, HteObserver {
 
         public CleaningEmergencyEvent(int guestNumber) {
             this.guestNumber = guestNumber;
+        }
+    }
+
+    private class NeedFoodEvent {
+        private int guestNumber;
+
+        public NeedFoodEvent(int guestNumber) {
+
+            this.guestNumber = guestNumber;
+        }
+    }
+
+    private class GoToFitnessEvent {
+        private final int guestNumber;
+        private final int duration;
+
+        public GoToFitnessEvent(int guestNumber, int duration) {
+            this.guestNumber = guestNumber;
+            this.duration = duration;
+        }
+    }
+
+    private class GoToCinemaEvent {
+        private int guestNumber;
+
+        public GoToCinemaEvent(int guestNumber) {
+            this.guestNumber = guestNumber;
+        }
+    }
+
+    private class StartCinemaEvent {
+        private int cinemaId;
+
+        public StartCinemaEvent(int cinemaId) {
+            this.cinemaId = cinemaId;
         }
     }
 }

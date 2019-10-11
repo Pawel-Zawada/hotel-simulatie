@@ -2,8 +2,9 @@ package simulation;
 
 import drawing.DrawHelper;
 import drawing.Drawable;
-import tasks.CheckOutTask;
-import tasks.Task;
+import tasks.*;
+
+import java.util.ArrayList;
 
 /**
  * @author Ümit Tokmak, Marc Kemp, Johan Geluk
@@ -28,10 +29,13 @@ public class Guest extends Person implements HteObserver, Drawable {
     }
 
     public void observeHTE() {
-        Task task = personalTasks.getNextActiveTask();
+        Task task = getPersonalTasks().getNextActiveTask();
         // Task will be null if we have nothing to do.
         if(task != null){
             task.executeStep();
+        }
+        else if(getCurrentRoom() != room){
+            this.moveTo(room);
         }
     }
 
@@ -41,12 +45,12 @@ public class Guest extends Person implements HteObserver, Drawable {
         }else{
             drawHelper.drawSprite("guest", this.x, this.y);
         }
+        //drawHelper.drawString(name, "default", x, y);
     }
 
     public void assignRoom(Room room){
         room.setOccupied(true);
         this.room = room;
-        moveTo(room);
     }
 
 
@@ -55,10 +59,30 @@ public class Guest extends Person implements HteObserver, Drawable {
     }
 
     public void checkOut(){
-        personalTasks.enQueue(new CheckOutTask(hotel, this));
+        getPersonalTasks().enQueue(new CheckOutTask(hotel, this));
+    }
+
+    public void eatAtRestaurant(Restaurant restaurant, ArrayList<Restaurant> restaurantsToExclude){
+        getPersonalTasks().enQueue(new EatAtRestaurantTask(hotel,restaurant,restaurantsToExclude, this));
     }
 
     public Room getRoom() {
         return room;
+    }
+
+    public void workOut(int duration) {
+        getPersonalTasks().enQueue(new WorkOutTask(hotel, duration));
+    }
+
+    public void watchMovie(Cinema cinema) {
+        getPersonalTasks().enQueue(new WatchMovieTask(hotel, cinema));
+    }
+
+    public void evacuate(Hotel hotel){
+        for(Task task:getPersonalTasks().getTaskQueue()){
+            task.abort();
+        }
+        getPersonalTasks().getTaskQueue().clear();
+        getPersonalTasks().enQueue(new Evacuate(this, hotel));
     }
 }

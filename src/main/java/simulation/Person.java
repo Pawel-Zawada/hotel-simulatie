@@ -16,7 +16,7 @@ public abstract class Person {
     protected int y;
     protected String name;
     protected HotelElement currentRoom;
-    protected TaskRepository personalTasks = new TaskRepository();
+    private TaskRepository personalTasks = new TaskRepository();
     protected Hotel hotel;
 
     public Person(Hotel hotel){
@@ -28,6 +28,9 @@ public abstract class Person {
         return this.name;
     }
 
+    public TaskRepository getPersonalTasks() {
+        return personalTasks;
+    }
 
     public int getX() {
         return x;
@@ -54,8 +57,15 @@ public abstract class Person {
     }
 
     public void moveTo(HotelElement destination){
+        var destinations = new ArrayList<HotelElement>();
+        destinations.add(destination);
+        moveToClosest(destinations);
+    }
+
+    public HotelElement moveToClosest(List<HotelElement> destinations){
         var pathFinding = new PathFinding();
         var graph = Graph.createGraph(hotel);
+
         Node<HotelElement> startNode=null;
         for(Node<HotelElement> node:graph.getNodeList()){
             if (node.getElement().getX() == x && node.getElement().getY() == y){
@@ -63,17 +73,16 @@ public abstract class Person {
             }
         }
 
-        Node<HotelElement> endNode=null;
+        ArrayList<Node> endNodes=new ArrayList<>();
         for(Node<HotelElement> node:graph.getNodeList()){
-            if (node.getElement() == destination){
-                endNode = node;
+            if (destinations.contains(node.getElement())){
+                endNodes.add(node);
             }
         }
 
-        Node<HotelElement> destinationNode = pathFinding.doPathFinding(startNode,endNode);
+        Node<HotelElement> destinationNode = pathFinding.doPathFinding(startNode,endNodes);
         if(destinationNode == null){
-            System.out.println("Could not find a path to destination: " + destination.getClass().getName());
-
+            System.out.println("Could not find a path to destination: " + destinations.get(0).getClass().getName());
         } else {
             List<HotelElement> path = new ArrayList<>();
             var currentNode = destinationNode;
@@ -86,6 +95,8 @@ public abstract class Person {
 
             personalTasks.enQueue(new MoveToTask(path, this));
         }
+        return destinationNode.getElement();
     }
 
+    public abstract void evacuate(Hotel hotel);
 }

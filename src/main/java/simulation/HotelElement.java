@@ -7,5 +7,4 @@ public interface HotelElement extends Drawable {
     int getHeight();
     int getX();
     int getY();
-    boolean isWalkable();
 }

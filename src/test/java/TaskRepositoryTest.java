@@ -32,6 +32,11 @@ public class TaskRepositoryTest {
 
         }
 
+        @Override
+        public void abort() {
+
+        }
+
         public int getTaskNumber() {
             return number;
         }

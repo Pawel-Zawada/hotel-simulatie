@@ -34,10 +34,6 @@ public class Elevator implements HotelElement {
         return y;
     }
 
-    public boolean isWalkable() {
-        return false;
-    }
-
     public static ArrayList<Guest> guestsInElevator = new ArrayList<>();
 
     public void guestStepInElevator(Guest guest){

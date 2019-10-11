@@ -39,7 +39,7 @@ public class Graph {
             if (hotelElement.getClass() == Elevator.class){ //connect elevator to left nodes. in applies elevator weight
                 for(Node<HotelElement> neigbourCandidate: nodeList){
                     if (hotelElement.getX()+hotelElement.getWidth() == neigbourCandidate.getElement().getX()) {
-                        neigbourCandidate.connect(node, hotel.getElevatorWeight());
+                        neigbourCandidate.connect(node, hotel.getConfiguration().getElevatorWeight());
                         node.connect(neigbourCandidate, hotelElement.getWidth());
                     }
                 }
@@ -55,7 +55,7 @@ public class Graph {
                 for (Node<HotelElement> neigbourCandidate : nodeList) {
                     if (hotelElement.getX() == neigbourCandidate.getElement().getX()) { //node is a stairs
                         if (neigbourCandidate.getElement().getY() == hotelElement.getY() + 1 || neigbourCandidate.getElement().getY() == hotelElement.getY() - 1) {
-                            node.connect(neigbourCandidate, hotel.getStairsWeight());
+                            node.connect(neigbourCandidate, hotel.getConfiguration().getStairsWeight());
                         }
                     }
                 }

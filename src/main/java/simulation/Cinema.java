@@ -3,12 +3,12 @@ package simulation;
 
 import drawing.DrawHelper;
 
-public class Cinema implements HotelElement, HteObserver {
+public class Cinema implements HotelElement {
     private int width;
     private int height;
     private int x;
     private int y;
-  //  private int cinemaID;
+    private boolean started;
 
     public Cinema(int width, int height, int x, int y){
         this.width = width;
@@ -17,10 +17,7 @@ public class Cinema implements HotelElement, HteObserver {
         this.y = y;
     }
 
-    public void observeHTE(){
-        //start playing a movie
-    }
-
+    @Override
     public int getWidth() {
         return width;
     }
@@ -38,10 +35,6 @@ public class Cinema implements HotelElement, HteObserver {
         return y;
     }
 
-    public boolean isWalkable() {
-        return false;
-    }
-
     @Override
     public void draw(DrawHelper drawHelper) {
         for(int x = 0; x < this.width; x++){
@@ -54,6 +47,14 @@ public class Cinema implements HotelElement, HteObserver {
                 }
             }
         }
+    }
+
+    public boolean hasStarted() {
+        return started;
+    }
+
+    public void start(){
+        started = true;
     }
 }
 

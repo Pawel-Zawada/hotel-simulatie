@@ -9,6 +9,7 @@ import simulation.Hotel;
 public class CheckOutTask extends Task {
     private Hotel hotel;
     private Guest guest;
+    private boolean isDone = false;
 
     public CheckOutTask(Hotel hotel, Guest guest){
         this.hotel = hotel;
@@ -17,11 +18,17 @@ public class CheckOutTask extends Task {
 
     @Override
     public boolean isDone() {
-        return false;
+        return isDone;
     }
 
     @Override
     public void executeStep() {
+        isDone = true;
         hotel.checkOut(guest);
+    }
+
+    @Override
+    public void abort() {
+
     }
 }
