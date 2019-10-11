@@ -33,10 +33,6 @@ public class CheckInDesk implements HotelElement{
         return y;
     }
 
-    public boolean isWalkable() {
-        return false;
-    }
-
     @Override
     public void draw(DrawHelper drawHelper) {
         drawHelper.drawSprite("checkin", x, y);

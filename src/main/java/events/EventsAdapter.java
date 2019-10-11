@@ -86,6 +86,7 @@ public class EventsAdapter implements HotelEventListener, HteObserver {
             case EVACUATE:
                 break;
             case GODZILLA:
+                hotel.handleGodzilla();
                 break;
             case NEED_FOOD:
                 var needFoodEvent = parseNeedFoodEvent(event);
@@ -100,8 +101,14 @@ public class EventsAdapter implements HotelEventListener, HteObserver {
                 hotel.handleGoToFitness(goToFitnessEvent.guestNumber, goToFitnessEvent.duration);
                 break;
             case START_CINEMA:
+                var startCinemaEvent = parseStartCinemaEvent(event);
+                hotel.handleStartCinema(startCinemaEvent.cinemaId);
                 break;
         }
+    }
+
+    private StartCinemaEvent parseStartCinemaEvent(HotelEvent event) {
+        return new StartCinemaEvent(Integer.parseInt(event.Data.get("ID")));
     }
 
     private GoToCinemaEvent parseGoToCinemaEvent(HotelEvent event) {
@@ -207,6 +214,14 @@ public class EventsAdapter implements HotelEventListener, HteObserver {
 
         public GoToCinemaEvent(int guestNumber) {
             this.guestNumber = guestNumber;
+        }
+    }
+
+    private class StartCinemaEvent {
+        private int cinemaId;
+
+        public StartCinemaEvent(int cinemaId) {
+            this.cinemaId = cinemaId;
         }
     }
 }

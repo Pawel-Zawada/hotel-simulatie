@@ -33,10 +33,6 @@ public class Lobby implements HotelElement{
         return y;
     }
 
-    public boolean isWalkable() {
-        return false;
-    }
-
     @Override
     public void draw(DrawHelper drawHelper) {
         for(int x = 0; x < this.width; x++){

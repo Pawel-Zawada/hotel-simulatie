@@ -38,10 +38,6 @@ public class Room implements HotelElement{
         return y;
     }
 
-    public boolean isWalkable() {
-        return false;
-    }
-
     public int getClassification() {
         return classification;
     }

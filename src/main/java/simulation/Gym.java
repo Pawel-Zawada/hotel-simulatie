@@ -35,10 +35,6 @@ public class Gym implements HotelElement{
         return y;
     }
 
-    public boolean isWalkable() {
-        return false;
-    }
-
     public static ArrayList<Guest> guestsInGym = new ArrayList<>();
 
     public void enterGym(Guest guest){

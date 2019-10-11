@@ -21,6 +21,8 @@ public class Hotel implements Drawable {
     private final int width;
     private final int height;
 
+    private boolean destroyed = false;
+
     private HotelTimer hotelTimer;
     private TaskRepository cleanerTasks = new TaskRepository();
     private HotelConfiguration configuration = new HotelConfiguration();
@@ -129,7 +131,12 @@ public class Hotel implements Drawable {
     }
 
     public void handleCleaningEmergency(int guestNumber) {
-        var room = getGuestByNumber(guestNumber).getRoom();
+        var guest = getGuestByNumber(guestNumber);
+        if(guest == null){
+            System.out.println("A dead guest can't have their room cleaned!");
+            return;
+        }
+        var room = guest.getRoom();
         room.setDirty(true);
         cleanerTasks.addEmergencyTask(new CleanRoomTask(this, room));
     }
@@ -145,9 +152,12 @@ public class Hotel implements Drawable {
 
     @Override
     public void draw(DrawHelper drawHelper) {
-        hotelElements.stream();
         for(var element: hotelElements){
-            element.draw(drawHelper);
+            if(destroyed){
+                drawHelper.drawSprite("ruin", element.getX(), element.getY());
+            }else{
+                element.draw(drawHelper);
+            }
         }
         for(var guest: guests){
             guest.draw(drawHelper);
@@ -184,15 +194,26 @@ public class Hotel implements Drawable {
             System.out.println("A dead guest can't go to the cinema!");
             return;
         }
-        var cinema = getCinema();
-        guest.moveTo(cinema);
-        guest.watchMovie(cinema);
+        List<HotelElement> cinemas = getCinemas();
+        Cinema closest = (Cinema) guest.moveToClosest(cinemas);
+        guest.watchMovie(closest);
     }
 
-    private Cinema getCinema() {
+    private List<HotelElement> getCinemas() {
         return hotelElements.stream()
                 .filter(e -> e.getClass() == Cinema.class)
-                .map(e -> (Cinema) e).findFirst().get();
+                .collect(Collectors.toList());
+    }
+
+    public void handleGodzilla() {
+        while(guests.size() > 0){
+            killGuest(guests.get(0));
+        }
+        destroyed = true;
+    }
+
+    public void handleStartCinema(int cinemaId) {
+        ;
     }
 
     public void handleEvacuation(){

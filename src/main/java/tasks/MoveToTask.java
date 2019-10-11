@@ -33,7 +33,7 @@ public class MoveToTask extends Task {
         person.setY(nextNode.getY());
 
         if(isDone()){
-            System.out.println(person.getName() + " arrived at destination.");
+            System.out.println(person.getName() + " arrived at destination: " + nextNode.getClass().getSimpleName());
 
             person.setCurrentRoom(nextNode);
         }

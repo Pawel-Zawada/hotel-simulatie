@@ -7,6 +7,7 @@ public class HotelConfiguration {
     
     private int dinnerTime = 5;
     private int cleaningTime = 2;
+    private int cinemaDuration = 10;
 
     public int getElevatorWeight() {
         return elevatorWeight;
@@ -38,5 +39,9 @@ public class HotelConfiguration {
     
     public void setCleaningTime(int cleaningTime) {
         this.cleaningTime = cleaningTime;
+    }
+
+    public int getCinemaDuration() {
+        return this.cinemaDuration;
     }
 }

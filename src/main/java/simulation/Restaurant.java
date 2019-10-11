@@ -43,10 +43,6 @@ public class Restaurant implements HotelElement {
         return capacity;
     }
 
-    public boolean isWalkable() {
-        return true;
-    }
-
     public void enterRestaurant(Guest guest) {
         if (!isFull()) {
             guests.add(guest);
