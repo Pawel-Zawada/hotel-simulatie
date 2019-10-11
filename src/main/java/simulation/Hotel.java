@@ -113,8 +113,10 @@ public class Hotel implements Drawable {
         var guest = getGuestByNumber(guestNumber);
         if(guests.contains(guest)) { //if it does not contain guest, that means he is dead :(
             guest.moveTo(getCheckInDesk());
+            guest.checkOut();
+        }else{
+            System.out.println("He's dead jim");
         }
-        guest.checkOut();
     }
 
     public void checkOut(Guest guest){
