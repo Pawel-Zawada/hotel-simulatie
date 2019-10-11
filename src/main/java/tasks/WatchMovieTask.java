@@ -23,4 +23,9 @@ public class WatchMovieTask extends Task {
     public void executeStep() {
 
     }
+
+    @Override
+    public void abort() {
+
+    }
 }

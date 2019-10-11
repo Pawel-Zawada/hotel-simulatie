@@ -29,7 +29,7 @@ public class Guest extends Person implements HteObserver, Drawable {
     }
 
     public void observeHTE() {
-        Task task = personalTasks.getNextActiveTask();
+        Task task = getPersonalTasks().getNextActiveTask();
         // Task will be null if we have nothing to do.
         if(task != null){
             task.executeStep();
@@ -59,11 +59,11 @@ public class Guest extends Person implements HteObserver, Drawable {
     }
 
     public void checkOut(){
-        personalTasks.enQueue(new CheckOutTask(hotel, this));
+        getPersonalTasks().enQueue(new CheckOutTask(hotel, this));
     }
 
     public void eatAtRestaurant(Restaurant restaurant, ArrayList<Restaurant> restaurantsToExclude){
-        personalTasks.enQueue(new EatAtRestaurantTask(hotel,restaurant,restaurantsToExclude, this));
+        getPersonalTasks().enQueue(new EatAtRestaurantTask(hotel,restaurant,restaurantsToExclude, this));
     }
 
     public Room getRoom() {
@@ -71,10 +71,18 @@ public class Guest extends Person implements HteObserver, Drawable {
     }
 
     public void workOut(int duration) {
-        personalTasks.enQueue(new WorkOutTask(hotel, duration));
+        getPersonalTasks().enQueue(new WorkOutTask(hotel, duration));
     }
 
     public void watchMovie(Cinema cinema) {
-        personalTasks.enQueue(new WatchMovieTask(hotel, cinema));
+        getPersonalTasks().enQueue(new WatchMovieTask(hotel, cinema));
+    }
+
+    public void evacuate(Hotel hotel){
+        for(Task task:getPersonalTasks().getTaskQueue()){
+            task.abort();
+        }
+        getPersonalTasks().getTaskQueue().clear();
+        getPersonalTasks().enQueue(new Evacuate(this, hotel));
     }
 }

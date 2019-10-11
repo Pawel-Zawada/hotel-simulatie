@@ -38,4 +38,9 @@ public class MoveToTask extends Task {
             person.setCurrentRoom(nextNode);
         }
     }
+
+    @Override
+    public void abort() {
+
+    }
 }

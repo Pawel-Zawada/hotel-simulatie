@@ -7,7 +7,9 @@ import tasks.CleanRoomTask;
 import tasks.TaskRepository;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Hotel implements Drawable {
@@ -22,6 +24,8 @@ public class Hotel implements Drawable {
     private HotelTimer hotelTimer;
     private TaskRepository cleanerTasks = new TaskRepository();
     private HotelConfiguration configuration = new HotelConfiguration();
+
+    private Set<Person> evacuatedPersons = new HashSet<>();
 
     public Hotel( ArrayList<HotelElement> hotelElements,int width,int height){
         this.hotelElements = hotelElements;
@@ -189,5 +193,33 @@ public class Hotel implements Drawable {
         return hotelElements.stream()
                 .filter(e -> e.getClass() == Cinema.class)
                 .map(e -> (Cinema) e).findFirst().get();
+    }
+
+    public void handleEvacuation(){
+        ArrayList<Person> evacuees = new ArrayList<>();
+        for(Guest guest:guests){
+            evacuees.add(guest);
+        }
+        for (Cleaner cleaner: cleaners){
+            evacuees.add(cleaner);
+        }
+        for (Person evacuee: evacuees){
+            evacuee.moveTo(getCheckInDesk());
+        }
+        for (Person evacuee: evacuees){
+            evacuee.evacuate(this);
+        }
+    }
+
+    public void addEvacuatedPerson(Person person){
+        evacuatedPersons.add(person);
+
+    }
+
+    public boolean evacuationComplete(){
+        if (evacuatedPersons.size() == (guests.size() + cleaners.size())){
+            return true;
+        }
+        else return false;
     }
 }

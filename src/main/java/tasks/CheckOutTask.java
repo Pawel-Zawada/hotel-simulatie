@@ -26,4 +26,9 @@ public class CheckOutTask extends Task {
         isDone = true;
         hotel.checkOut(guest);
     }
+
+    @Override
+    public void abort() {
+
+    }
 }

@@ -16,7 +16,7 @@ public abstract class Person {
     protected int y;
     protected String name;
     protected HotelElement currentRoom;
-    protected TaskRepository personalTasks = new TaskRepository();
+    private TaskRepository personalTasks = new TaskRepository();
     protected Hotel hotel;
 
     public Person(Hotel hotel){
@@ -28,6 +28,9 @@ public abstract class Person {
         return this.name;
     }
 
+    public TaskRepository getPersonalTasks() {
+        return personalTasks;
+    }
 
     public int getX() {
         return x;
@@ -95,4 +98,5 @@ public abstract class Person {
         return destinationNode.getElement();
     }
 
+    public abstract void evacuate(Hotel hotel);
 }

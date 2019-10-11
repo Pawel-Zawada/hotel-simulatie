@@ -19,4 +19,9 @@ public class WorkOutTask extends Task{
     public void executeStep() {
         ticksDone++;
     }
+
+    @Override
+    public void abort() {
+
+    }
 }

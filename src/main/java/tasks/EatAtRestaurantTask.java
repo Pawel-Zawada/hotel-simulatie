@@ -45,4 +45,9 @@ public class EatAtRestaurantTask extends Task{
         }
         timeStayed++;
     }
+
+    @Override
+    public void abort() {
+        restaurant.leaveRestaurant(guest);
+    }
 }
