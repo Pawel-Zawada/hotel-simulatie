@@ -29,6 +29,11 @@ public class PathFinding {
     }
 
     public Node doPathFinding(Node startNode, List<Node> endNodes){
+        if(endNodes.contains(startNode)){
+            // We're already at a destination.
+            return startNode;
+        }
+
         Node currentNode = startNode;
 
         openList.add(startNode);
