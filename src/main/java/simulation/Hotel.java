@@ -73,8 +73,7 @@ public class Hotel implements Drawable {
     }
 
     public void killGuest(Guest guest) { // Muahahaha >:)
-        guests.remove(guest);
-        requestCheckOut(guest.getGuestNumber());
+        checkOut(guest);
     }
 
     public int numberOfGuests() {
@@ -116,6 +115,7 @@ public class Hotel implements Drawable {
             guest.checkOut();
         }else{
             System.out.println("He's dead jim");
+
         }
     }
 
