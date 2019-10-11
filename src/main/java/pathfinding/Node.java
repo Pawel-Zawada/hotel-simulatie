@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * @author Marc Kemp
+ */
 public class Node<T> {
 
     private int x;

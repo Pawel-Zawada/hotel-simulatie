@@ -3,6 +3,9 @@ import simulation.*;
 
 import java.util.*;
 
+/**
+ * @author Marc Kemp
+ */
 public class Graph {
     private ArrayList<HotelElement> hotelElements;
     private int width;

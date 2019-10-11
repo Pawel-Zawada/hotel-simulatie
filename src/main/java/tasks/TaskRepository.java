@@ -2,6 +2,9 @@ package tasks;
 
 import java.util.ArrayList;
 
+/**
+ * @author Ümit Tokmak
+ */
 public class TaskRepository {
     private ArrayList<Task> taskQueue;
     private boolean isEmpty;

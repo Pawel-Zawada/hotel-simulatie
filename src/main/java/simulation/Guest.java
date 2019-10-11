@@ -14,6 +14,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * @author Ümit Tokmak, Marc Kemp, Johan Geluk
+ * Represents a guest in the hotel.
+ */
 public class Guest implements IObserver, Person, Drawable {
     private String name;
     private int x;

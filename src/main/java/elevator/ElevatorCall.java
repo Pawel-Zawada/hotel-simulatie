@@ -1,5 +1,8 @@
 package elevator;
 
+/**
+ * Represents a request for entering the elevator from a given floor.
+ */
 public class ElevatorCall {
     private final int floor;
     private final ElevatorDirection direction;

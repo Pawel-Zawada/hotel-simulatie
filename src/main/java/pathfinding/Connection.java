@@ -1,5 +1,8 @@
 package pathfinding;
 
+/**
+ * @author Marc Kemp
+ */
 public class Connection<T> {
 
     private final Node<T> node;

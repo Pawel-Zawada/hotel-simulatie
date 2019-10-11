@@ -4,6 +4,9 @@ import simulation.*;
 import java.io.FileReader;
 import java.util.ArrayList;
 
+/**
+ * @author Marc Kemp
+ */
 public class JsonReader {
 
     public ArrayList<HotelElement> loadHotelElements(String fileName){

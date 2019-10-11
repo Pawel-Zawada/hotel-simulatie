@@ -3,6 +3,9 @@ package tasks;
 import simulation.Guest;
 import simulation.Hotel;
 
+/**
+ * @author Marc Kemp
+ */
 public class CheckOutTask extends Task {
     private Hotel hotel;
     private Guest guest;

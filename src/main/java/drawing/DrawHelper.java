@@ -9,21 +9,22 @@ import java.awt.geom.AffineTransform;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 
+/**
+ * @author Johan Geluk
+ * Helper class for drawing things within a component.
+ */
 public class DrawHelper {
 
     public static final int SPRITE_SIZE = 32;
 
     private final AssetLoader assetLoader;
-    private final Random random = new Random();
 
     private Graphics2D graphics;
+
+    // Cache sprites and fonts to prevent them being loaded over and over.
     private Map<String, Image> spriteMap = new HashMap<>();
-    private Map<String, Image[]> spriteSetMap = new HashMap<>();
     private Map<String, Font> fontMap = new HashMap<>();
-    private int originX;
-    private int originY;
     private Hotel hotel;
     private float scaleFactor = 2;
 
@@ -35,23 +36,10 @@ public class DrawHelper {
         this.graphics = g;
     }
 
-    public void setRandomSeed(long seed) {
-        random.setSeed(seed);
-    }
-
-    public void setOrigin(int x, int y){
-        originX = x;
-        originY = y;
-    }
-
-    public int getOriginX(){
-        return originX;
-    }
-
-    public int getOriginY(){
-        return originY;
-    }
-
+    /**
+     * Draw some text at the given coordinates, using the font specified.
+     * This font needs to be in the assets/fonts directory!
+     */
     public void drawString(String text, String fontName, int x, int y) {
         var font = getFont(fontName);
         var size = font.getSize2D();
@@ -65,31 +53,24 @@ public class DrawHelper {
         graphics.drawString(text, screenX, screenY);
     }
 
+    /**
+     * Draw a sprite at the given coordinates.
+     */
     public void drawSprite(String spriteName, int x, int y){
         drawSprite(spriteName, Direction.UP, x, y);
     }
 
+    /**
+     * Draw a sprite at the given coordinates, pointing it in the given direction.
+     */
     public void drawSprite(String spriteName, Direction direction, int x, int y){
         var sprite = getSprite(spriteName);
         drawSprite(sprite, direction, x, y);
     }
 
-    public void drawRandomizedSprite(String spriteName, int x, int y) {
-        Image[] spriteSet;
-        spriteSet = getSpriteSet(spriteName);
-
-        if (random.nextDouble() < 0.85) {
-            drawSprite(spriteSet[0], Direction.UP, x, y);
-            return;
-        }
-        for (int i = 1; i < spriteSet.length; i++) {
-            if (random.nextDouble() < 1f / (spriteSet.length - i)) {
-                drawSprite(spriteSet[i], Direction.UP, x, y);
-                return;
-            }
-        }
-    }
-
+    /**
+     * Fetch the specified font from cache or disk.
+     */
     private Font getFont(String name){
         Font font = fontMap.getOrDefault(name, null);
         if(font == null){
@@ -103,6 +84,9 @@ public class DrawHelper {
         return font;
     }
 
+    /**
+     * Fetch the specified sprite from cache or disk.
+     */
     private Image getSprite(String name){
         Image sprite = spriteMap.getOrDefault(name, null);
         if(sprite == null){
@@ -116,40 +100,44 @@ public class DrawHelper {
         return sprite;
     }
 
-    private Image[] getSpriteSet(String name){
-        Image[] sprites = spriteSetMap.getOrDefault(name, null);
-        if(sprites == null){
-            try {
-                sprites = assetLoader.loadSpriteSet(name);
-                spriteSetMap.put(name, sprites);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        return sprites;
-    }
-
+    /**
+     * Internal draw method, called by all other draw methods.
+     */
     private void drawSprite(Image sprite, Direction direction, int x, int y) {
+        // Since the coordinate system is flipped, we need to flip our Y-coordinates
+        // to ensure the hotel does not get drawn upside down.
+        // Then subtract one additional point since origin of each sprite is still in the top left corner,
+        // instead of the bottom left. This prevents the top row from being empty.
         y = hotel.getHeight() - y - 1;
 
-        var rotation = direction.ordinal() * Math.PI * 0.5; // 1/2pi rad = 90°
+        var rotation = direction.ordinal() * Math.PI * 0.5; // 0.5 pi rad = 90°
 
         // Create a fresh transform to apply to the sprite.
         var transform = new AffineTransform();
 
+        // This is black magic. Scale -> rotate -> translate, right? Nope, not in here!
+        // I tried that first but it didn't work, so I messed with it until it did work, and this is the result™
         transform.scale(scaleFactor, scaleFactor);
         transform.translate(x * SPRITE_SIZE + (0.5 * SPRITE_SIZE), y * SPRITE_SIZE + (0.5 * SPRITE_SIZE));
         transform.rotate(rotation);
         transform.translate(-0.5 * SPRITE_SIZE, -0.5 * SPRITE_SIZE);
 
+        // Now just draw the damn thing.
         graphics.drawImage(sprite, transform, null);
     }
 
+    /**
+     * Set the hotel to draw. We need this in order to determine the hotel's height,
+     * so it gets drawn in the right place.
+     */
     public void setHotel(Hotel hotel) {
         this.hotel = hotel;
     }
 
-    public void setScaleFactor(float minScale) {
-        this.scaleFactor = minScale;
+    /**
+     * Sets the scale at which the hotel should be drawn.
+     */
+    public void setScaleFactor(float scale) {
+        this.scaleFactor = scale;
     }
 }

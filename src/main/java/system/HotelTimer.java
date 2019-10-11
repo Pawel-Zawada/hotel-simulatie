@@ -1,6 +1,5 @@
 package system;
 
-import drawing.GameComponent;
 import simulation.IObserver;
 
 import java.util.ArrayList;
@@ -8,6 +7,9 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * @author Marc Kemp
+ */
 public class HotelTimer {
     private Timer timer = new Timer();
     private List<IObserver> observers = new ArrayList<>();

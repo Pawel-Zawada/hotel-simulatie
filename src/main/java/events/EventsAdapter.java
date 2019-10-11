@@ -9,13 +9,17 @@ import simulation.IObserver;
 import java.util.LinkedList;
 import java.util.Queue;
 
+/**
+ * @author Johan Geluk
+ * Collects events from the library, rewrites them, and forwards them to the hotel to be processed.
+ */
 public class EventsAdapter implements HotelEventListener, IObserver {
-
     private HotelEventManager hotelEventManager;
     private Hotel hotel;
 
+    // Collected, unprocessed events get queued up here.
     private Queue<HotelEvent> eventQueue = new LinkedList<>();
-
+    // Lets us keep track of where we are in the game.
     private int tickCount;
 
     public EventsAdapter(Hotel hotel){
@@ -27,18 +31,25 @@ public class EventsAdapter implements HotelEventListener, IObserver {
         hotelEventManager.start();
 
         // After a tick event has fired, we should collect the events that we will need to process for the next tick.
-        // This means we should start out at a tick count of 1.
+        // This means we should start out at a tick count of 1,
+        // since we will be processing the events that will occur during that tick.
         hotel.getHotelTimer().addAfterEventObserver(this);
         tickCount = 1;
 
     }
     @Override
+    /**
+     * Queues an event to be processed as soon as it is meant to occur.
+     */
     public void Notify(HotelEvent event) {
         eventQueue.add(event);
     }
 
 
     @Override
+    /**
+     * Checks which events need to be dispatched for the upcoming HTE tick.
+     */
     public void observe() {
         while(eventQueue.size() > 0 && eventQueue.peek().Time <= tickCount){
             // We have events to process.
@@ -75,6 +86,9 @@ public class EventsAdapter implements HotelEventListener, IObserver {
         }
     }
 
+    /**
+     * Parses the required information from a check out event.
+     */
     private CheckOutEvent parseCheckOutEvent(HotelEvent event) {
         var eventKey = event.Data.keySet().iterator().next();
         var guestNumber = Integer.parseInt(eventKey.split(" ")[1]);
@@ -82,6 +96,9 @@ public class EventsAdapter implements HotelEventListener, IObserver {
         return new CheckOutEvent(guestNumber);
     }
 
+    /**
+     * Parses the required information from a check in event.
+     */
     private static CheckInEvent parseCheckInEvent(HotelEvent event){
 
         var eventKey = event.Data.keySet().iterator().next();
@@ -93,6 +110,9 @@ public class EventsAdapter implements HotelEventListener, IObserver {
         return new CheckInEvent(guestNumber, classification);
     }
 
+    /**
+     * Represents a check in event.
+     */
     private static class CheckInEvent {
         private final int guestNumber;
         private final int classification;
@@ -104,6 +124,9 @@ public class EventsAdapter implements HotelEventListener, IObserver {
         }
     }
 
+    /**
+     * Represents a check out event.
+     */
     private class CheckOutEvent {
         public int guestNumber;
 

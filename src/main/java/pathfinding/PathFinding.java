@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+/**
+ * @author Marc Kemp
+ */
 public class PathFinding {
     /**
      *  openList contains nodes yet to be calculated

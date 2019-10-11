@@ -2,6 +2,9 @@ package json;
 
 import java.util.ArrayList;
 
+/**
+ * @author Marc Kemp
+ */
 public class JsonElement  extends ArrayList<JsonElement.Container> {
 
     public class Container {

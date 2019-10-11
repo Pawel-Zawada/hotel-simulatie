@@ -8,6 +8,9 @@ import simulation.Restaurant;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * @author Ümit Tokmak
+ */
 public class DataCollector {
     Hotel hotel;
     List<Restaurant> restaurants;

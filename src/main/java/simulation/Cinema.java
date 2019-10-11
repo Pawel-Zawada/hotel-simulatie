@@ -38,10 +38,6 @@ public class Cinema implements HotelElement, IObserver {
         return y;
     }
 
-    /*public int getCinemaID(){
-        return cinemaID;
-    }*/
-
     public boolean isWalkable() {
         return false;
     }

@@ -4,6 +4,9 @@ import json.JsonReader;
 
 import java.util.ArrayList;
 
+/**
+ * @author Marc Kemp
+ */
 public class HotelFactory {
 
     public Hotel createHotel(String jsonFile){

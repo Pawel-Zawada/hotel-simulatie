@@ -1,11 +1,14 @@
 package tasks;
 
-import simulation.Guest;
 import simulation.HotelElement;
 import simulation.Person;
 
 import java.util.List;
 
+/**
+ * @author Johan Geluk
+ * Represents a task to move to a given (public) room in a hotel.
+ */
 public class MoveToTask extends Task {
     private final List<HotelElement> path;
     private final Person person;

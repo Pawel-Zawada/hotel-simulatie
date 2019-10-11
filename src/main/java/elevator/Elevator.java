@@ -2,6 +2,10 @@ package elevator;
 
 import java.util.*;
 
+/**
+ * @author Johan Geluk
+ * Elevator simulation algorithm.
+ */
 public class Elevator {
 
     private final int floorCount;
