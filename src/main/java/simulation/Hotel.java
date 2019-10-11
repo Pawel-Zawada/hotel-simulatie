@@ -76,6 +76,7 @@ public class Hotel implements Drawable {
 
     public void killGuest(Guest guest) { // Muahahaha >:)
         guests.remove(guest);
+        requestCheckOut(guest.getGuestNumber());
     }
 
     public int numberOfGuests() {
@@ -112,7 +113,9 @@ public class Hotel implements Drawable {
 
     public void requestCheckOut(int guestNumber) {
         var guest = getGuestByNumber(guestNumber);
-        guest.moveTo(getCheckInDesk());
+        if(guests.contains(guest)) { //if it does not contain guest, that means he is dead :(
+            guest.moveTo(getCheckInDesk());
+        }
         guest.checkOut();
     }
 
