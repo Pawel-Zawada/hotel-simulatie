@@ -3,6 +3,7 @@ package simulation;
 import json.JsonReader;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Marc Kemp
@@ -12,7 +13,7 @@ public class HotelFactory {
     public Hotel createHotel(String jsonFile){
         //load Hotel from json file
         JsonReader jsonReader = new JsonReader();
-        ArrayList<HotelElement> hotelElements = jsonReader.loadHotelElements(jsonFile);
+        List<HotelElement> hotelElements = jsonReader.loadHotelElements(jsonFile);
 
         var numberOfFloors = numberOfFloors(hotelElements);
         var width = width(hotelElements);
@@ -29,7 +30,7 @@ public class HotelFactory {
 
     //create lift and stairs and lobby
 
-    private int numberOfFloors(ArrayList<HotelElement> hotelElements){
+    private int numberOfFloors(List<HotelElement> hotelElements){
         int numberOfFloors = 1;
         for(HotelElement hotelElement: hotelElements){
             int y = hotelElement.getY();
@@ -41,7 +42,7 @@ public class HotelFactory {
         return numberOfFloors;
     }
 
-    private int width(ArrayList<HotelElement> hotelElements){
+    private int width(List<HotelElement> hotelElements){
         int width = 1;
         for(HotelElement hotelElement: hotelElements){
             int x = hotelElement.getX();

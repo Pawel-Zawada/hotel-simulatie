@@ -34,7 +34,7 @@ public class Elevator implements HotelElement {
         return y;
     }
 
-    public static ArrayList<Guest> guestsInElevator = new ArrayList<>();
+    private ArrayList<Guest> guestsInElevator = new ArrayList<>();
 
     public void guestStepInElevator(Guest guest){
         guestsInElevator.add(guest);

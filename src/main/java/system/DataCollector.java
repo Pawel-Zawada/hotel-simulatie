@@ -1,7 +1,5 @@
 package system;
 
-import simulation.Elevator;
-import simulation.Gym;
 import simulation.Hotel;
 import simulation.Restaurant;
 
@@ -24,32 +22,32 @@ public class DataCollector {
         return hotel.getTaskQueue().getSize();
     }
 
-    public static int getNumberOfOneStarRooms() {
+    public int getNumberOfOneStarRooms() {
         return -1;
     }
 
-    public static int getNumberOfTwoStarRooms() {
+    public int getNumberOfTwoStarRooms() {
         return -1;
     }
 
-    public static int getNumberOfThreeStarRooms() {
+    public int getNumberOfThreeStarRooms() {
         return -1;
     }
 
-    public static int getNumberOfFourStarRooms() {
+    public int getNumberOfFourStarRooms() {
         return -1;
     }
 
-    public static int getNumberOfFiveStarRooms() {
+    public int getNumberOfFiveStarRooms() {
         return -1;
     }
 
-    public static int guestsInGym() {
-        return Gym.guestsInGym.size();
+    public int guestsInGym() {
+        return hotel.getGym().totalGuestsInGym();
     }
 
-    public static int guestsInElevator() {
-        return Elevator.guestsInElevator.size();
+    public int guestsInElevator() {
+        return hotel.getElevator().numberOfGuestsInElevator();
     }
 
     public int guestsInRestaurant() {

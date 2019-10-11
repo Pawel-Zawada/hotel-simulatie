@@ -5,19 +5,26 @@ import java.util.*;
 
 /**
  * @author Marc Kemp
+ * Represents the hotel in a graph form, which can be traversed by the pathfinding algorithm.
  */
 public class Graph {
-    private ArrayList<HotelElement> hotelElements;
+    private List<HotelElement> hotelElements;
     private int width;
     private Hotel hotel;
     private List<Node<HotelElement>> nodeList = new ArrayList<>();
 
+    /**
+     * Internal constructor, only used by createGraph.
+     */
     private Graph(Hotel hotel){
         this.hotel = hotel;
         this.hotelElements = hotel.getHotelElements();
         this.width = hotel.getWidth();
     }
 
+    /**
+     * Builds a graph from a hotel.
+     */
     public static Graph createGraph(Hotel hotel){
         Graph graph = new Graph(hotel);
         graph.fillNodeList();
@@ -25,15 +32,21 @@ public class Graph {
         return graph;
     }
 
+    /**
+     * Generates the node list based on the rooms in the hotel.
+     */
     private void fillNodeList(){
         for(HotelElement hotelElement:hotelElements){
-            /** Nodes get a X and a Y just in case we want to use A* **/
+            // In order to use A*, we need to tell each node its coordinates, so that the pathfinding algorithm
+            // can use heuristics to determine which paths to evaluate first.
             nodeList.add(new Node<>(hotelElement.getX(),hotelElement.getY(),hotelElement));
         }
     }
 
+    /**
+     * Connects each node to its neighbours where appropriate.
+     */
     private void setHotelElementNeighbours(){
-
         for(Node<HotelElement> node: nodeList){
             HotelElement hotelElement = node.getElement();
             if (hotelElement.getClass() == Elevator.class){ //connect elevator to left nodes. in applies elevator weight
@@ -85,31 +98,42 @@ public class Graph {
         }
     }
 
-
+    /**
+     * Gets the node list of the graph.
+     */
     public List<Node<HotelElement>> getNodeList(){
         return Collections.unmodifiableList(nodeList);
     }
 
+    /**
+     * Finds the nearest neighbour to the left side of this element.
+     */
     private Node<HotelElement> findLeftNeighbour(HotelElement hotelElement){
         int xOfLeftNode = 0;
         Node leftNode = null;
-        for(Node<HotelElement> neigbourCandidate: nodeList){
-            if (hotelElement.getY()==neigbourCandidate.getElement().getY()) { //same floor
-                if (xOfLeftNode<neigbourCandidate.getElement().getX() && neigbourCandidate.getElement().getX() < hotelElement.getX()){
-                    xOfLeftNode = neigbourCandidate.getElement().getX();
-                    leftNode = neigbourCandidate;
+
+        for(Node<HotelElement> neighbourCandidate: nodeList){
+            // Only consider nodes that are on the same floor and to the left of us.
+            if (hotelElement.getY() == neighbourCandidate.getElement().getY() && neighbourCandidate.getElement().getX() < hotelElement.getX()) {
+                if (xOfLeftNode < neighbourCandidate.getElement().getX()){
+                    // We've found a better match (a closer node).
+                    xOfLeftNode = neighbourCandidate.getElement().getX();
+                    leftNode = neighbourCandidate;
                 }
             }
         }
         return leftNode;
     }
 
+    /**
+     * Finds the nearest neighbour to the right side of this element.
+     */
     private Node<HotelElement> findRightNeighbour(HotelElement hotelElement){
         Node rightNode = null;
-        for(Node<HotelElement> neigbourCandidate: nodeList){
-            if (hotelElement.getY()==neigbourCandidate.getElement().getY()) { //same floor
-                if (hotelElement.getX()+hotelElement.getWidth() == neigbourCandidate.getElement().getX()){
-                    rightNode = neigbourCandidate;
+        for(Node<HotelElement> neighbourCandidate : nodeList){
+            if (hotelElement.getY()==neighbourCandidate.getElement().getY()) { //same floor
+                if (hotelElement.getX()+hotelElement.getWidth() == neighbourCandidate.getElement().getX()){
+                    rightNode = neighbourCandidate;
                 }
             }
         }

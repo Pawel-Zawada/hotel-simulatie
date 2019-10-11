@@ -1,4 +1,4 @@
-package simulation;
+package drawing;
 
 public enum Direction {
     UP,

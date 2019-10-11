@@ -1,7 +1,6 @@
 package drawing;
 
 import assets.AssetLoader;
-import simulation.Direction;
 import simulation.Hotel;
 
 import java.awt.*;

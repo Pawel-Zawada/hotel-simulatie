@@ -14,9 +14,9 @@ import java.util.stream.Collectors;
 
 public class Hotel implements Drawable {
 
-    private ArrayList<HotelElement> hotelElements;
-    private ArrayList<Guest> guests = new ArrayList<>();
-    private ArrayList<Cleaner> cleaners = new ArrayList<>();
+    private List<HotelElement> hotelElements;
+    private List<Guest> guests = new ArrayList<>();
+    private List<Cleaner> cleaners = new ArrayList<>();
 
     private final int width;
     private final int height;
@@ -29,7 +29,7 @@ public class Hotel implements Drawable {
 
     private Set<Person> evacuatedPersons = new HashSet<>();
 
-    public Hotel( ArrayList<HotelElement> hotelElements,int width,int height){
+    public Hotel(List<HotelElement> hotelElements, int width, int height) {
         this.hotelElements = hotelElements;
         this.width = width;
         this.height = height;
@@ -52,22 +52,22 @@ public class Hotel implements Drawable {
     public void newGuest(int guestNumber, int requestedClassification) {
 
         var destinations = hotelElements.stream()
-                .filter(e->e.getClass()==Room.class)
+                .filter(e -> e.getClass() == Room.class)
                 .map(e -> (Room) e)
                 .filter(r -> !r.isOccupied() && !r.isDirty() && r.getClassification() >= requestedClassification)
                 .sorted(new RoomComparator())
                 .collect(Collectors.toList());
 
-        if(destinations.size() == 0){
+        if (destinations.size() == 0) {
             // No rooms found. Guest leaves the building.
             System.out.println("Guest " + guestNumber + " could not get a room of " + requestedClassification + " stars.");
-        }else{
+        } else {
             var guest = GuestFactory.makeNewGuest(this, guestNumber);
             guests.add(guest);
             var room = destinations.get(0);
-            if(room.getClassification() > requestedClassification){
+            if (room.getClassification() > requestedClassification) {
                 System.out.println("Guest " + guestNumber + " received a free upgrade (" + requestedClassification + " -> " + room.getClassification() + " stars), room number " + room.getRoomNumber());
-            }else{
+            } else {
                 System.out.println("Guest " + guestNumber + " received room number " + room.getRoomNumber() + " (" + requestedClassification + " stars).");
             }
             guest.assignRoom(room);
@@ -82,12 +82,12 @@ public class Hotel implements Drawable {
         return guests.size();
     }
 
-    public ArrayList<HotelElement> getHotelElements(){
+    public List<HotelElement> getHotelElements() {
         return hotelElements;
     }
 
     public CheckInDesk getCheckInDesk() {
-        return (CheckInDesk)hotelElements.stream().filter(e->e.getClass()==CheckInDesk.class).findFirst().get();
+        return (CheckInDesk) hotelElements.stream().filter(e -> e.getClass() == CheckInDesk.class).findFirst().get();
     }
 
     public HotelTimer getHotelTimer() {
@@ -96,24 +96,24 @@ public class Hotel implements Drawable {
 
     public void requestCheckOut(int guestNumber) {
         var guest = getGuestByNumber(guestNumber);
-        if(guests.contains(guest)) { //if it does not contain guest, that means he is dead :(
+        if (guests.contains(guest)) { //if it does not contain guest, that means he is dead :(
             guest.moveTo(getCheckInDesk());
             guest.checkOut();
-        }else{
+        } else {
             System.out.println("He's dead Jim");
         }
     }
 
-    public void checkOut(Guest guest){
+    public void checkOut(Guest guest) {
         guest.getRoom().setOccupied(false);
         guest.getRoom().setDirty(true);
         cleanerTasks.enQueue(new CleanRoomTask(this, guest.getRoom()));
         guests.remove(guest);
     }
 
-    public Guest getGuestByNumber(int guestNumber){
-        for(Guest guest:guests){
-            if (guest.getGuestNumber() == guestNumber){
+    public Guest getGuestByNumber(int guestNumber) {
+        for (Guest guest : guests) {
+            if (guest.getGuestNumber() == guestNumber) {
                 return guest;
             }
         }
@@ -132,7 +132,7 @@ public class Hotel implements Drawable {
 
     public void handleCleaningEmergency(int guestNumber) {
         var guest = getGuestByNumber(guestNumber);
-        if(guest == null){
+        if (guest == null) {
             System.out.println("A dead guest can't have their room cleaned!");
             return;
         }
@@ -141,28 +141,28 @@ public class Hotel implements Drawable {
         cleanerTasks.addEmergencyTask(new CleanRoomTask(this, room));
     }
 
-    public void handleDinnerRequest(int guestNumber, ArrayList<Restaurant> restaurantsToExclude){
-        List<HotelElement> restaurantsToTry = getRestaurants().stream().filter(r->!restaurantsToExclude.contains(r)).collect(Collectors.toList());
+    public void handleDinnerRequest(int guestNumber, ArrayList<Restaurant> restaurantsToExclude) {
+        List<HotelElement> restaurantsToTry = getRestaurants().stream().filter(r -> !restaurantsToExclude.contains(r)).collect(Collectors.toList());
         Guest guest = getGuestByNumber(guestNumber);
-        if(guest!=null) {
-            Restaurant restaurant = (Restaurant)guest.moveToClosest(restaurantsToTry); //find nearest
+        if (guest != null) {
+            Restaurant restaurant = (Restaurant) guest.moveToClosest(restaurantsToTry); //find nearest
             guest.eatAtRestaurant(restaurant, restaurantsToExclude);
         }
     }
 
     @Override
     public void draw(DrawHelper drawHelper) {
-        for(var element: hotelElements){
-            if(destroyed){
+        for (var element : hotelElements) {
+            if (destroyed) {
                 drawHelper.drawSprite("ruin", element.getX(), element.getY());
-            }else{
+            } else {
                 element.draw(drawHelper);
             }
         }
-        for(var guest: guests){
+        for (var guest : guests) {
             guest.draw(drawHelper);
         }
-        for(var cleaner: cleaners){
+        for (var cleaner : cleaners) {
             cleaner.draw(drawHelper);
         }
     }
@@ -173,7 +173,7 @@ public class Hotel implements Drawable {
 
     public void handleGoToFitness(int guestNumber, int duration) {
         var guest = getGuestByNumber(guestNumber);
-        if(guest == null){
+        if (guest == null) {
             System.out.println("A dead guest can't go to the gym!");
             return;
         }
@@ -182,7 +182,7 @@ public class Hotel implements Drawable {
         guest.workOut(duration);
     }
 
-    private Gym getGym() {
+    public Gym getGym() {
         return hotelElements.stream()
                 .filter(e -> e.getClass() == Gym.class)
                 .map(e -> (Gym) e).findFirst().get();
@@ -190,58 +190,69 @@ public class Hotel implements Drawable {
 
     public void handleGoToCinema(int guestNumber) {
         var guest = getGuestByNumber(guestNumber);
-        if(guest == null){
+        if (guest == null) {
             System.out.println("A dead guest can't go to the cinema!");
             return;
         }
-        List<HotelElement> cinemas = getCinemas();
-        Cinema closest = (Cinema) guest.moveToClosest(cinemas);
-        guest.watchMovie(closest);
+
+        // If only Java supported proper generics, this would have been less ugly.
+        List<HotelElement> cinemas = getCinemas().stream().map(c -> (HotelElement) c).collect(Collectors.toList());
+        Cinema nearestCinema = (Cinema) guest.moveToClosest(cinemas);
+        guest.watchMovie(nearestCinema);
     }
 
-    private List<HotelElement> getCinemas() {
+    private List<Cinema> getCinemas() {
         return hotelElements.stream()
                 .filter(e -> e.getClass() == Cinema.class)
+                .map(e -> (Cinema) e)
                 .collect(Collectors.toList());
     }
 
     public void handleGodzilla() {
-        while(guests.size() > 0){
+        while (guests.size() > 0) {
             killGuest(guests.get(0));
         }
         destroyed = true;
     }
 
     public void handleStartCinema(int cinemaId) {
-        ;
+        for (Cinema cinema : getCinemas()) {
+
+        }
     }
 
-    public void handleEvacuation(){
+    public void handleEvacuation() {
         ArrayList<Person> evacuees = new ArrayList<>();
-        for(Guest guest:guests){
+        for (Guest guest : guests) {
             evacuees.add(guest);
         }
-        for (Cleaner cleaner: cleaners){
+        for (Cleaner cleaner : cleaners) {
             evacuees.add(cleaner);
         }
-        for (Person evacuee: evacuees){
+        for (Person evacuee : evacuees) {
             evacuee.moveTo(getCheckInDesk());
         }
-        for (Person evacuee: evacuees){
+        for (Person evacuee : evacuees) {
             evacuee.evacuate(this);
         }
     }
 
-    public void addEvacuatedPerson(Person person){
-        if (!evacuatedPersons.contains(person)){
+    public void addEvacuatedPerson(Person person) {
+        if (!evacuatedPersons.contains(person)) {
+            System.out.println(person.getName() + " has been safely evacuated.");
             evacuatedPersons.add(person);
         }
     }
 
-    public boolean evacuationComplete(){
-        if (evacuatedPersons.size() == (guests.size() + cleaners.size())){
+    public boolean evacuationComplete() {
+        if (evacuatedPersons.size() == (guests.size() + cleaners.size())) {
             return true;
-        }
-        else return false;
+        } else return false;
+    }
+
+    public Elevator getElevator() {
+        return hotelElements.stream()
+                .filter(e -> e.getClass() == Elevator.class)
+                .map(e -> (Elevator) e).findFirst().get();
     }
 }

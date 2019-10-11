@@ -19,7 +19,7 @@ public class Cleaner extends Person implements HteObserver, Drawable {
     }
 
     public void observeHTE() {
-        Task task = getPersonalTasks().getNextActiveTask();
+        Task task = personalTasks.getNextActiveTask();
         if(task == null){
             // No personal tasks remaining. Check for shared tasks.
             task = sharedTasks.getNextActiveTask();
@@ -32,13 +32,13 @@ public class Cleaner extends Person implements HteObserver, Drawable {
                 }else{
                     // We have nothing to do, let's go back to the lobby.
                     moveTo(hotel.getCheckInDesk());
-                    task = getPersonalTasks().peek();
+                    task = personalTasks.peek();
                 }
             }else{
                 System.out.println(this.name + " has picked up a new cleaning task.");
                 CleanRoomTask cleanTask = (CleanRoomTask)sharedTasks.deQueue();
                 moveTo(cleanTask.getRoom());
-                getPersonalTasks().enQueue(cleanTask);
+                personalTasks.enQueue(cleanTask);
             }
         }
         task.executeStep();
@@ -51,11 +51,12 @@ public class Cleaner extends Person implements HteObserver, Drawable {
 
 
     public void evacuate(Hotel hotel){
-        for(Task task:getPersonalTasks().getTaskQueue()){
+        for(Task task:personalTasks.getTaskQueue()){
+            // Abort all active tasks, so cleaning tasks are returned to the queue to be processed later.
             task.abort();
         }
-        getPersonalTasks().getTaskQueue().clear();
-        getPersonalTasks().enQueue(new Evacuate(this, hotel));
+        personalTasks.getTaskQueue().clear();
+        personalTasks.enQueue(new Evacuate(this, hotel));
     }
 
 }

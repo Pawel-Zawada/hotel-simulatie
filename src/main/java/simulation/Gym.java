@@ -35,7 +35,7 @@ public class Gym implements HotelElement{
         return y;
     }
 
-    public static ArrayList<Guest> guestsInGym = new ArrayList<>();
+    private ArrayList<Guest> guestsInGym = new ArrayList<>();
 
     public void enterGym(Guest guest){
         guestsInGym.add(guest);

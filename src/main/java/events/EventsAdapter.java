@@ -67,10 +67,11 @@ public class EventsAdapter implements HotelEventListener, HteObserver {
         tickCount++;
     }
 
+    /**
+     * Dispatches events based on their type, transforming them into a data type that the application can deal with.
+     */
     private void handleEvent(HotelEvent event) {
         switch (event.Type) {
-            case NONE:
-                break;
             case CHECK_IN:
                 var checkInEvent = parseCheckInEvent(event);
                 hotel.newGuest(checkInEvent.guestNumber, checkInEvent.classification);
@@ -108,15 +109,24 @@ public class EventsAdapter implements HotelEventListener, HteObserver {
         }
     }
 
+    /**
+     * Parses the required information from a cinema start event.
+     */
     private StartCinemaEvent parseStartCinemaEvent(HotelEvent event) {
         return new StartCinemaEvent(Integer.parseInt(event.Data.get("ID")));
     }
 
+    /**
+     * Parses the required information from a go to cinema event.
+     */
     private GoToCinemaEvent parseGoToCinemaEvent(HotelEvent event) {
         String guest = event.Data.get("Guest");
         return new GoToCinemaEvent(Integer.parseInt(guest));
     }
 
+    /**
+     * Parses the required information from a go to fitness event.
+     */
     private GoToFitnessEvent parseGoToFitnessEvent(HotelEvent event) {
         var eventKey = event.Data.keySet().iterator().next();
         var eventValue = event.Data.get(eventKey).split(" ");
@@ -126,11 +136,17 @@ public class EventsAdapter implements HotelEventListener, HteObserver {
         return new GoToFitnessEvent(guestNumber, duration);
     }
 
+    /**
+     * Parses the required information from a need food event.
+     */
     private NeedFoodEvent parseNeedFoodEvent(HotelEvent event) {
         String guest = event.Data.get("Guest");
         return new NeedFoodEvent(Integer.parseInt(guest));
     }
 
+    /**
+     * Parses the required information from a cleaning emergency event.
+     */
     private CleaningEmergencyEvent parseCleaningEmergencyEvent(HotelEvent event) {
         String guest = event.Data.get("Guest");
         return new CleaningEmergencyEvent(Integer.parseInt(guest));
@@ -183,6 +199,9 @@ public class EventsAdapter implements HotelEventListener, HteObserver {
         }
     }
 
+    /**
+     * Represents a cleaning emergency event.
+     */
     private class CleaningEmergencyEvent {
         public int guestNumber;
 
@@ -191,6 +210,9 @@ public class EventsAdapter implements HotelEventListener, HteObserver {
         }
     }
 
+    /**
+     * Represents a need food event.
+     */
     private class NeedFoodEvent {
         private int guestNumber;
 
@@ -200,6 +222,9 @@ public class EventsAdapter implements HotelEventListener, HteObserver {
         }
     }
 
+    /**
+     * Represents a go to fitness event.
+     */
     private class GoToFitnessEvent {
         private final int guestNumber;
         private final int duration;
@@ -210,6 +235,9 @@ public class EventsAdapter implements HotelEventListener, HteObserver {
         }
     }
 
+    /**
+     * Represents a go to cinema event.
+     */
     private class GoToCinemaEvent {
         private int guestNumber;
 
@@ -218,6 +246,9 @@ public class EventsAdapter implements HotelEventListener, HteObserver {
         }
     }
 
+    /**
+     * Represents a start cinema event.
+     */
     private class StartCinemaEvent {
         private int cinemaId;
 

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 /**
  * @author Marc Kemp
+ * Represents JSON element in the hotel layout file.
  */
 public class JsonElement  extends ArrayList<JsonElement.Container> {
 

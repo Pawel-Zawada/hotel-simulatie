@@ -3,17 +3,22 @@ import com.google.gson.Gson;
 import simulation.*;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Marc Kemp
+ * A reader class for reading JSON elements from the layout file.
  */
 public class JsonReader {
 
-    public ArrayList<HotelElement> loadHotelElements(String fileName){
-        return parseJason(fileName);
+    public List<HotelElement> loadHotelElements(String fileName){
+        return ParseJson(fileName);
     }
 
-    private ArrayList<HotelElement> parseJason(String fileName){
+    /**
+     * Parses the file with the given filename into a list of hotel elements.
+     */
+    private List<HotelElement> ParseJson(String fileName){
         ArrayList<HotelElement> hotelElements = new ArrayList<>();
         Gson gson = new Gson();
 
@@ -22,10 +27,10 @@ public class JsonReader {
             JsonElement hotelElement = gson.fromJson(new FileReader(fileName), JsonElement.class);
             for (JsonElement.Container container : hotelElement) {
 
-                int width = getIntFromContainer(container.getDimension())[0];
-                int height = getIntFromContainer(container.getDimension())[1];
-                int x = getIntFromContainer(container.getPosition())[0];
-                int y = getIntFromContainer(container.getPosition())[1];
+                int width = parseDimension(container.getDimension())[0];
+                int height = parseDimension(container.getDimension())[1];
+                int x = parseDimension(container.getPosition())[0];
+                int y = parseDimension(container.getPosition())[1];
 
                 switch (container.getAreaType()) {
                     case "Room":
@@ -46,7 +51,10 @@ public class JsonReader {
         return hotelElements;
     }
 
-    private int[] getIntFromContainer(String string) throws Exception {
+    /**
+     * Parses a dimension string into its constituent values.
+     */
+    private int[] parseDimension(String string) throws Exception {
         String[]splitString = string.split("\\s*,\\s*");
         if(splitString.length!=2 ){
             throw new Exception("missing dimensions");

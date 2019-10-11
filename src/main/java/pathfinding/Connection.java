@@ -2,6 +2,7 @@ package pathfinding;
 
 /**
  * @author Marc Kemp
+ * A one-way connection between two nodes of a graph.
  */
 public class Connection<T> {
 
