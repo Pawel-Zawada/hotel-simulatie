@@ -4,6 +4,10 @@ import simulation.Hotel;
 import simulation.HotelElement;
 import simulation.Room;
 
+/**
+ * @author Johan Geluk
+ * A task that can be picked up by a cleaner, to clean a room.
+ */
 public class CleanRoomTask extends Task {
     private final int ticksRequiredToClean;
     private Room room;

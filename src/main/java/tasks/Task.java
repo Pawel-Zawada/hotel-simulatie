@@ -2,6 +2,7 @@ package tasks;
 
 /**
  * @author Ümit Tokmak
+ * A generic that can be executed by people in the hotel.
  */
 public abstract class Task {
     public abstract boolean isDone();

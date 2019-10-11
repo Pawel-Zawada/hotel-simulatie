@@ -12,6 +12,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * @author Johan Geluk, Marc Kemp, Ümit Tokmak
+ * Simulates a hotel.
+ */
 public class Hotel implements Drawable {
 
     private List<HotelElement> hotelElements;

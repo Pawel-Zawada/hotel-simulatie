@@ -45,7 +45,6 @@ public class Guest extends Person implements HteObserver, Drawable {
         }else{
             drawHelper.drawSprite("guest", this.x, this.y);
         }
-        //drawHelper.drawString(name, "default", x, y);
     }
 
     public void assignRoom(Room room){

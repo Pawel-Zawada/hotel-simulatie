@@ -9,6 +9,7 @@ import java.awt.*;
 
 /**
  * @author Johan Geluk
+ * The AWT component in which the hotel gets drawn.
  */
 public class GameComponent extends JComponent implements HteObserver {
     private Hotel hotel;

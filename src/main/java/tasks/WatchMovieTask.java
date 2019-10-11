@@ -3,6 +3,10 @@ package tasks;
 import simulation.Cinema;
 import simulation.Hotel;
 
+/**
+ * @author Johan Geluk
+ * Executed by a guest when watching a movie
+ */
 public class WatchMovieTask extends Task {
 
     private Hotel hotel;

@@ -1,10 +1,12 @@
 package tasks;
 
-import simulation.CheckInDesk;
-import simulation.Guest;
 import simulation.Hotel;
 import simulation.Person;
 
+/**
+ * @author Marc Kemp
+ * Executed by everyone in the hotel when an emergency occurs.
+ */
 public class Evacuate extends Task {
 
     private final Person person;

@@ -111,6 +111,8 @@ public abstract class Person {
         if(destinationNode == null){
             System.out.println("Could not find a path to destination: " + destinations.get(0).getClass().getName());
         } else {
+            // We now have a linked list pointing from the destination to the beginning.
+            // We need to copy it and reverse it, so we know how to get to the destination.
             List<HotelElement> path = new ArrayList<>();
             var currentNode = destinationNode;
             do {
@@ -120,6 +122,7 @@ public abstract class Person {
 
             Collections.reverse(path);
 
+            // Now that we have found the path, queue up a movement task to walk along that path.
             personalTasks.enQueue(new MoveToTask(path, this));
         }
         return destinationNode.getElement();

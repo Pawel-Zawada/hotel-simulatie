@@ -39,10 +39,6 @@ public class Restaurant implements HotelElement {
         return y;
     }
 
-    public int getCapacity() {
-        return capacity;
-    }
-
     public void enterRestaurant(Guest guest) {
         if (!isFull()) {
             guests.add(guest);
@@ -60,7 +56,6 @@ public class Restaurant implements HotelElement {
     public int getNumberOfGuests() {
         return guests.size();
     }
-
 
     @Override
     public void draw(DrawHelper drawHelper) {

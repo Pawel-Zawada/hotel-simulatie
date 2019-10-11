@@ -2,6 +2,9 @@ package simulation;
 
 import tasks.TaskRepository;
 
+/**
+ * @author Ümit Tokmak
+ */
 public class CleanerFactory {
 
     private static int cleanerCount = 1;

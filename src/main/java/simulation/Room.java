@@ -2,6 +2,10 @@ package simulation;
 
 import drawing.DrawHelper;
 
+/**
+ * @author Johan Geluk
+ * A room in the hotel.
+ */
 public class Room implements HotelElement{
     private int width;
     private int height;
@@ -70,10 +74,18 @@ public class Room implements HotelElement{
         isDirty = dirty;
     }
 
+    /**
+     * Gets whether the room is currently assigned to a guest.
+     * This does not require the guest to currently be present.
+     */
     public boolean isOccupied() {
         return isOccupied;
     }
 
+    /**
+     * Sets whether the room is currently assigned to a guest.
+     * This does not require the guest to currently be present.
+     */
     public void setOccupied(boolean occuplied) {
         isOccupied = occuplied;
     }

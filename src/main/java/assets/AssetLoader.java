@@ -3,6 +3,9 @@ package assets;
 import java.awt.*;
 import java.io.IOException;
 
+/**
+ * @author Johan Geluk
+ */
 public interface AssetLoader {
     Image loadSprite(String name) throws IOException;
 

@@ -1,6 +1,7 @@
 package drawing;
 
 /**
+ * @author Johan Geluk
  * Can be applied to any objects that want to draw themselves.
  */
 public interface Drawable {

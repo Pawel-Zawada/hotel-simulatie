@@ -2,6 +2,10 @@ package tasks;
 
 import simulation.Hotel;
 
+/**
+ * @author Johan Geluk
+ * Executed by a guest when working out.
+ */
 public class WorkOutTask extends Task{
     private final int ticksRequiredForGym;
     private int ticksDone = 0;

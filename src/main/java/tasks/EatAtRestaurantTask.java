@@ -6,6 +6,10 @@ import simulation.Restaurant;
 
 import java.util.ArrayList;
 
+/**
+ * @author Marc Kemp
+ * This task gets executed when a guest eats at a restaurant.
+ */
 public class EatAtRestaurantTask extends Task{
 
     private Restaurant restaurant;

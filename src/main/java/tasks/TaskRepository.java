@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 /**
  * @author Ümit Tokmak
+ * Contains a queue of tasks to be executed in order.
  */
 public class TaskRepository {
     private ArrayList<Task> taskQueue;
