@@ -233,8 +233,9 @@ public class Hotel implements Drawable {
     }
 
     public void addEvacuatedPerson(Person person){
-        evacuatedPersons.add(person);
-
+        if (!evacuatedPersons.contains(person)){
+            evacuatedPersons.add(person);
+        }
     }
 
     public boolean evacuationComplete(){
