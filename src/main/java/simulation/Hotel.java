@@ -158,6 +158,10 @@ public class Hotel implements Drawable {
 
     public void handleGoToFitness(int guestNumber, int duration) {
         var guest = getGuestByNumber(guestNumber);
+        if(guest == null){
+            System.out.println("A dead guest can't go to the gym!");
+            return;
+        }
         var gym = getGym();
         guest.moveTo(gym);
         guest.workOut(duration);
