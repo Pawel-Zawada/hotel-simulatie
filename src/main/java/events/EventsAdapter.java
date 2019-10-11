@@ -84,6 +84,7 @@ public class EventsAdapter implements HotelEventListener, HteObserver {
                 hotel.handleCleaningEmergency(emergencyEvent.guestNumber);
                 break;
             case EVACUATE:
+                hotel.handleEvacuation();
                 break;
             case GODZILLA:
                 hotel.handleGodzilla();
