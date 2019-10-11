@@ -21,12 +21,19 @@ public class PathFinding {
      * @param endNode
      * @return returns the endNode, the endNode contains a parentNode, every parentNode contains a parentNode, until the startNode, this is the path
      */
+
     public Node doPathFinding(Node startNode, Node endNode){
+        var endNodes = new ArrayList<Node>();
+        endNodes.add(endNode);
+        return doPathFinding(startNode, endNodes);
+    }
+
+    public Node doPathFinding(Node startNode, List<Node> endNodes){
         Node currentNode = startNode;
 
         openList.add(startNode);
 
-        while(currentNode!=endNode){
+        while(!endNodes.contains(currentNode)){
             /** gCost = distance to previous node
              * hCost = estimated distance to end node
              * fCost = gCost + hCost
@@ -34,7 +41,7 @@ public class PathFinding {
             currentNode = getLowestFCostNode(openList);
             openList.remove(currentNode);
             closedList.add(currentNode);
-            if (currentNode == endNode){
+            if (endNodes.contains(currentNode)){
                 return currentNode;
             }
             else {
@@ -49,7 +56,7 @@ public class PathFinding {
                     /**If the new path to the next node is shorter, of if the next node is not yet in the open list */
                     if(gCost < node.getgCost() || !openList.contains(node)){
                         node.setgCost(gCost);
-                        node.sethCost(calHCost(node, endNode));
+                        node.sethCost(calHCost(node, endNodes));
                         node.setParentNode(currentNode);
                         if(currentNode.getParentNode() == node.getParentNode()){
                             System.out.println("oh no.");
@@ -77,11 +84,18 @@ public class PathFinding {
         return parentNode.getgCost() + connection.getWeight();
     }
 
-    private double calHCost(Node node, Node endNode){
+    private double calHCost(Node node, List<Node> endNodes){
         /**distance from end node*/
-        double xf = Math.abs(node.getX()-endNode.getX());
-        double yf = Math.abs(node.getY()-endNode.getY());
-        return calDistance(xf,yf);
+        double shortestDistance = Double.MAX_VALUE;
+        for(Node endNode: endNodes){
+            double xf = Math.abs(node.getX()-endNode.getX());
+            double yf = Math.abs(node.getY()-endNode.getY());
+            double distance =  calDistance(xf,yf);
+            if(shortestDistance > distance){
+                shortestDistance = distance;
+            }
+        }
+        return shortestDistance;
     }
 
     private double calDistance(double xf, double yf){

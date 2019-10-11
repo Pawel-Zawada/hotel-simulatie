@@ -131,11 +131,11 @@ public class Hotel implements Drawable {
     }
 
     public void handleDinnerRequest(int guestNumber, ArrayList<Restaurant> restaurantsToExclude){
-        var restaurantsToTry = getRestaurants().stream().filter(r->!restaurantsToExclude.contains(r)).collect(Collectors.toList());
+        List<HotelElement> restaurantsToTry = getRestaurants().stream().filter(r->!restaurantsToExclude.contains(r)).collect(Collectors.toList());
         Guest guest = getGuestByNumber(guestNumber);
         if(guest!=null) {
-            guest.moveTo(restaurantsToTry.get(0)); //find nearest
-            guest.eatAtRestaurant(restaurantsToTry.get(0), restaurantsToExclude);
+            Restaurant restaurant = (Restaurant)guest.moveToClosest(restaurantsToTry); //find nearest
+            guest.eatAtRestaurant(restaurant, restaurantsToExclude);
         }
     }
 
