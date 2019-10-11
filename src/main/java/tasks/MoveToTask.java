@@ -26,6 +26,8 @@ public class MoveToTask extends Task {
     @Override
     public void executeStep() {
         var nextNode = path.remove(0);
+        // Someone who is walking is not in a room
+        person.setCurrentRoom(null);
 
         person.setX(nextNode.getX());
         person.setY(nextNode.getY());

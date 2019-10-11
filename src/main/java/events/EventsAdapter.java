@@ -53,7 +53,13 @@ public class EventsAdapter implements HotelEventListener, HteObserver {
     public void observeHTE() {
         while(eventQueue.size() > 0 && eventQueue.peek().Time <= tickCount){
             // We have events to process.
-            handleEvent(eventQueue.remove());
+            // Make sure that if an exception should occur during processing,
+            // we don't kill the entire application.
+            try{
+                handleEvent(eventQueue.remove());
+            }catch(Exception e){
+                e.printStackTrace();
+            }
         }
         tickCount++;
     }
@@ -65,11 +71,14 @@ public class EventsAdapter implements HotelEventListener, HteObserver {
             case CHECK_IN:
                 var checkInEvent = parseCheckInEvent(event);
                 hotel.newGuest(checkInEvent.guestNumber, checkInEvent.classification);
+                break;
             case CHECK_OUT:
                 var checkOutEvent = parseCheckOutEvent(event);
                 hotel.requestCheckOut(checkOutEvent.guestNumber);
                 break;
             case CLEANING_EMERGENCY:
+                var emergencyEvent = parseCleaningEmergencyEvent(event);
+                hotel.handleCleaningEmergency(emergencyEvent.guestNumber);
                 break;
             case EVACUATE:
                 break;
@@ -86,13 +95,16 @@ public class EventsAdapter implements HotelEventListener, HteObserver {
         }
     }
 
+    private CleaningEmergencyEvent parseCleaningEmergencyEvent(HotelEvent event) {
+        String guest = event.Data.get("Guest");
+        return new CleaningEmergencyEvent(Integer.parseInt(guest));
+    }
+
     /**
      * Parses the required information from a check out event.
      */
     private CheckOutEvent parseCheckOutEvent(HotelEvent event) {
-        var eventKey = event.Data.keySet().iterator().next();
-        var guestNumber = Integer.parseInt(eventKey.split(" ")[1]);
-
+        var guestNumber = Integer.parseInt(event.Data.get("Guest"));
         return new CheckOutEvent(guestNumber);
     }
 
@@ -131,6 +143,14 @@ public class EventsAdapter implements HotelEventListener, HteObserver {
         public int guestNumber;
 
         public CheckOutEvent(int guestNumber) {
+            this.guestNumber = guestNumber;
+        }
+    }
+
+    private class CleaningEmergencyEvent {
+        public int guestNumber;
+
+        public CleaningEmergencyEvent(int guestNumber) {
             this.guestNumber = guestNumber;
         }
     }

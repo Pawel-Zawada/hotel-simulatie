@@ -8,9 +8,32 @@ public class TaskRepositoryTest {
     @Test
     public void addEmergencyTaskToHeadOfQueueShouldReturn100(){
         TaskRepository taskRepository = new TaskRepository();
-        taskRepository.addEmergencyTask(new Task(100));
+        taskRepository.enQueue(new TestTask(10));
+        taskRepository.addEmergencyTask(new TestTask(100));
 
-        assertEquals(100,taskRepository.peek().getTaskNumber());
+        assertEquals(100,((TestTask)taskRepository.peek()).getTaskNumber());
     }
 
+    private class TestTask extends Task {
+        private int number;
+
+        public TestTask(int number) {
+            super();
+            this.number = number;
+        }
+
+        @Override
+        public boolean isDone() {
+            return false;
+        }
+
+        @Override
+        public void executeStep() {
+
+        }
+
+        public int getTaskNumber() {
+            return number;
+        }
+    }
 }

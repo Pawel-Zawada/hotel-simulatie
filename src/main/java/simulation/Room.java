@@ -52,7 +52,11 @@ public class Room implements HotelElement{
             // Also support rooms higher than 1.
             for(int y = 0; y < this.height; y++){
                 if(x == 0 && y == 0) {
-                    drawHelper.drawSprite("room_door", this.x + x, this.y + y);
+                    if(isDirty){
+                        drawHelper.drawSprite("room_door_dirty", this.x + x, this.y + y);
+                    }else{
+                        drawHelper.drawSprite("room_door", this.x + x, this.y + y);
+                    }
                 }else if(y == 0){
                     drawHelper.drawSprite("room_window", this.x + x, this.y + y);
                 }else{
